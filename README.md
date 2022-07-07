@@ -2,7 +2,7 @@
 
 ## Process
 ### Team
-* Beniamin Avramita *[]* as **scrum master**
+* Beniamin Avramita *[304994]* as **scrum master**
 * Diana Andreea Deget *[304476]* as **developer**
 * Dimitri Pinzari *[]* as **developer**
 * Iustin Grigorcea *[305546]* as **product owner**
