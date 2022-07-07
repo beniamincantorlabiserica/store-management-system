@@ -13,7 +13,7 @@ public class DBConnection {
         try {
 
             Class.forName("org.postgresql.Driver");
-            connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "Jg11331133^");
+            connection = DriverManager.getConnection("jdbc:postgresql://abul.db.elephantsql.com:5432/qvmbhbpf", "qvmbhbpf", "j8EWXTHxrhH17YY2QXhvh12KFgE2vy9w");
 
             if (connection != null) {
                 System.out.println("Connection established!!!");
@@ -21,7 +21,7 @@ public class DBConnection {
                 System.out.println("Connection failed =c");
             }
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
         return connection;
     }
