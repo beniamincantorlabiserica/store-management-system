@@ -1,0 +1,14 @@
+*.lnk
+$RECYCLE.BIN/
+[Dd]esktop.ini
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+.DS_Store
+.AppleDouble
+.LSOverride
+*.icloud
+out/
+.idea/
+*.iml
