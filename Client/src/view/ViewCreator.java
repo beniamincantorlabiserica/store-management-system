@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class ViewCreator {
-    private Map<View, ViewController> controllers;
+    private final Map<View, ViewController> controllers;
 
     public ViewCreator() {
         controllers = new HashMap<>();
@@ -22,7 +22,6 @@ public abstract class ViewCreator {
         } else {
             controllers.get(view).reset();
         }
-
         return controller;
     }
 
@@ -38,7 +37,6 @@ public abstract class ViewCreator {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return controller;
     }
 

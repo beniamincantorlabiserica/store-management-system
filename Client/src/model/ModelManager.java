@@ -1,5 +1,7 @@
 package model;
 
+import logger.Logger;
+import logger.LoggerType;
 import mediator.NetworkManager;
 import networking.RemoteModel;
 
@@ -12,8 +14,8 @@ public class ModelManager implements Model {
         clientModel = new NetworkManager();
     }
 
-    public boolean login(String password) {
-        System.out.println("LocalModelManager here");
+    public User login(String password) {
+        Logger.getInstance().log(LoggerType.DEBUG, "ModelManager -> login()");
         try {
             return clientModel.login(password);
         } catch (RemoteException e) {

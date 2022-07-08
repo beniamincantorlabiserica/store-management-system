@@ -1,8 +1,9 @@
 package viewmodel;
 
-public interface StartViewModelInterface {
-    boolean login(String password);
+import model.User;
 
+public interface StartViewModelInterface {
+    User login(String password);
     void reset();
 }
 

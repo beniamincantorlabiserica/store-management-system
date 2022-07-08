@@ -11,25 +11,22 @@ public abstract class ViewController {
         this.viewHandler = viewHandler;
         this.viewModelFactory = viewModelFactory;
         this.root = root;
-
         init();
     }
 
     protected abstract void init();
+
     public abstract void reset();
 
     public ViewHandler getViewHandler() {
-
         return viewHandler;
     }
 
     public ViewModelFactory getViewModelFactory() {
-
         return viewModelFactory;
     }
 
     public Region getRoot() {
-
         return root;
     }
 }

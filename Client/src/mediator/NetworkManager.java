@@ -2,6 +2,7 @@ package mediator;
 
 import logger.Logger;
 import logger.LoggerType;
+import model.User;
 import networking.RemoteModel;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
@@ -22,7 +23,7 @@ public class NetworkManager implements RemoteModel {
     }
 
     @Override
-    public boolean login(String password) throws RemoteException{
+    public User login(String password) throws RemoteException{
         Logger.getInstance().log(LoggerType.DEBUG,"Login reached");
         return remoteModel.login(password);
     }

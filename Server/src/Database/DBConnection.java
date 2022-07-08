@@ -17,7 +17,6 @@ public class DBConnection {
                     "qvmbhbpf",
                     "j8EWXTHxrhH17YY2QXhvh12KFgE2vy9w"
             );
-
             if (connection != null) {
                 Logger.getInstance().log("Connection established");
             } else {

@@ -1,5 +1,8 @@
 package Database;
 
+import logger.Logger;
+import logger.LoggerType;
+import model.User;
 import org.json.JSONObject;
 
 
@@ -28,7 +31,7 @@ public class UsersDatabaseManager {
                     ");";
             statement = connection.createStatement();
             statement.executeUpdate(query);
-            System.out.println("Finished");
+            Logger.getInstance().log(LoggerType.DEBUG, "User table created");
             connection.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -47,7 +50,7 @@ public class UsersDatabaseManager {
                     ");";
             statement = connection.createStatement();
             statement.executeUpdate(query);
-            System.out.println("Finished");
+            Logger.getInstance().log(LoggerType.DEBUG, "Checkouts table created");
             connection.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -67,35 +70,36 @@ public class UsersDatabaseManager {
                     ");";
             statement = connection.createStatement();
             statement.executeUpdate(query);
-            System.out.println("Finished");
+            Logger.getInstance().log(LoggerType.DEBUG, "Item table created");
             connection.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public boolean login(String password) {
+    public User login(String password) {
         DBConnection dbConnection = new DBConnection();
         connection = dbConnection.getConnection();
-        ResultSet rs = null;
+        ResultSet rs;
+        String role = null;
         try {
-            String query = "Select * from users where password= '" + password + "'";
+            String query = "Select * from users where password= '" + password + "' limit 1";
             statement = connection.createStatement();
             rs = statement.executeQuery(query);
-            int count = 0;
-            while (rs.next()) {
-                count++;
+            if (rs.next()) {
+                role = rs.getString("role");
             }
             connection.close();
-            if (count == 0) {
-                return false;
+            if (role == null) {
+                Logger.getInstance().log(LoggerType.WARNING, "Failed attempt to login with password " + password);
+                return null;
             }
-            System.out.println("yes it happened");
-            return true;
+            Logger.getInstance().log("User logged in as " + role + ".");
+            return new User(role);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return false;
+        return null;
     }
 
 //    public boolean register(String username, String password, String email) {

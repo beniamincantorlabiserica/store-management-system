@@ -1,5 +1,7 @@
 package view.controller;
 
+import logger.Logger;
+import logger.LoggerType;
 import view.ViewController;
 import viewmodel.StartViewModel;
 import javafx.event.ActionEvent;
@@ -11,18 +13,8 @@ import javafx.scene.control.TextField;
 
 public class StartViewController extends ViewController {
     private StartViewModel viewModel;
-
-    @FXML
-    private Label passwordLabel;
     @FXML
     private TextField passwordTextField;
-
-    @FXML
-    private Button loginButton;
-
-
-    private String password;
-
 
     public StartViewController(){
 
@@ -35,14 +27,15 @@ public class StartViewController extends ViewController {
 
     @Override
     public void reset() {
-
         viewModel.reset();
     }
-     public void login(ActionEvent actionEvent) {
-
-        password = passwordTextField.getText();
-
-         viewModel.login(password);
-
-     }
+    public void login(ActionEvent actionEvent) {
+        if (viewModel.login(passwordTextField.getText()) == null) {
+            Logger.getInstance().log(LoggerType.WARNING, "Wrong password");
+        } else if (viewModel.login(passwordTextField.getText()).isMaster()){
+            Logger.getInstance().log("Master logged in!");
+        } else {
+            Logger.getInstance().log("Cashier logged in!");
+        }
+    }
 }

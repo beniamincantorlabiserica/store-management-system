@@ -2,32 +2,24 @@ package model;
 
 import org.json.JSONObject;
 
-public class User {
+import java.io.Serializable;
 
-    public int id;
-    public String password;
-    public String role;
+public class User implements Serializable {
+    private String role;
 
-    public User(int id, String password, String role) {
-        this.id = id;
-
-        this.password = password;
-
+    public void setRole(String role) {
         this.role = role;
     }
 
-    public User() {
-
+    public String getRole() {
+        return role;
     }
 
-
-    public String getPassword() {
-        return password;
+    public boolean isMaster() {
+        return role.equals("master");
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public User(String role) {
+        this.role = role;
     }
-
-
 }

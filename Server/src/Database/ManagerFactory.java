@@ -1,10 +1,9 @@
 package Database;
 
 public class ManagerFactory {
-    private UsersDatabaseManager usersDatabaseManager;
+    private final UsersDatabaseManager usersDatabaseManager;
 
     public ManagerFactory(){
-
         usersDatabaseManager = new UsersDatabaseManager();
     }
 

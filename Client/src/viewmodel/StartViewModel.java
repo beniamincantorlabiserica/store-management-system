@@ -1,14 +1,17 @@
 package viewmodel;
 
+import logger.Logger;
+import logger.LoggerType;
 import model.Model;
+import model.User;
 
 import java.rmi.RemoteException;
 
 public class StartViewModel implements StartViewModelInterface {
-    private Model localModel;
+    private final Model model;
 
     public StartViewModel(Model model, ViewModelState viewModelState) {
-        localModel = model;
+        this.model = model;
     }
 
     @Override
@@ -17,11 +20,12 @@ public class StartViewModel implements StartViewModelInterface {
     }
 
     @Override
-    public boolean login(String password){
-        System.out.println("Start view model here :O");
+    public User login(String password){
+        Logger.getInstance().log(LoggerType.DEBUG, "StartViewModel -> login()");
         try {
-            return localModel.login(password);
+            return model.login(password);
         } catch (RemoteException e) {
+            Logger.getInstance().log(LoggerType.ERROR, "StartViewModel login() error");
             throw new RuntimeException(e);
         }
     }

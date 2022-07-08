@@ -3,10 +3,9 @@ package view;
 public enum View {
     START("fxml/StartView.fxml");
 
-    private String fxmlFile;
+    private final String fxmlFile;
 
-    private View(String fxmlFile) {
-
+    View(String fxmlFile) {
         this.fxmlFile = fxmlFile;
     }
 

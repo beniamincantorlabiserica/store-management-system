@@ -1,6 +1,9 @@
 package mediator;
 
+import logger.Logger;
+import logger.LoggerType;
 import model.ServerModel;
+import model.User;
 import networking.RemoteModel;
 
 
@@ -13,7 +16,7 @@ import java.rmi.server.ExportException;
 import java.rmi.server.UnicastRemoteObject;
 
 public class ServerModelManager implements RemoteModel {
-    private ServerModel serverModel;
+    private final ServerModel serverModel;
 
     public ServerModelManager(ServerModel serverModel) throws RemoteException, MalformedURLException {
         this.serverModel = serverModel;
@@ -23,24 +26,23 @@ public class ServerModelManager implements RemoteModel {
     }
 
     @Override
-    public boolean login(String password)throws RemoteException {
-        System.out.println("I am in Remote class as well :O:O");
+    public User login(String password)throws RemoteException {
+        Logger.getInstance().log(LoggerType.DEBUG, "ServerModelManager -> login()");
         return serverModel.login(password);
     }
-
 
     private void startServer() throws RemoteException, MalformedURLException {
         UnicastRemoteObject.exportObject( this, 0);
         Naming.rebind("Shop",  this);
-        System.out.println("Server started...");
+        Logger.getInstance().log("RMI server started");
     }
     private void startRegistry() throws RemoteException {
         try {
            Registry registry = LocateRegistry.createRegistry(1099);
-            System.out.println("Registry started...");
+            Logger.getInstance().log("RMI registry started");
         }
         catch (ExportException e) {
-            System.out.println("Registry already started - " + e.getMessage());
+            Logger.getInstance().log(LoggerType.ERROR, "RMI registry already started? " + e.getMessage());
         }
     }
 }
