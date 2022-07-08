@@ -15,20 +15,25 @@ import java.rmi.registry.Registry;
 import java.rmi.server.ExportException;
 import java.rmi.server.UnicastRemoteObject;
 
-public class ServerModelManager implements RemoteModel {
+public class ServerNetworkManager implements RemoteModel {
     private final ServerModel serverModel;
 
-    public ServerModelManager(ServerModel serverModel) throws RemoteException, MalformedURLException {
+    public ServerNetworkManager(ServerModel serverModel) throws RemoteException, MalformedURLException {
         this.serverModel = serverModel;
         startRegistry();
         startServer();
-
     }
 
     @Override
-    public User login(String password)throws RemoteException {
+    public User login(String password) throws RemoteException {
         Logger.getInstance().log(LoggerType.DEBUG, "ServerModelManager -> login()");
         return serverModel.login(password);
+    }
+
+    @Override
+    public void changePassword(String password, String role) throws RemoteException {
+        Logger.getInstance().log(LoggerType.DEBUG, "ServerModelManager -> changePassword()");
+        serverModel.changePassword(password, role);
     }
 
     private void startServer() throws RemoteException, MalformedURLException {

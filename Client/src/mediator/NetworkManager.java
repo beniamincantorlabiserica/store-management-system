@@ -27,4 +27,10 @@ public class NetworkManager implements RemoteModel {
         Logger.getInstance().log(LoggerType.DEBUG,"Login reached");
         return remoteModel.login(password);
     }
+
+    @Override
+    public void changePassword(String password, String role) throws RemoteException {
+        Logger.getInstance().log(LoggerType.DEBUG,"Change password reached");
+        remoteModel.changePassword(password, role);
+    }
 }

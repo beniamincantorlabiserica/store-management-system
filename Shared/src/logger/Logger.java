@@ -1,13 +1,18 @@
 package logger;
 
+import java.util.ArrayList;
+
 public class Logger {
     private static Logger logger;
+
+    private final ArrayList<String> logLines;
 
     // 0 - logging off / 1 - info only / 2 - warnings and info / 3 - errors, warnings and info / 4 - errors, warnings, info and debug
     // use 0 for distribution and 3 for general debugging / development
     private int logLevel;
 
     private Logger() {
+        logLines = new ArrayList<>();
         this.logLevel = 4;
     }
 
@@ -28,18 +33,23 @@ public class Logger {
         this.logLevel = logLevel;
     }
 
-    public void log (String logLine) {
-        log(LoggerType.INFO, logLine);
+    public String log (String logLine) {
+        return log(LoggerType.INFO, logLine);
     }
 
-    public void log (LoggerType loggerType, String logLine) {
+    public String log (LoggerType loggerType, String logLine) {
         if(logLevel < loggerType.getMinLogLevel())
-            return;
-        print(loggerType + ": " + logLine + "." + LoggerType.COLOR_RESET);
+            return null;
+        return print(loggerType + ": " + logLine + "." + LoggerType.COLOR_RESET);
     }
 
-    private void print(String s) {
+    private String print(String s) {
+        logLines.add(s);
         System.out.println(s);
+        return s;
     }
 
+    public String getLastLogLine() {
+        return logLines.get(logLines.size()-1);
+    }
 }
