@@ -3,12 +3,12 @@ package logger;
 public class Logger {
     private static Logger logger;
 
-    // -1 - logging off / 0 - info only / 1 - errors only / 2 - errors and warnings / 3 - errors, warnings and info
+    // 0 - logging off / 1 - info only / 2 - warnings and info / 3 - errors, warnings and info / 4 - errors, warnings, info and debug
     // use 0 for distribution and 3 for general debugging / development
-    private short logLevel;
+    private int logLevel;
 
     private Logger() {
-        this.logLevel = 3;
+        this.logLevel = 4;
     }
 
     public static Logger getInstance() {
@@ -18,13 +18,13 @@ public class Logger {
         return logger;
     }
 
-    public short getLogLevel() {
+    public int getLogLevel() {
         return logLevel;
     }
 
-    public void setLogLevel(short logLevel) {
-        if(logLevel < -1 || logLevel > 3)
-            throw new RuntimeException("LogLevel out of bounds.\nAllowed values: -1 -> 3 [NO LOGS / INFO ONLY / ERRORS ONLY / ERRORS AND WARNINGS / ERRORS WARNINGS AND INFO]");
+    public void setLogLevel(int logLevel) {
+        if(logLevel < 0 || logLevel > 3)
+            throw new RuntimeException("LogLevel out of bounds.\nAllowed values: 0 -> 3 [NO LOGS / INFO ONLY / WARNINGS AND INFO / ERRORS, WARNINGS AND INFO]");
         this.logLevel = logLevel;
     }
 
@@ -33,7 +33,9 @@ public class Logger {
     }
 
     public void log (LoggerType loggerType, String logLine) {
-        print(loggerType + ": " + logLine + ".");
+        if(logLevel < loggerType.getMinLogLevel())
+            return;
+        print(loggerType + ": " + logLine + "." + LoggerType.COLOR_RESET);
     }
 
     private void print(String s) {

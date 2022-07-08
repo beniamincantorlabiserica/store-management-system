@@ -12,10 +12,10 @@ import java.rmi.registry.Registry;
 import java.rmi.server.ExportException;
 import java.rmi.server.UnicastRemoteObject;
 
-public class RemoteModelManager implements RemoteModel {
+public class ServerModelManager implements RemoteModel {
     private ServerModel serverModel;
 
-    public RemoteModelManager(ServerModel serverModel) throws RemoteException, MalformedURLException {
+    public ServerModelManager(ServerModel serverModel) throws RemoteException, MalformedURLException {
         this.serverModel = serverModel;
         startRegistry();
         startServer();
