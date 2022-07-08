@@ -16,6 +16,9 @@ public class StartViewController extends ViewController {
     @FXML
     private TextField passwordTextField;
 
+    @FXML
+    private Label roleLabel;
+
     public StartViewController(){
 
     }
@@ -33,9 +36,9 @@ public class StartViewController extends ViewController {
         if (viewModel.login(passwordTextField.getText()) == null) {
             Logger.getInstance().log(LoggerType.WARNING, "Wrong password");
         } else if (viewModel.login(passwordTextField.getText()).isMaster()){
-            Logger.getInstance().log("Master logged in!");
+            roleLabel.setText(Logger.getInstance().log("Master logged in!"));
         } else {
-            Logger.getInstance().log("Cashier logged in!");
+            roleLabel.setText(Logger.getInstance().log("Cashier logged in!"));
         }
     }
 }
