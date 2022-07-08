@@ -1,13 +1,13 @@
 package viewmodel;
 
-import model.ILocalModel;
+import model.Model;
 
 import java.rmi.RemoteException;
 
 public class StartViewModel implements StartViewModelInterface {
-    private ILocalModel localModel;
+    private Model localModel;
 
-    public StartViewModel(ILocalModel model, ViewModelState viewModelState) {
+    public StartViewModel(Model model, ViewModelState viewModelState) {
         localModel = model;
     }
 
