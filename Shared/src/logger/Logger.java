@@ -10,7 +10,7 @@ public class Logger {
     private final ArrayList<String> logLines;
 
     // 0 - logging off / 1 - info only / 2 - warnings and info / 3 - errors, warnings and info / 4 - errors, warnings, info and debug
-    // use 0 for distribution and 3 for general debugging / development
+    // use 1 for distribution and 4 for general debugging / development
     private int logLevel;
 
     private Logger() {
@@ -49,6 +49,7 @@ public class Logger {
 
     private void print(String s) {
         logLines.add(s);
+        System.out.println(s);
     }
 
     public String getLastLogLine() {
