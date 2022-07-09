@@ -9,7 +9,6 @@ import java.util.Map;
 
 public abstract class ViewCreator {
     private final Map<View, ViewController> controllers;
-
     public ViewCreator() {
         controllers = new HashMap<>();
     }

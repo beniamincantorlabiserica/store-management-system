@@ -43,7 +43,7 @@ public class WorkingHours implements Serializable {
         } catch (DateTimeParseException e) {
             throw new RuntimeException("TIME_PARSE_FAILED");
         }
-        if(temporaryTime.isAfter(closingTime)) {
+        if (temporaryTime.isAfter(closingTime)) {
             throw new RuntimeException("TIME_INCORRECT");
         }
         this.openingTime = temporaryTime;
@@ -56,7 +56,7 @@ public class WorkingHours implements Serializable {
         } catch (DateTimeParseException e) {
             throw new RuntimeException("TIME_PARSE_FAILED");
         }
-        if(temporaryTime.isBefore(openingTime)) {
+        if (temporaryTime.isBefore(openingTime)) {
             throw new RuntimeException("TIME_INCORRECT");
         }
         this.closingTime = temporaryTime;

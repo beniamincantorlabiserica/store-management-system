@@ -10,11 +10,8 @@ public enum LoggerType {
     private static final String COLOR_RED = "\033[0;31m"; // RED
     private static final String COLOR_YELLOW = "\033[0;33m"; // YELLOW
     private static final String COLOR_BLUE = "\033[0;34m"; // BLUE
-
-
-    private String label;
-
-    private int minLogLevel;
+    private final String label;
+    private final int minLogLevel;
 
     LoggerType(String label, int minLogLevel) {
         this.label = label;

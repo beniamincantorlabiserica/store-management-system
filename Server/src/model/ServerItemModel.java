@@ -1,5 +1,3 @@
 package model;
 
-public interface ServerItemModel {
-
-}
+public interface ServerItemModel {}

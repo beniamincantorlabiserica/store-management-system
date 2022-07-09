@@ -103,12 +103,12 @@ public class DashboardViewModel implements DashBoardViewModelInterface {
         // y  ------- x
         // y = x / t
         // y = ( now() - getOpeningHour() ) / ( closingHour() - openingHour() )
-        if(LocalTime.now().getHour() <= model.getOpeningHourInteger() || LocalTime.now().getHour() > model.getClosingHourInteger()) {
+        if (LocalTime.now().getHour() <= model.getOpeningHourInteger() || LocalTime.now().getHour() > model.getClosingHourInteger()) {
             return 0;
         }
         double hoursPassed = LocalTime.now().getHour() - model.getOpeningHourInteger();
         double totalHours = model.getClosingHourInteger() - model.getOpeningHourInteger();
-        return hoursPassed/ totalHours;
+        return hoursPassed / totalHours;
     }
 
     @Override

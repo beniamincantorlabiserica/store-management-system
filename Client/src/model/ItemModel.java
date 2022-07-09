@@ -1,5 +1,3 @@
 package model;
 
-public interface ItemModel {
-
-}
+public interface ItemModel {}

@@ -8,7 +8,6 @@ public class Item {
     public String description;
     public int quantity;
 
-
     public Item(int id, String name, int price, String category, String description, int quantity) {
         this.id = id;
         this.name = name;
@@ -18,9 +17,7 @@ public class Item {
         this.quantity = quantity;
     }
 
-    public Item() {
-
-    }
+    public Item() {}
 
     public int getId() {
         return id;

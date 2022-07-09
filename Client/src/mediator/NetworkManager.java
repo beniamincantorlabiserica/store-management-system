@@ -33,12 +33,21 @@ public class NetworkManager implements RemoteModel {
         return remoteModel.login(password);
     }
 
+    /** passes the request to change the password for a specific role to the server
+     * @param password the new password for the respective role
+     * @param role the role to get the password changed
+     * @throws RemoteException in case the password is the same as before / the password is
+     *                         the same as the one from another role
+     */
     @Override
     public void changePassword(String password, String role) throws RemoteException {
         Logger.getInstance().log(LoggerType.DEBUG,"Change password reached");
         remoteModel.changePassword(password, role);
     }
 
+    /** receives an object with information about the working hours from the server
+     * @return WorkingHours object
+     */
     @Override
     public WorkingHours getWorkingHours() {
         try {
@@ -48,6 +57,10 @@ public class NetworkManager implements RemoteModel {
         }
     }
 
+    /** passes the request to set the opening time to the server
+     * @param openingTime a string containing 5 characters, out of which the first
+     *                    two are representing the hour and the last two the minutes
+     */
     @Override
     public void setOpeningHours(String openingTime) {
         try {
@@ -57,6 +70,10 @@ public class NetworkManager implements RemoteModel {
         }
     }
 
+    /** passes the request to set the closing time to the server
+     * @param closingTime a string containing 5 characters, out of which the first
+     *                    two are representing the hour and the last two the minutes
+     */
     @Override
     public void setClosingHours(String closingTime) {
         try {

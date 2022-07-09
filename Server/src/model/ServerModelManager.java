@@ -1,6 +1,6 @@
 package model;
 
-import Database.ManagerFactory;
+import database.ManagerFactory;
 import logger.Logger;
 import logger.LoggerType;
 

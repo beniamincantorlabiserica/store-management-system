@@ -8,7 +8,7 @@
 * Iustin Grigorcea *[305546]* as **product owner**
 
 ### Deadline and exam
-The deadline for material uploading is on 12th of August, 2022 at 13:00.
+The deadline for material uploading is on 12th of August 2022 at 13:00.
 Parts ready for uploading:
 - [ ] Project Description
 - [ ] Project Report

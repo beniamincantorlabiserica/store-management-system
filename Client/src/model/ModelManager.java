@@ -10,7 +10,11 @@ import java.time.LocalTime;
 
 public class ModelManager implements Model {
     private RemoteModel clientModel;
-
+    /**
+     * @value
+     *  true if the client successfully connected to the server through RMI
+     *  false otherwise
+     */
     private boolean network;
     private User currentUser;
 
@@ -28,7 +32,7 @@ public class ModelManager implements Model {
 
     public User login(String password) {
         Logger.getInstance().log(LoggerType.DEBUG, "ModelManager -> login()");
-        if(isLoggedIn()) {
+        if (isLoggedIn()) {
             Logger.getInstance().log(LoggerType.WARNING, "Already logged in. Log out first?");
             throw new RuntimeException("USER_ALREADY_LOGGED_IN");
         }
@@ -41,6 +45,10 @@ public class ModelManager implements Model {
         }
     }
 
+    /**
+     * mark the network as available if the client can connect to the server
+     * log an error otherwise
+     */
     public void retryConnection() {
         try {
             clientModel = new NetworkManager();
@@ -50,6 +58,9 @@ public class ModelManager implements Model {
         }
     }
 
+    /**
+     * @return value of the variable network
+     */
     public boolean isNetwork() {
         return network;
     }

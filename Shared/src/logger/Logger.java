@@ -5,7 +5,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class Logger {
-
     private static Logger logger;
     private final ArrayList<String> logLines;
 
@@ -19,7 +18,7 @@ public class Logger {
     }
 
     public static Logger getInstance() {
-        if(logger == null) {
+        if (logger == null) {
             logger = new Logger();
         }
         return logger;
@@ -30,8 +29,9 @@ public class Logger {
     }
 
     public void setLogLevel(int logLevel) {
-        if(logLevel < 0 || logLevel > 3)
+        if (logLevel < 0 || logLevel > 3) {
             throw new RuntimeException("LogLevel out of bounds.\nAllowed values: 0 -> 3 [NO LOGS / INFO ONLY / WARNINGS AND INFO / ERRORS, WARNINGS AND INFO]");
+        }
         this.logLevel = logLevel;
     }
 
@@ -40,8 +40,9 @@ public class Logger {
     }
 
     public String log (LoggerType loggerType, String logLine) {
-        if(logLevel < loggerType.getMinLogLevel())
+        if (logLevel < loggerType.getMinLogLevel()) {
             return null;
+        }
         String unColoredLogLine = ": " + logLine + ".";
         print(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")) + " " + loggerType + unColoredLogLine + LoggerType.COLOR_RESET);
         return unColoredLogLine;

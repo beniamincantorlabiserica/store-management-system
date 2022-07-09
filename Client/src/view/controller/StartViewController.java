@@ -18,7 +18,7 @@ public class StartViewController extends ViewController {
     @FXML
     private PasswordField passwordField;
 
-    public StartViewController(){
+    public StartViewController() {
 
     }
 
@@ -30,7 +30,7 @@ public class StartViewController extends ViewController {
             alert.setContentText("You seem to be offline, do you want to retry connection to the server?");
             alert.setTitle("Server unreachable");
             alert.showAndWait();
-            if(alert.getResult().getButtonData().isDefaultButton()) {
+            if (alert.getResult().getButtonData().isDefaultButton()) {
                 viewModel.retryNetwork();
             } else {
                 System.exit(0);
@@ -62,7 +62,7 @@ public class StartViewController extends ViewController {
                             "To be able to log out and log in as a master, you need to restart the client app.");
                     alert.showAndWait();
 
-                    // TODO after implementing, remove this alertbox
+                    // TODO after implementing, remove this alert-box
                     Logger.getInstance().log("Cashier logged in!");
                 }
             } else {

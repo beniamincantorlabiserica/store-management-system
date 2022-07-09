@@ -42,9 +42,7 @@ public class DashboardViewController extends ViewController {
 
     private DashboardViewModel viewModel;
 
-    public DashboardViewController() {
-
-    }
+    public DashboardViewController() {}
 
     @Override
     protected void init() {
@@ -119,7 +117,7 @@ public class DashboardViewController extends ViewController {
             boolean valid = false;
             while ((result.get().equals("opening time") || result.get().equals("closing time")) && !valid) {
                 TextInputDialog timeDialog;
-                if(result.get().contains("open")) {
+                if (result.get().contains("open")) {
                     timeDialog = new TextInputDialog(viewModel.getOpeningHours());
                 } else {
                     timeDialog = new TextInputDialog(viewModel.getClosingHours());
@@ -128,9 +126,9 @@ public class DashboardViewController extends ViewController {
                 timeDialog.setHeaderText("Enter your desired " + result.get() + ".");
                 timeDialog.setContentText("Remember! The format needs to be like 07:00 or 12:00 or 23:35!");
                 Optional<String> timeResult = timeDialog.showAndWait();
-                if (timeResult.isPresent()){
+                if (timeResult.isPresent()) {
                     try {
-                        if(result.get().equals("opening time")) {
+                        if (result.get().equals("opening time")) {
                             viewModel.setOpeningHours(timeResult.get());
                             Logger.getInstance().log(LoggerType.DEBUG, "Opening time set to: " + timeResult.get());
                         } else {

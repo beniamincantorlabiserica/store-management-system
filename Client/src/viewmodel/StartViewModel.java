@@ -15,9 +15,7 @@ public class StartViewModel implements StartViewModelInterface {
     }
 
     @Override
-    public void reset() {
-
-    }
+    public void reset() {}
 
     @Override
     public boolean isNetwork() {
