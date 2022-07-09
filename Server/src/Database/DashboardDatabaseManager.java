@@ -16,6 +16,7 @@ public class DashboardDatabaseManager {
     }
 
     public WorkingHours getWorkingHours() {
+        Logger.getInstance().log(LoggerType.DEBUG, "DashboardDatabaseManager -> getWorkingHours()");
         String query = "select value from preferences where preference = 'workingHours'";
         ResultSet rs = queryDB(query);
         try {
@@ -32,6 +33,7 @@ public class DashboardDatabaseManager {
     }
 
     public void setWorkingHours(String workingHours) {
+        Logger.getInstance().log(LoggerType.DEBUG, "DashboardDatabaseManager -> setWorkingHours()");
         String query = "update preferences set value = '" + workingHours + "' where preference = 'workingHours'";
         updateDB(query);
     }

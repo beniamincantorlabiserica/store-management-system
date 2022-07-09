@@ -88,4 +88,22 @@ public class ModelManager implements Model {
         // TODO @diana
         return 0;
     }
+
+    @Override
+    public void setOpeningHours(String openingTime) {
+        try {
+            clientModel.setOpeningHours(openingTime);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void setClosingHours(String closingTime) {
+        try {
+            clientModel.setClosingHours(closingTime);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

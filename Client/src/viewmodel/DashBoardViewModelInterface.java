@@ -3,4 +3,6 @@ package viewmodel;
 public interface DashBoardViewModelInterface {
     void logout();
     void reset();
+    void setOpeningHours();
+    void setClosingHours();
 }

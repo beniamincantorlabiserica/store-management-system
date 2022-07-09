@@ -60,6 +60,16 @@ public class DashboardViewModel implements DashBoardViewModelInterface {
         this.monthProgressBarProperty.set(0);
     }
 
+    @Override
+    public void setOpeningHours() {
+
+    }
+
+    @Override
+    public void setClosingHours() {
+
+    }
+
     public SimpleStringProperty getDateProperty() {
         return dateProperty;
     }
