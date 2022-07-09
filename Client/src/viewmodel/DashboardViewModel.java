@@ -69,7 +69,6 @@ public class DashboardViewModel implements DashBoardViewModelInterface {
 
     @Override
     public void logout() {
-        updateThread.interrupt();
         model.logout();
         reset();
     }
