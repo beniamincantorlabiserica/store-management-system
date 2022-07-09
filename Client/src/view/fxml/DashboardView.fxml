@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="410.0" prefWidth="615.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controller.DashboardViewController">
+   <VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="600.0">
+      <HBox alignment="TOP_CENTER" prefHeight="36.0" prefWidth="600.0">
+         <Label prefHeight="27.0" prefWidth="199.0" text="MANAGER DASHBOARD">
+            <font>
+               <Font size="18.0" />
+            </font>
+         </Label>
+      </HBox>
+      <HBox prefHeight="67.0" prefWidth="600.0">
+         <Label fx:id="dateLabel" alignment="CENTER" prefHeight="42.0" prefWidth="150.0" text="DATE" textAlignment="CENTER">
+            <font>
+               <Font name="System Bold" size="12.0" />
+            </font>
+         </Label>
+         <Label fx:id="timeLabel" alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="42.0" prefWidth="150.0" text="TIME" textAlignment="CENTER">
+            <font>
+               <Font name="System Bold" size="12.0" />
+            </font>
+         </Label>
+         <Label fx:id="dayOfWeekLabel" alignment="CENTER" layoutX="160.0" layoutY="10.0" prefHeight="42.0" prefWidth="150.0" text="DAY OF WEEK" textAlignment="CENTER">
+            <font>
+               <Font name="System Bold" size="12.0" />
+            </font>
+         </Label>
+         <Label fx:id="storeStatusLabel" alignment="CENTER" layoutX="310.0" layoutY="10.0" prefHeight="42.0" prefWidth="150.0" text="STORE STATUS" textAlignment="CENTER">
+            <font>
+               <Font name="System Bold" size="12.0" />
+            </font>
+         </Label>
+      </HBox>
+      <HBox layoutX="10.0" layoutY="46.0" prefHeight="62.0" prefWidth="600.0">
+         <Label fx:id="checkoutsTodayLabel" alignment="CENTER" prefHeight="42.0" prefWidth="200.0" text="CHECKOUTS TODAY" textAlignment="CENTER" />
+         <Label fx:id="itemsTodayLabel" alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="42.0" prefWidth="200.0" text="ITEMS TODAY" textAlignment="CENTER" />
+         <Label fx:id="salesTodayLabel" alignment="CENTER" layoutX="160.0" layoutY="10.0" prefHeight="42.0" prefWidth="200.0" text="SALES TODAY" textAlignment="CENTER" />
+      </HBox>
+      <HBox prefHeight="62.0" prefWidth="600.0">
+         <Label fx:id="checkoutsThisMonthLabel" alignment="CENTER" prefHeight="42.0" prefWidth="200.0" text="CHECKOUTS THIS MONTH" textAlignment="CENTER" />
+         <Label fx:id="itemsThisMonthLabel" alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="42.0" prefWidth="200.0" text="ITEMS THIS MONTH" textAlignment="CENTER" />
+         <Label fx:id="salesThisMonthLabel" alignment="CENTER" layoutX="160.0" layoutY="10.0" prefHeight="42.0" prefWidth="200.0" text="SALES THIS MONTH" textAlignment="CENTER" />
+      </HBox>
+      <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="600.0">
+         <Label alignment="CENTER" prefHeight="17.0" prefWidth="146.0" text="Day competition" textAlignment="CENTER" />
+         <ProgressBar fx:id="dayProgressBar" prefHeight="24.0" prefWidth="200.0" progress="0.0" />
+      </HBox>
+      <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="600.0">
+         <Label alignment="CENTER" prefHeight="17.0" prefWidth="146.0" text="Month competition" textAlignment="CENTER" />
+         <ProgressBar fx:id="monthProgressBar" prefHeight="24.0" prefWidth="200.0" progress="0.0" />
+      </HBox>
+      <HBox alignment="BOTTOM_CENTER" layoutX="10.0" layoutY="57.0" prefHeight="76.0" prefWidth="600.0">
+         <Button mnemonicParsing="false" onAction="#onLogoutButtonPressed" prefHeight="25.0" prefWidth="101.0" text="Log out">
+            <HBox.margin>
+               <Insets bottom="10.0" left="15.0" right="80.0" />
+            </HBox.margin>
+         </Button>
+         <Button layoutX="284.0" layoutY="54.0" mnemonicParsing="false" onAction="#onInventoryButtonPressed" prefHeight="25.0" prefWidth="107.0" text="Inventory">
+            <HBox.margin>
+               <Insets bottom="10.0" left="50.0" />
+            </HBox.margin>
+         </Button>
+         <Button layoutX="310.0" layoutY="64.0" mnemonicParsing="false" onAction="#onPasswordsButtonPressed" prefHeight="25.0" prefWidth="107.0" text="Passwords">
+            <HBox.margin>
+               <Insets bottom="10.0" left="15.0" />
+            </HBox.margin>
+         </Button>
+         <Button mnemonicParsing="false" onAction="#onWorkingHoursButtonPressed" prefHeight="25.0" prefWidth="111.0" text="Working Hours">
+            <HBox.margin>
+               <Insets bottom="10.0" left="15.0" right="15.0" />
+            </HBox.margin>
+         </Button>
+      </HBox>
+   </VBox>
+</AnchorPane>

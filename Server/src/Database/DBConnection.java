@@ -6,6 +6,7 @@ import logger.LoggerType;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class DBConnection {
     public Connection getConnection() {
@@ -18,7 +19,7 @@ public class DBConnection {
                     "j8EWXTHxrhH17YY2QXhvh12KFgE2vy9w"
             );
             if (connection != null) {
-                Logger.getInstance().log("Connection established");
+                Logger.getInstance().log("Connection established to DB");
             } else {
                 Logger.getInstance().log(LoggerType.ERROR, "Connection to the database failed.");
             }

@@ -4,6 +4,7 @@ import logger.Logger;
 import logger.LoggerType;
 import model.ServerModel;
 import model.User;
+import model.WorkingHours;
 import networking.RemoteModel;
 
 
@@ -49,5 +50,20 @@ public class ServerNetworkManager implements RemoteModel {
         catch (ExportException e) {
             Logger.getInstance().log(LoggerType.ERROR, "RMI registry already started? " + e.getMessage());
         }
+    }
+
+    @Override
+    public WorkingHours getWorkingHours() {
+        return serverModel.getWorkingHours();
+    }
+
+    @Override
+    public void setOpeningHours(String openingTime) {
+        serverModel.setOpeningHours(openingTime);
+    }
+
+    @Override
+    public void setClosingHours(String closingTime) {
+        serverModel.setClosingHours(closingTime);
     }
 }

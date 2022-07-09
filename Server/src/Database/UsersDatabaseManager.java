@@ -3,7 +3,6 @@ package Database;
 import logger.Logger;
 import logger.LoggerType;
 import model.User;
-import org.json.JSONObject;
 
 
 import java.sql.Connection;

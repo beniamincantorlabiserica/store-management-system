@@ -1,14 +1,16 @@
 package logger;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class Logger {
-    private static Logger logger;
 
+    private static Logger logger;
     private final ArrayList<String> logLines;
 
     // 0 - logging off / 1 - info only / 2 - warnings and info / 3 - errors, warnings and info / 4 - errors, warnings, info and debug
-    // use 0 for distribution and 3 for general debugging / development
+    // use 1 for distribution and 4 for general debugging / development
     private int logLevel;
 
     private Logger() {
@@ -40,13 +42,14 @@ public class Logger {
     public String log (LoggerType loggerType, String logLine) {
         if(logLevel < loggerType.getMinLogLevel())
             return null;
-        return print(loggerType + ": " + logLine + "." + LoggerType.COLOR_RESET);
+        String unColoredLogLine = ": " + logLine + ".";
+        print(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")) + " " + loggerType + unColoredLogLine + LoggerType.COLOR_RESET);
+        return unColoredLogLine;
     }
 
-    private String print(String s) {
+    private void print(String s) {
         logLines.add(s);
         System.out.println(s);
-        return s;
     }
 
     public String getLastLogLine() {
