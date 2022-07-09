@@ -21,7 +21,15 @@ public class WorkingHours implements Serializable {
     }
 
     public String getSQLReadyWorkingHours() {
-        return openingTime.format(DateTimeFormatter.ofPattern("hh:mm")) + " " + closingTime.format(DateTimeFormatter.ofPattern("hh:mm"));
+        return openingTime.format(DateTimeFormatter.ofPattern("HH:mm")) + " " + closingTime.format(DateTimeFormatter.ofPattern("HH:mm"));
+    }
+
+    public String getOpeningTime() {
+        return openingTime.format(DateTimeFormatter.ofPattern("HH:mm"));
+    }
+
+    public String getClosingTime() {
+        return closingTime.format(DateTimeFormatter.ofPattern("HH:mm"));
     }
 
     public void setOpeningTime(String openingTime) {

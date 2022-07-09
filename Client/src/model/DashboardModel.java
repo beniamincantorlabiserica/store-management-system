@@ -8,6 +8,8 @@ public interface DashboardModel {
     int getCheckoutsThisMonth();
     int getItemsThisMonth();
     int getSalesThisMonth();
-    void setOpeningHours(String openingTime);
-    void setClosingHours(String closingTime);
+    void setOpeningHours(String openingTime) throws RuntimeException;
+    void setClosingHours(String closingTime) throws RuntimeException;
+    String getClosingHours();
+    String getOpeningHours();
 }

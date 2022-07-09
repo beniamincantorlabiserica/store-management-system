@@ -37,16 +37,28 @@ public class NetworkManager implements RemoteModel {
 
     @Override
     public WorkingHours getWorkingHours() {
-        return null;
+        try {
+            return remoteModel.getWorkingHours();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void setOpeningHours(String openingTime) {
-
+        try {
+            remoteModel.setOpeningHours(openingTime);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void setClosingHours(String closingTime) {
-
+        try {
+            remoteModel.setClosingHours(closingTime);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

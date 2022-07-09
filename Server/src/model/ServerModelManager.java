@@ -1,11 +1,13 @@
 package model;
 
 import Database.ManagerFactory;
+import logger.Logger;
+import logger.LoggerType;
 
 public class ServerModelManager implements ServerModel {
     private final ManagerFactory managerFactory;
 
-    private WorkingHours workingHours;
+    private final WorkingHours workingHours;
 
     public ServerModelManager() {
         managerFactory = new ManagerFactory();
@@ -23,6 +25,7 @@ public class ServerModelManager implements ServerModel {
 
     @Override
     public WorkingHours getWorkingHours() {
+        Logger.getInstance().log(LoggerType.DEBUG, "getWorkingHours() ServerModelManager");
         return managerFactory.getDashboardDatabaseManager().getWorkingHours();
     }
 

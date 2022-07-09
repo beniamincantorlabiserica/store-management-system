@@ -28,10 +28,10 @@ public class ModelManager implements Model {
         }
         try {
             currentUser = clientModel.login(password);
-            workingHours = clientModel.getWorkingHours();
             return currentUser;
         } catch (RemoteException e) {
-            throw new RuntimeException(e);
+            Logger.getInstance().log(LoggerType.ERROR, "Get working hours error");
+            throw new RuntimeException("TODO");
         }
     }
 
@@ -103,6 +103,25 @@ public class ModelManager implements Model {
         try {
             clientModel.setClosingHours(closingTime);
         } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public String getClosingHours() {
+        try {
+            return clientModel.getWorkingHours().getClosingTime();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public String getOpeningHours() {
+        try {
+            return clientModel.getWorkingHours().getOpeningTime();
+        } catch (RemoteException e) {
+            Logger.getInstance().log(LoggerType.ERROR, e.getMessage());
             throw new RuntimeException(e);
         }
     }

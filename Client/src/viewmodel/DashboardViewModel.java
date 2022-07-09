@@ -8,18 +8,18 @@ public class DashboardViewModel implements DashBoardViewModelInterface {
 
     private final Model model;
 
-    private SimpleStringProperty dateProperty;
-    private SimpleStringProperty timeProperty;
-    private SimpleStringProperty dayOfWeekProperty;
-    private SimpleStringProperty storeStatusProperty;
-    private SimpleStringProperty checkoutsTodayProperty;
-    private SimpleStringProperty itemsTodayProperty;
-    private SimpleStringProperty salesTodayProperty;
-    private SimpleStringProperty checkoutsThisMonthProperty;
-    private SimpleStringProperty itemsThisMonthProperty;
-    private SimpleStringProperty salesThisMonthProperty;
-    private SimpleIntegerProperty dayProgressBarProperty;
-    private SimpleIntegerProperty monthProgressBarProperty;
+    private final SimpleStringProperty dateProperty;
+    private final SimpleStringProperty timeProperty;
+    private final SimpleStringProperty dayOfWeekProperty;
+    private final SimpleStringProperty storeStatusProperty;
+    private final SimpleStringProperty checkoutsTodayProperty;
+    private final SimpleStringProperty itemsTodayProperty;
+    private final SimpleStringProperty salesTodayProperty;
+    private final SimpleStringProperty checkoutsThisMonthProperty;
+    private final SimpleStringProperty itemsThisMonthProperty;
+    private final SimpleStringProperty salesThisMonthProperty;
+    private final SimpleIntegerProperty dayProgressBarProperty;
+    private final SimpleIntegerProperty monthProgressBarProperty;
 
     // TODO viewModelState - use or remove
     public DashboardViewModel(Model model, ViewModelState viewModelState) {
@@ -61,13 +61,23 @@ public class DashboardViewModel implements DashBoardViewModelInterface {
     }
 
     @Override
-    public void setOpeningHours() {
-
+    public void setOpeningHours(String s) throws RuntimeException {
+        model.setOpeningHours(s);
     }
 
     @Override
-    public void setClosingHours() {
+    public void setClosingHours(String s) throws RuntimeException {
+        model.setClosingHours(s);
+    }
 
+    @Override
+    public String getOpeningHours() {
+        return model.getOpeningHours();
+    }
+
+    @Override
+    public String getClosingHours() {
+        return model.getClosingHours();
     }
 
     public SimpleStringProperty getDateProperty() {

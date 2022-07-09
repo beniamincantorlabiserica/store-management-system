@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="620.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controller.DashboardViewController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controller.DashboardViewController">
    <VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="600.0">
       <HBox alignment="TOP_CENTER" prefHeight="36.0" prefWidth="600.0">
          <Label prefHeight="27.0" prefWidth="199.0" text="MANAGER DASHBOARD">
@@ -55,19 +55,24 @@
          <ProgressBar fx:id="monthProgressBar" prefHeight="24.0" prefWidth="200.0" progress="0.0" />
       </HBox>
       <HBox alignment="BOTTOM_CENTER" layoutX="10.0" layoutY="57.0" prefHeight="76.0" prefWidth="600.0">
-         <Button mnemonicParsing="false" onAction="#onLogoutButtonPressed" prefHeight="25.0" prefWidth="65.0" text="Log out">
+         <Button mnemonicParsing="false" onAction="#onLogoutButtonPressed" prefHeight="25.0" prefWidth="101.0" text="Log out">
             <HBox.margin>
-               <Insets bottom="10.0" right="100.0" />
+               <Insets bottom="10.0" left="15.0" right="80.0" />
             </HBox.margin>
          </Button>
-         <Button layoutX="284.0" layoutY="54.0" mnemonicParsing="false" onAction="#onInventoryButtonPressed" prefHeight="25.0" prefWidth="130.0" text="Inventory">
+         <Button layoutX="284.0" layoutY="54.0" mnemonicParsing="false" onAction="#onInventoryButtonPressed" prefHeight="25.0" prefWidth="107.0" text="Inventory">
             <HBox.margin>
-               <Insets bottom="10.0" left="100.0" right="20.0" />
+               <Insets bottom="10.0" left="50.0" />
             </HBox.margin>
          </Button>
-         <Button layoutX="310.0" layoutY="64.0" mnemonicParsing="false" onAction="#onPasswordsButtonPressed" prefHeight="25.0" prefWidth="130.0" text="Passwords">
+         <Button layoutX="310.0" layoutY="64.0" mnemonicParsing="false" onAction="#onPasswordsButtonPressed" prefHeight="25.0" prefWidth="107.0" text="Passwords">
             <HBox.margin>
-               <Insets bottom="10.0" left="20.0" />
+               <Insets bottom="10.0" left="15.0" />
+            </HBox.margin>
+         </Button>
+         <Button mnemonicParsing="false" onAction="#onWorkingHoursButtonPressed" prefHeight="25.0" prefWidth="111.0" text="Working Hours">
+            <HBox.margin>
+               <Insets bottom="10.0" left="15.0" right="15.0" />
             </HBox.margin>
          </Button>
       </HBox>

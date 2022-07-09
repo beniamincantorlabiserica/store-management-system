@@ -23,6 +23,7 @@ public class DashboardDatabaseManager {
             if(!rs.next()) {
                 String defaultHours = "09:00 17:00";
                 query = "insert into preferences (preference, value) values ('workingHours', '" + defaultHours + "')";
+                updateDB(query);
                 return new WorkingHours(defaultHours);
             } else {
                 return new WorkingHours(rs.getString("value"));
@@ -50,10 +51,10 @@ public class DashboardDatabaseManager {
     }
 
     private ResultSet queryDB(String query) {
-        DBConnection dbConnection = new DBConnection();
-        Connection connection = dbConnection.getConnection();
         ResultSet resultSet = null;
         try {
+            DBConnection dbConnection = new DBConnection();
+            Connection connection = dbConnection.getConnection();
             Statement statement = connection.createStatement();
             resultSet = statement.executeQuery(query);
             connection.close();

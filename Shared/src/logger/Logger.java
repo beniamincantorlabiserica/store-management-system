@@ -43,13 +43,12 @@ public class Logger {
         if(logLevel < loggerType.getMinLogLevel())
             return null;
         String unColoredLogLine = ": " + logLine + ".";
-        print(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm:ss")) + " " + loggerType + unColoredLogLine + LoggerType.COLOR_RESET);
+        print(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")) + " " + loggerType + unColoredLogLine + LoggerType.COLOR_RESET);
         return unColoredLogLine;
     }
 
     private void print(String s) {
         logLines.add(s);
-        System.out.println(s);
     }
 
     public String getLastLogLine() {
