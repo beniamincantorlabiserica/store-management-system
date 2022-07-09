@@ -6,7 +6,7 @@ import mediator.NetworkManager;
 import networking.RemoteModel;
 
 import java.rmi.RemoteException;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class ModelManager implements Model {
     private final RemoteModel clientModel;
@@ -48,45 +48,43 @@ public class ModelManager implements Model {
 
     @Override
     public String getStoreStatus() {
-        // TODO @iustin
-        // TODO Implement working hours.
-        return null;
+        return LocalTime.now().getHour() < getClosingHourInteger() && LocalTime.now().getHour() > getOpeningHourInteger() ? "OPEN" : "CLOSED";
     }
 
     @Override
-    public int getCheckoutsToday() {
+    public String getCheckoutsToday() {
         // TODO @beniamin
-        return 0;
+        return "TODO @beniamin";
     }
 
     @Override
-    public int getItemsToday() {
+    public String getItemsToday() {
         // TODO @beniamin
-        return 0;
+        return "TODO @beniamin";
     }
 
     @Override
-    public int getSalesToday() {
+    public String getSalesToday() {
         // TODO @beniamin
-        return 0;
+        return "TODO @beniamin";
     }
 
     @Override
-    public int getCheckoutsThisMonth() {
+    public String getCheckoutsThisMonth() {
         // TODO @diana
-        return 0;
+        return "TODO @diana";
     }
 
     @Override
-    public int getItemsThisMonth() {
+    public String getItemsThisMonth() {
         // TODO @diana
-        return 0;
+        return "TODO @diana";
     }
 
     @Override
-    public int getSalesThisMonth() {
+    public String getSalesThisMonth() {
         // TODO @diana
-        return 0;
+        return "TODO @diana";
     }
 
     @Override
@@ -124,5 +122,15 @@ public class ModelManager implements Model {
             Logger.getInstance().log(LoggerType.ERROR, e.getMessage());
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public int getClosingHourInteger() {
+        return Integer.parseInt(getClosingHours().substring(0, 2));
+    }
+
+    @Override
+    public int getOpeningHourInteger() {
+        return Integer.parseInt(getOpeningHours().substring(0, 2));
     }
 }

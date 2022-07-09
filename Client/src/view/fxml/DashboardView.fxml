@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controller.DashboardViewController">
+<AnchorPane prefHeight="410.0" prefWidth="615.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controller.DashboardViewController">
    <VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="600.0">
       <HBox alignment="TOP_CENTER" prefHeight="36.0" prefWidth="600.0">
          <Label prefHeight="27.0" prefWidth="199.0" text="MANAGER DASHBOARD">

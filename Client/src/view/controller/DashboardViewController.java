@@ -2,10 +2,8 @@ package view.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.ChoiceDialog;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.*;
+import javafx.scene.control.Alert.*;
 import logger.Logger;
 import logger.LoggerType;
 import view.View;
@@ -17,7 +15,6 @@ import java.util.List;
 import java.util.Optional;
 
 public class DashboardViewController extends ViewController {
-
     @FXML
     public Label dateLabel;
     @FXML
@@ -62,8 +59,8 @@ public class DashboardViewController extends ViewController {
         this.checkoutsThisMonthLabel.textProperty().bind(viewModel.getCheckoutsThisMonthProperty());
         this.itemsThisMonthLabel.textProperty().bind(viewModel.getItemsThisMonthProperty());
         this.salesThisMonthLabel.textProperty().bind(viewModel.getSalesThisMonthProperty());
-        this.dayProgressBar.progressProperty().bind(viewModel.getDayProgressBarProperty());
-        this.monthProgressBar.progressProperty().bind(viewModel.getMonthProgressBarProperty());
+        this.dayProgressBar.progressProperty().bindBidirectional(viewModel.getDayProgressBarProperty());
+        this.monthProgressBar.progressProperty().bindBidirectional(viewModel.getMonthProgressBarProperty());
     }
 
     @Override
@@ -80,6 +77,11 @@ public class DashboardViewController extends ViewController {
     @FXML
     public void onInventoryButtonPressed() {
         // TODO inventory page with list of items & ability to edit amount of item x & price of item.
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Unimplemented feature");
+        alert.setHeaderText("This feature is not yet implemented.");
+        alert.setContentText("Description: inventory page with list of items & ability to edit amount of item x & price of item.");
+        alert.showAndWait();
     }
 
     @FXML
@@ -87,6 +89,14 @@ public class DashboardViewController extends ViewController {
         // TODO change password dialog with dropdown with choice for "master" or "cashier",
         // TODO a master password field (old master password) and two new password
         // TODO fields (new password + confirm new password)
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Unimplemented feature");
+        alert.setHeaderText("This feature is not yet implemented.");
+        alert.setContentText("""
+                Description: change password dialog with dropdown with choice for "master" or "cashier",
+                 a master password field (old master password) and two new password\s
+                fields (new password + confirm new password)""");
+        alert.showAndWait();
     }
 
     public void onWorkingHoursButtonPressed() {

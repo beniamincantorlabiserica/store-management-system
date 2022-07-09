@@ -1,8 +1,15 @@
 package viewmodel;
 
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import model.Model;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.Year;
+import java.time.format.DateTimeFormatter;
 
 public class DashboardViewModel implements DashBoardViewModelInterface {
 
@@ -18,8 +25,8 @@ public class DashboardViewModel implements DashBoardViewModelInterface {
     private final SimpleStringProperty checkoutsThisMonthProperty;
     private final SimpleStringProperty itemsThisMonthProperty;
     private final SimpleStringProperty salesThisMonthProperty;
-    private final SimpleIntegerProperty dayProgressBarProperty;
-    private final SimpleIntegerProperty monthProgressBarProperty;
+    private final SimpleDoubleProperty dayProgressBarProperty;
+    private final SimpleDoubleProperty monthProgressBarProperty;
 
     // TODO viewModelState - use or remove
     public DashboardViewModel(Model model, ViewModelState viewModelState) {
@@ -34,8 +41,9 @@ public class DashboardViewModel implements DashBoardViewModelInterface {
         this.itemsTodayProperty = new SimpleStringProperty();
         this.salesTodayProperty = new SimpleStringProperty();
         this.salesThisMonthProperty = new SimpleStringProperty();
-        this.dayProgressBarProperty = new SimpleIntegerProperty();
-        this.monthProgressBarProperty = new SimpleIntegerProperty();
+        this.dayProgressBarProperty = new SimpleDoubleProperty();
+        this.monthProgressBarProperty = new SimpleDoubleProperty();
+        reset();
     }
 
     @Override
@@ -46,18 +54,42 @@ public class DashboardViewModel implements DashBoardViewModelInterface {
 
     @Override
     public void reset() {
-        this.dateProperty.set("");
-        this.timeProperty.set("");
-        this.dayOfWeekProperty.set("");
-        this.storeStatusProperty.set("");
-        this.checkoutsThisMonthProperty.set("");
-        this.checkoutsTodayProperty.set("");
-        this.itemsThisMonthProperty.set("");
-        this.itemsTodayProperty.set("");
-        this.salesTodayProperty.set("");
-        this.salesThisMonthProperty.set("");
-        this.dayProgressBarProperty.set(0);
-        this.monthProgressBarProperty.set(0);
+        this.dateProperty.set("DATE\n" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        this.timeProperty.set("TIME\n" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+        this.dayOfWeekProperty.set("DAY OF WEEK\n" + LocalDateTime.now().getDayOfWeek().name());
+        this.storeStatusProperty.set("STORE STATUS\n" + model.getStoreStatus());
+        this.checkoutsThisMonthProperty.set("CHECKOUTS THIS MONTH\n" + model.getCheckoutsThisMonth());
+        this.checkoutsTodayProperty.set("CHECKOUTS TODAY\n" + model.getCheckoutsToday());
+        this.itemsThisMonthProperty.set("ITEMS THIS MONTH\n" + model.getItemsThisMonth());
+        this.itemsTodayProperty.set("ITEMS TODAY\n" + model.getItemsToday());
+        this.salesTodayProperty.set("SALES TODAY\n" + model.getSalesToday());
+        this.salesThisMonthProperty.set("SALES THIS MONTH\n" + model.getSalesThisMonth());
+        this.dayProgressBarProperty.set(getDayProgress());
+        this.monthProgressBarProperty.set(getMonthProgress());
+    }
+
+    private double getMonthProgress() {
+        // x = LocalDateTime.now().getDayOfMonth()
+        // t = LocalDateTime.now().getCurrentMonthTotalDays()
+        // 1 ------- t
+        //  y  ------- x
+        // y = LocalDateTime.now().getDayOfMonth() / LocalDateTime.now().getCurrentMonthTotalDays()
+        return (double) LocalDateTime.now().getDayOfMonth() / (double) LocalDateTime.now().getMonth().length(Year.isLeap(LocalDateTime.now().getYear()));
+    }
+
+    private double getDayProgress() {
+        // x = now() - openingHour() // hours passed
+        // t = closingHour() - openingHour()
+        // 1 ------- t
+        // y  ------- x
+        // y = x / t
+        // y = ( now() - getOpeningHour() ) / ( closingHour() - openingHour() )
+        if(LocalTime.now().getHour() <= model.getOpeningHourInteger() || LocalTime.now().getHour() > model.getClosingHourInteger()) {
+            return 0;
+        }
+        double hoursPassed = LocalTime.now().getHour() - model.getOpeningHourInteger();
+        double totalHours = model.getClosingHourInteger() - model.getOpeningHourInteger();
+        return hoursPassed/ totalHours;
     }
 
     @Override
@@ -126,11 +158,11 @@ public class DashboardViewModel implements DashBoardViewModelInterface {
         return salesThisMonthProperty;
     }
 
-    public SimpleIntegerProperty getDayProgressBarProperty() {
+    public SimpleDoubleProperty getDayProgressBarProperty() {
         return dayProgressBarProperty;
     }
 
-    public SimpleIntegerProperty getMonthProgressBarProperty() {
+    public SimpleDoubleProperty getMonthProgressBarProperty() {
         return monthProgressBarProperty;
     }
 }

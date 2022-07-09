@@ -1,5 +1,6 @@
 package view.controller;
 
+import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import logger.Logger;
 import logger.LoggerType;
@@ -42,6 +43,15 @@ public class StartViewController extends ViewController {
                     Logger.getInstance().log("Master logged in!");
                 } else {
                     // TODO cashier UI and use of it
+
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Unimplemented feature");
+                    alert.setHeaderText("This feature is not yet implemented.");
+                    alert.setContentText("Description: You have logged in as a cashier. It does not have an UI nor a functionality. \n" +
+                            "To be able to log out and log in as a master, you need to restart the client app.");
+                    alert.showAndWait();
+
+                    // TODO after implementing, remove this alertbox
                     Logger.getInstance().log("Cashier logged in!");
                 }
             } else {
