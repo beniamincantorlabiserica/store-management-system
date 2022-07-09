@@ -2,7 +2,7 @@ package model;
 
 import Database.ManagerFactory;
 
-public class ServerModelManager implements ServerModel{
+public class ServerModelManager implements ServerModel {
     private final ManagerFactory managerFactory;
 
     public ServerModelManager() {
@@ -15,5 +15,20 @@ public class ServerModelManager implements ServerModel{
     @Override
     public User login(String password) {
         return managerFactory.getUsersDatabaseManager().login(password);
+    }
+
+    @Override
+    public WorkingHours getWorkingHours() {
+        return null;
+    }
+
+    @Override
+    public void setOpeningHours(String openingTime) {
+
+    }
+
+    @Override
+    public void setClosingHours(String closingTime) {
+
     }
 }

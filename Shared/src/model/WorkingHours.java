@@ -2,6 +2,8 @@ package model;
 
 import java.io.Serializable;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.StringTokenizer;
 
 public class WorkingHours implements Serializable {
@@ -16,5 +18,35 @@ public class WorkingHours implements Serializable {
         StringTokenizer tokenizer = new StringTokenizer(workingHours, " ");
         openingTime = LocalTime.parse(tokenizer.nextToken());
         closingTime = LocalTime.parse(tokenizer.nextToken());
+    }
+
+    public String getSQLReadyWorkingHours() {
+        return openingTime.format(DateTimeFormatter.ofPattern("hh:mm")) + " " + closingTime.format(DateTimeFormatter.ofPattern("hh:mm"));
+    }
+
+    public void setOpeningTime(String openingTime) {
+        LocalTime temporaryTime;
+        try {
+            temporaryTime = LocalTime.parse(openingTime);
+        } catch (DateTimeParseException e) {
+            throw new RuntimeException("TIME_PARSE_FAILED");
+        }
+        if(temporaryTime.isAfter(closingTime)) {
+            throw new RuntimeException("TIME_INCORRECT");
+        }
+        this.openingTime = temporaryTime;
+    }
+
+    public void setClosingTime(String closingTime) {
+        LocalTime temporaryTime;
+        try {
+            temporaryTime = LocalTime.parse(closingTime);
+        } catch (DateTimeParseException e) {
+            throw new RuntimeException("TIME_PARSE_FAILED");
+        }
+        if(temporaryTime.isBefore(openingTime)) {
+            throw new RuntimeException("TIME_INCORRECT");
+        }
+        this.closingTime = temporaryTime;
     }
 }
