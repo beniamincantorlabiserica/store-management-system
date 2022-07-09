@@ -20,11 +20,11 @@ public class StartViewModel implements StartViewModelInterface {
     }
 
     @Override
-    public User login(String password){
+    public User login(String password) {
         Logger.getInstance().log(LoggerType.DEBUG, "StartViewModel -> login()");
         try {
             return model.login(password);
-        } catch (RemoteException e) {
+        } catch (RuntimeException e) {
             Logger.getInstance().log(LoggerType.ERROR, "StartViewModel login() error");
             throw new RuntimeException(e);
         }

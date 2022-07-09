@@ -2,6 +2,6 @@ package model;
 
 import java.rmi.RemoteException;
 
-public interface Model extends ItemModel, UserModel {
+public interface Model extends ItemModel, UserModel, DashboardModel {
 
 }
