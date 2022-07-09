@@ -7,4 +7,5 @@ public interface DashBoardViewModelInterface {
     void setClosingHours(String s);
     String getOpeningHours();
     String getClosingHours();
+    void startUpdateThread();
 }

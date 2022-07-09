@@ -25,6 +25,17 @@ public class StartViewController extends ViewController {
     @Override
     protected void init() {
         viewModel = getViewModelFactory().getStartViewModel();
+        while (!viewModel.isNetwork()) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setContentText("You seem to be offline, do you want to retry connection to the server?");
+            alert.setTitle("Server unreachable");
+            alert.showAndWait();
+            if(alert.getResult().getButtonData().isDefaultButton()) {
+                viewModel.retryNetwork();
+            } else {
+                System.exit(0);
+            }
+        }
     }
 
     @Override

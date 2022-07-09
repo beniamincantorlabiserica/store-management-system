@@ -20,6 +20,16 @@ public class StartViewModel implements StartViewModelInterface {
     }
 
     @Override
+    public boolean isNetwork() {
+        return model.isNetwork();
+    }
+
+    @Override
+    public void retryNetwork() {
+        model.retryConnection();
+    }
+
+    @Override
     public User login(String password) {
         Logger.getInstance().log(LoggerType.DEBUG, "StartViewModel -> login()");
         try {

@@ -14,6 +14,10 @@ public class WorkingHours implements Serializable {
         init(workingHours);
     }
 
+    public WorkingHours() {
+        this("09:00 17:00");
+    }
+
     private void init(String workingHours) {
         StringTokenizer tokenizer = new StringTokenizer(workingHours, " ");
         openingTime = LocalTime.parse(tokenizer.nextToken());

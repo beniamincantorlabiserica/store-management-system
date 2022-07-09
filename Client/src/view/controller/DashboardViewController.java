@@ -61,6 +61,8 @@ public class DashboardViewController extends ViewController {
         this.salesThisMonthLabel.textProperty().bind(viewModel.getSalesThisMonthProperty());
         this.dayProgressBar.progressProperty().bindBidirectional(viewModel.getDayProgressBarProperty());
         this.monthProgressBar.progressProperty().bindBidirectional(viewModel.getMonthProgressBarProperty());
+        viewModel.startUpdateThread();
+        viewModel.reset();
     }
 
     @Override

@@ -1,5 +1,6 @@
 package view;
 
+import javafx.application.Platform;
 import viewmodel.ViewModelFactory;
 import javafx.scene.Scene;
 import javafx.scene.layout.Region;
@@ -8,7 +9,7 @@ import javafx.stage.Stage;
 public class ViewHandler extends ViewCreator {
     private Stage stage;
     private Scene scene;
-    private ViewModelFactory viewModelFactory;
+    private final ViewModelFactory viewModelFactory;
 
     public ViewHandler(ViewModelFactory viewModelFactory) {
         super();
@@ -17,6 +18,7 @@ public class ViewHandler extends ViewCreator {
 
     public void start(Stage stage) {
         this.stage = stage;
+        this.stage.setOnCloseRequest(e -> System.exit(0));
         scene = new Scene(new Region());
         openView(View.START);
     }

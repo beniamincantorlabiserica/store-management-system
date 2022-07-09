@@ -10,16 +10,20 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 public class NetworkManager implements RemoteModel {
-    private RemoteModel remoteModel;
+    private final RemoteModel remoteModel;
 
-    public NetworkManager() throws RemoteException {
+    public NetworkManager() throws RuntimeException {
         try {
             remoteModel = (RemoteModel) Naming.lookup("rmi://localhost:1099/Shop");
         } catch (Exception e) {
-            Logger.getInstance().log(LoggerType.ERROR,"RMI connection error");
-            e.printStackTrace();
+            Logger.getInstance().log(LoggerType.ERROR,"RMI connection error (Stub lookup)");
+            throw new RuntimeException("STUB_UNREACHABLE");
         }
-        UnicastRemoteObject.exportObject(this, 0);
+        try {
+            UnicastRemoteObject.exportObject(this, 0);
+        } catch (RemoteException e) {
+            Logger.getInstance().log(LoggerType.ERROR,"RMI connection error (exportObject)");
+        }
         Logger.getInstance().log("RMI connected successfully");
     }
 
@@ -40,7 +44,7 @@ public class NetworkManager implements RemoteModel {
         try {
             return remoteModel.getWorkingHours();
         } catch (RemoteException e) {
-            throw new RuntimeException(e);
+            return null;
         }
     }
 

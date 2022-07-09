@@ -21,10 +21,7 @@ public class DashboardDatabaseManager {
         ResultSet rs = queryDB(query);
         try {
             if(!rs.next()) {
-                String defaultHours = "09:00 17:00";
-                query = "insert into preferences (preference, value) values ('workingHours', '" + defaultHours + "')";
-                updateDB(query);
-                return new WorkingHours(defaultHours);
+                return new WorkingHours();
             } else {
                 return new WorkingHours(rs.getString("value"));
             }

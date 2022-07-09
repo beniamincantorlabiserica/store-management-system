@@ -9,14 +9,20 @@ import java.rmi.RemoteException;
 import java.time.LocalTime;
 
 public class ModelManager implements Model {
-    private final RemoteModel clientModel;
+    private RemoteModel clientModel;
 
+    private boolean network;
     private User currentUser;
 
-    private WorkingHours workingHours;
-
-    public ModelManager() throws RemoteException {
-        clientModel = new NetworkManager();
+    public ModelManager() {
+        clientModel = null;
+        network = false;
+        try {
+            clientModel = new NetworkManager();
+            network = true;
+        } catch (Exception e) {
+            Logger.getInstance().log(LoggerType.ERROR, "Connection error. Is the server offline?");
+        }
         currentUser = null;
     }
 
@@ -33,6 +39,19 @@ public class ModelManager implements Model {
             Logger.getInstance().log(LoggerType.ERROR, "Get working hours error");
             throw new RuntimeException("TODO");
         }
+    }
+
+    public void retryConnection() {
+        try {
+            clientModel = new NetworkManager();
+            network = true;
+        } catch (RuntimeException e) {
+            Logger.getInstance().log(LoggerType.ERROR, "Connection to the server failed again.");
+        }
+    }
+
+    public boolean isNetwork() {
+        return network;
     }
 
     @Override

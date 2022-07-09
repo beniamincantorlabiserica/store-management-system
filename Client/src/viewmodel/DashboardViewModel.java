@@ -1,8 +1,10 @@
 package viewmodel;
 
+import javafx.application.Platform;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import logger.Logger;
 import model.Model;
 
 import java.time.LocalDate;
@@ -14,6 +16,8 @@ import java.time.format.DateTimeFormatter;
 public class DashboardViewModel implements DashBoardViewModelInterface {
 
     private final Model model;
+
+    private final Thread updateThread;
 
     private final SimpleStringProperty dateProperty;
     private final SimpleStringProperty timeProperty;
@@ -43,20 +47,36 @@ public class DashboardViewModel implements DashBoardViewModelInterface {
         this.salesThisMonthProperty = new SimpleStringProperty();
         this.dayProgressBarProperty = new SimpleDoubleProperty();
         this.monthProgressBarProperty = new SimpleDoubleProperty();
-        reset();
+        updateThread = new Thread(() -> {
+            while (true) {
+                try {
+                    //noinspection BusyWait
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Platform.runLater(this::softReset);
+            }
+        });
+        updateThread.setDaemon(true);
+    }
+
+    private void softReset() {
+        this.dateProperty.set("DATE\n" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        this.timeProperty.set("TIME\n" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+        this.dayOfWeekProperty.set("DAY OF WEEK\n" + LocalDateTime.now().getDayOfWeek().name());
     }
 
     @Override
     public void logout() {
+        updateThread.interrupt();
         model.logout();
         reset();
     }
 
     @Override
     public void reset() {
-        this.dateProperty.set("DATE\n" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-        this.timeProperty.set("TIME\n" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
-        this.dayOfWeekProperty.set("DAY OF WEEK\n" + LocalDateTime.now().getDayOfWeek().name());
+        softReset();
         this.storeStatusProperty.set("STORE STATUS\n" + model.getStoreStatus());
         this.checkoutsThisMonthProperty.set("CHECKOUTS THIS MONTH\n" + model.getCheckoutsThisMonth());
         this.checkoutsTodayProperty.set("CHECKOUTS TODAY\n" + model.getCheckoutsToday());
@@ -110,6 +130,11 @@ public class DashboardViewModel implements DashBoardViewModelInterface {
     @Override
     public String getClosingHours() {
         return model.getClosingHours();
+    }
+
+    @Override
+    public void startUpdateThread() {
+        this.updateThread.start();
     }
 
     public SimpleStringProperty getDateProperty() {
