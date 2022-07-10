@@ -65,4 +65,19 @@ public class NetworkManager implements RemoteModel {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public String getCheckoutsThisMonth() throws RemoteException {
+        return remoteModel.getCheckoutsThisMonth();
+    }
+
+    @Override
+    public String getItemsThisMonth() throws RemoteException {
+        return remoteModel.getItemsThisMonth();
+    }
+
+    @Override
+    public String getSalesThisMonth() throws RemoteException {
+        return remoteModel.getSalesThisMonth();
+    }
 }

@@ -4,6 +4,8 @@ import Database.ManagerFactory;
 import logger.Logger;
 import logger.LoggerType;
 
+import java.rmi.RemoteException;
+
 public class ServerModelManager implements ServerModel {
     private final ManagerFactory managerFactory;
 
@@ -39,6 +41,36 @@ public class ServerModelManager implements ServerModel {
     public void setClosingHours(String closingTime) {
         workingHours.setClosingTime(closingTime);
         updateWorkingHours();
+    }
+
+    @Override
+    public String getCheckoutsThisMonth() {
+        try {
+            return managerFactory.getDashboardDatabaseManager().getCheckoutsThisMonth();
+        } catch (Exception e) {
+            Logger.getInstance().log(LoggerType.WARNING, "Could not fetch checkouts this month from server.");
+        }
+        return "Err";
+    }
+
+    @Override
+    public String getItemsThisMonth() {
+        try {
+            return managerFactory.getDashboardDatabaseManager().getItemsThisMonth();
+        } catch (Exception e) {
+            Logger.getInstance().log(LoggerType.WARNING, "Could not fetch items this month from server.");
+        }
+        return "Err";
+    }
+
+    @Override
+    public String getSalesThisMonth() {
+        try {
+            return managerFactory.getDashboardDatabaseManager().getSalesThisMonth();
+        } catch (Exception e) {
+            Logger.getInstance().log(LoggerType.WARNING, "Could not fetch sales this month from server.");
+        }
+        return "Err";
     }
 
     private void updateWorkingHours() {
