@@ -66,4 +66,19 @@ public class ServerNetworkManager implements RemoteModel {
     public void setClosingHours(String closingTime) {
         serverModel.setClosingHours(closingTime);
     }
+
+    @Override
+    public String getCheckoutsThisMonth() throws RemoteException {
+        return serverModel.getCheckoutsThisMonth();
+    }
+
+    @Override
+    public String getItemsThisMonth() throws RemoteException {
+        return serverModel.getItemsThisMonth();
+    }
+
+    @Override
+    public String getSalesThisMonth() throws RemoteException {
+        return serverModel.getSalesThisMonth();
+    }
 }

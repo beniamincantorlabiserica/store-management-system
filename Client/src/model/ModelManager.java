@@ -101,20 +101,29 @@ public class ModelManager implements Model {
 
     @Override
     public String getCheckoutsThisMonth() {
-        // TODO @diana
-        return "TODO @diana";
+        try {
+            return clientModel.getCheckoutsThisMonth();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public String getItemsThisMonth() {
-        // TODO @diana
-        return "TODO @diana";
+        try {
+            return clientModel.getItemsThisMonth();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public String getSalesThisMonth() {
-        // TODO @diana
-        return "TODO @diana";
+        try {
+            return clientModel.getSalesThisMonth();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
