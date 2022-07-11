@@ -35,6 +35,13 @@ public class DashboardDatabaseManager {
         updateDB(query);
     }
 
+    /**
+     * Logs the reaching method in the server as DEBUG
+     * Gets today's date and builds a query counting all distinct checkout ids
+     * Runs the query and loads the result in variable checkouts as String
+     * Logs the number retrieved from the database in the server as DEBUG
+     * @return checkouts
+     */
     public String getCheckoutsToday() {
         Logger.getInstance().log(LoggerType.DEBUG, "DashboardDatabaseManager -> getCheckoutsToday()");
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
@@ -52,6 +59,13 @@ public class DashboardDatabaseManager {
         return checkouts;
     }
 
+    /**
+     * Logs the reaching method in the server as DEBUG
+     * Gets today's date and builds a query summing up all the items sold today
+     * Runs the query and loads the result in variable items as String
+     * Logs the number retrieved from the database in the server as DEBUG
+     * @return items
+     */
     public String getItemsToday() {
         Logger.getInstance().log(LoggerType.DEBUG, "DashboardDatabaseManager -> getItemsToday()");
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
@@ -69,6 +83,13 @@ public class DashboardDatabaseManager {
         return items;
     }
 
+    /**
+     * Logs the reaching method in the server as DEBUG
+     * Gets today's date and builds a query summing up all the items' price sold today
+     * Runs the query and loads the result in variable sales as String
+     * Logs the number retrieved from the database in the server as DEBUG
+     * @return sales
+     */
     public String getSalesToday() {
         Logger.getInstance().log(LoggerType.DEBUG, "DashboardDatabaseManager -> getSalesToday()");
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
