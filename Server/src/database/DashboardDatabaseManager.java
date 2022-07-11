@@ -35,6 +35,78 @@ public class DashboardDatabaseManager {
         updateDB(query);
     }
 
+    /**
+     * Logs the reaching method in the server as DEBUG
+     * Gets today's date and builds a query counting all distinct checkout ids
+     * Runs the query and loads the result in variable checkouts as String
+     * Logs the number retrieved from the database in the server as DEBUG
+     * @return checkouts
+     */
+    public String getCheckoutsToday() {
+        Logger.getInstance().log(LoggerType.DEBUG, "DashboardDatabaseManager -> getCheckoutsToday()");
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+        LocalDateTime now = LocalDateTime.now();
+        String query = "Select count(distinct id) as checkouts from checkouts where timestamp='" + dtf.format(now) + "'";
+        ResultSet rs = queryDB(query);
+        String checkouts;
+        try {
+            rs.next();
+            checkouts = String.valueOf(rs.getInt("checkouts"));
+            Logger.getInstance().log(LoggerType.DEBUG, "CHECKOUTS TODAY: " + checkouts);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return checkouts;
+    }
+
+    /**
+     * Logs the reaching method in the server as DEBUG
+     * Gets today's date and builds a query summing up all the items sold today
+     * Runs the query and loads the result in variable items as String
+     * Logs the number retrieved from the database in the server as DEBUG
+     * @return items
+     */
+    public String getItemsToday() {
+        Logger.getInstance().log(LoggerType.DEBUG, "DashboardDatabaseManager -> getItemsToday()");
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+        LocalDateTime now = LocalDateTime.now();
+        String query = "Select sum(checkouts.quantity) as items from checkouts where timestamp='" + dtf.format(now) + "'";
+        ResultSet rs = queryDB(query);
+        String items;
+        try {
+            rs.next();
+            items = String.valueOf(rs.getInt("items"));
+            Logger.getInstance().log(LoggerType.DEBUG, "ITEMS TODAY: " + items);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return items;
+    }
+
+    /**
+     * Logs the reaching method in the server as DEBUG
+     * Gets today's date and builds a query summing up all the items' price sold today
+     * Runs the query and loads the result in variable sales as String
+     * Logs the number retrieved from the database in the server as DEBUG
+     * @return sales
+     */
+    public String getSalesToday() {
+        Logger.getInstance().log(LoggerType.DEBUG, "DashboardDatabaseManager -> getSalesToday()");
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+        LocalDateTime now = LocalDateTime.now();
+        String query = "Select sum(checkouts.price) as sales from checkouts where timestamp='" + dtf.format(now) + "'";
+        ResultSet rs = queryDB(query);
+        String sales;
+        try {
+            rs.next();
+            sales = String.valueOf(rs.getInt("sales"));
+            Logger.getInstance().log(LoggerType.DEBUG, "SALES TODAY: " + sales);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return sales;
+    }
+
     public String getCheckoutsThisMonth() {
         int year = LocalDateTime.now().getYear();
         String month = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM"));
