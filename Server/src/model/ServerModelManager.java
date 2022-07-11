@@ -58,7 +58,7 @@ public class ServerModelManager implements ServerModel {
         try {
             return managerFactory.getDashboardDatabaseManager().getItemsToday();
         } catch (Exception e) {
-            Logger.getInstance().log(LoggerType.WARNING, "Could not fetch checkouts for today from server.");
+            Logger.getInstance().log(LoggerType.WARNING, "Could not fetch items for today from server.");
         }
         return "Err";
     }
@@ -68,7 +68,7 @@ public class ServerModelManager implements ServerModel {
         try {
             return managerFactory.getDashboardDatabaseManager().getSalesToday();
         } catch (Exception e) {
-            Logger.getInstance().log(LoggerType.WARNING, "Could not fetch checkouts for today from server.");
+            Logger.getInstance().log(LoggerType.WARNING, "Could not fetch sales for today from server.");
         }
         return "Err";    }
 
