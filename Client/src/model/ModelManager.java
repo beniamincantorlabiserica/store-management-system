@@ -83,20 +83,29 @@ public class ModelManager implements Model {
 
     @Override
     public String getCheckoutsToday() {
-        // TODO @beniamin
-        return "TODO @beniamin";
+        try {
+            return clientModel.getCheckoutsToday();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public String getItemsToday() {
-        // TODO @beniamin
-        return "TODO @beniamin";
+        try {
+            return clientModel.getItemsToday();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public String getSalesToday() {
-        // TODO @beniamin
-        return "TODO @beniamin";
+        try {
+            return clientModel.getSalesToday();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

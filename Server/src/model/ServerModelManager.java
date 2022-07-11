@@ -44,6 +44,35 @@ public class ServerModelManager implements ServerModel {
     }
 
     @Override
+    public String getCheckoutsToday() {
+        try {
+            return managerFactory.getDashboardDatabaseManager().getCheckoutsToday();
+        } catch (Exception e) {
+            Logger.getInstance().log(LoggerType.WARNING, "Could not fetch checkouts for today from server.");
+        }
+        return "Err";
+    }
+
+    @Override
+    public String getItemsToday() {
+        try {
+            return managerFactory.getDashboardDatabaseManager().getItemsToday();
+        } catch (Exception e) {
+            Logger.getInstance().log(LoggerType.WARNING, "Could not fetch checkouts for today from server.");
+        }
+        return "Err";
+    }
+
+    @Override
+    public String getSalesToday() {
+        try {
+            return managerFactory.getDashboardDatabaseManager().getSalesToday();
+        } catch (Exception e) {
+            Logger.getInstance().log(LoggerType.WARNING, "Could not fetch checkouts for today from server.");
+        }
+        return "Err";    }
+
+    @Override
     public String getCheckoutsThisMonth() {
         try {
             return managerFactory.getDashboardDatabaseManager().getCheckoutsThisMonth();

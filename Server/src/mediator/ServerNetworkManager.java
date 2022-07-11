@@ -68,6 +68,20 @@ public class ServerNetworkManager implements RemoteModel {
     }
 
     @Override
+    public String getCheckoutsToday() throws RemoteException {
+        return serverModel.getCheckoutsToday();
+    }
+
+    @Override
+    public String getItemsToday() throws RemoteException {
+        return serverModel.getItemsToday();
+    }
+
+    @Override
+    public String getSalesToday() throws RemoteException {
+        return serverModel.getSalesToday();
+    }
+    @Override
     public String getCheckoutsThisMonth() throws RemoteException {
         return serverModel.getCheckoutsThisMonth();
     }
