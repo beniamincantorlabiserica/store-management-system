@@ -14,40 +14,54 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * contains the view controller components related to the dashboard
+ */
 public class DashboardViewController extends ViewController {
     @FXML
-    public Label dateLabel;
+    public Label dateLabel; // contains a string representing today's date
     @FXML
-    public Label timeLabel;
+    public Label timeLabel; // contains a string representing the time now
     @FXML
-    public Label dayOfWeekLabel;
+    public Label dayOfWeekLabel; // contains a string representing the day of the week
     @FXML
-    public Label storeStatusLabel;
+    public Label storeStatusLabel; // contains a string representing 'CLOSED' if the store is outside configured working hours and 'OPEN' if between
     @FXML
-    public Label checkoutsTodayLabel;
+    public Label checkoutsTodayLabel; // contains a string representing the number of unique checkouts that were registered today
     @FXML
-    public Label itemsTodayLabel;
+    public Label itemsTodayLabel; // contains a string representing the total number of items sold from all the checkouts today
     @FXML
-    public Label salesTodayLabel;
+    public Label salesTodayLabel; // contains a string representing the amount of currency the total items sold today sums up to
     @FXML
-    public Label checkoutsThisMonthLabel;
+    public Label checkoutsThisMonthLabel; // contains a string representing the number of unique checkouts that were registered this month from the first day of the month to the last
     @FXML
-    public Label itemsThisMonthLabel;
+    public Label itemsThisMonthLabel; // contains a string representing the total number of items sold from all the checkouts this month from the first day of the month to the last
     @FXML
-    public Label salesThisMonthLabel;
+    public Label salesThisMonthLabel; // contains a string representing the amount of currency the total items sold this month from the first day of the month to the last sums up to
     @FXML
-    public ProgressBar dayProgressBar;
+    public ProgressBar dayProgressBar; // contains a value representing the hours passed until the present moment between the opening hour and the closing hour
     @FXML
-    public ProgressBar monthProgressBar;
+    public ProgressBar monthProgressBar; // contains a value representing the days passed until the present moment between the first and the last days of the current month
 
-    private DashboardViewModel viewModel;
+    private DashboardViewModel viewModel; // contains a reference to the viewModel
 
-    public DashboardViewController() {}
+    public DashboardViewController() {} // empty constructor
 
+    /**
+     * called by the view handler when creating the view for the first time
+     *
+     * fetches the viewModel corresponding to this view
+     *
+     * binds the FXML variables to the property variables from the viewModel
+     *
+     * starts the view update thread in the viewModel (used to update the time, date and day of the week elements from this view)
+     *
+     * performs a viewModel reset so that all the appropriate data from the model is fetched just before the user is able to see it
+     */
     @Override
     protected void init() {
-        viewModel = getViewModelFactory().getDashboardViewModel();
-        this.dateLabel.textProperty().bind(viewModel.getDateProperty());
+        viewModel = getViewModelFactory().getDashboardViewModel(); // fetches the viewModel variable from the viewModel factory class
+        this.dateLabel.textProperty().bind(viewModel.getDateProperty()); // ->
         this.timeLabel.textProperty().bind(viewModel.getTimeProperty());
         this.dayOfWeekLabel.textProperty().bind(viewModel.getDayOfWeekProperty());
         this.storeStatusLabel.textProperty().bind(viewModel.getStoreStatusProperty());
@@ -58,22 +72,40 @@ public class DashboardViewController extends ViewController {
         this.itemsThisMonthLabel.textProperty().bind(viewModel.getItemsThisMonthProperty());
         this.salesThisMonthLabel.textProperty().bind(viewModel.getSalesThisMonthProperty());
         this.dayProgressBar.progressProperty().bindBidirectional(viewModel.getDayProgressBarProperty());
-        this.monthProgressBar.progressProperty().bindBidirectional(viewModel.getMonthProgressBarProperty());
-        viewModel.startUpdateThread();
-        viewModel.reset();
+        this.monthProgressBar.progressProperty().bindBidirectional(viewModel.getMonthProgressBarProperty()); // <- binding the variables to the corresponding viewModel property
+        viewModel.startUpdateThread(); // starts a thread in the viewModel, with the purpose explained in this method's JavaDOC
+        viewModel.reset(); // performs a viewModel reset to update data to the newest version available
     }
 
+    /**
+     * used to perform a reset into the viewModel, to update the data to the newest available version from the model
+     */
     @Override
     public void reset() {
         viewModel.reset();
     }
 
+    /**
+     * handles the logout button pressing event by sending a logout signal to the viewModel and opens the start view
+     */
     @FXML
     public void onLogoutButtonPressed() {
         viewModel.logout();
         getViewHandler().openView(View.START);
     }
 
+    /**
+     * handles the inventory button pressing event by sending displaying a window containing a list of items with three corresponding buttons
+     * for each item with the following functionality:
+     *  - 'Edit Amount' button: displays a Text Input Dialog with a text field input with the default value of the number of items available at
+     *  the moment in the store; after the user enters a number and presses ok, the number is passed to the viewModel in a corresponding function.
+     *  if the inputted text is not a number or contains spaces, display an alert box stating the error and let the user try again
+     *  - 'Edit Price' button: displays a Text Input Dialog with a text field input with the default value of the current price of the item; after
+     *  the user enters a number and presses ok, the number is passed to the viewModel in a corresponding function.
+     *  if the inputted text is not a number or contains spaces, display an alert box stating the error and let the user try again
+     *  - 'Remove Item' button: displays a Confirmation Dialog stating that the item will be removed if the user presses 'YES' and
+     *  it won't be removed if the user presses 'NO'
+     */
     @FXML
     public void onInventoryButtonPressed() {
         // TODO inventory page with list of items & ability to edit amount of item x & price of item.
@@ -84,6 +116,13 @@ public class DashboardViewController extends ViewController {
         alert.showAndWait();
     }
 
+    /**
+     * handles the passwords button pressing event by displaying a Confirmation Dialog with Custom Actions with the buttons for changing the password for the
+     * 'Master' or for the 'Cashier', and a 'Cancel' button to be able to exit.
+     * if the choice is not the cancel button, a new Custom Change Password Dialog is shown with three text field inputs ('Master Password', 'Old Password', 'New Password')
+     * and two buttons ('Change Password' and 'Cancel').
+     * if the data from the text fields is validated, pass the password change desire to the viewModel, else show an Error Alert box and let the user retry
+     */
     @FXML
     public void onPasswordsButtonPressed() {
         // TODO change password dialog with dropdown with choice for "master" or "cashier",
@@ -99,35 +138,42 @@ public class DashboardViewController extends ViewController {
         alert.showAndWait();
     }
 
+    /**
+     * handles the working hours button pressing event by displaying a Choice Dialog with a dropdown input (with the ability to choose from editing the opening time or
+     * the closing time) and a 'Cancel' button; if the user presses OK, Choice Dialog is closed and a new Text Input Dialog is shown, where the user needs to enter the new
+     * closing / opening time in the format 'HH:mm', HH - hour in 24h format, mm - minutes)
+     */
     public void onWorkingHoursButtonPressed() {
         showWorkingHoursChoiceDialog();
     }
 
+    /**
+     * extracted implementation for the onWorkingHoursButtonPressed
+     */
     private void showWorkingHoursChoiceDialog() {
         List<String> choices = new ArrayList<>();
-        choices.add("opening time");
-        choices.add("closing time");
+        choices.add("opening time"); // ->
+        choices.add("closing time"); // <- choices for the Choice Dialog
 
-        ChoiceDialog<String> dialog = new ChoiceDialog<>("opening time", choices);
+        ChoiceDialog<String> dialog = new ChoiceDialog<>("opening time", choices); // ->
         dialog.setTitle("Working Hours");
-        dialog.setContentText("What do you want to edit?");
-
-        Optional<String> result = dialog.showAndWait();
+        dialog.setContentText("What do you want to edit?"); // <- preferences for the Choice Dialog
+        Optional<String> result = dialog.showAndWait(); // show the dialog and wait for an answer
         if (result.isPresent()) {
-            boolean valid = false;
+            boolean valid = false; // var to keep displaying the Text Input Dialog if the text from the text field is not valid
             while ((result.get().equals("opening time") || result.get().equals("closing time")) && !valid) {
                 TextInputDialog timeDialog;
                 if (result.get().contains("open")) {
-                    timeDialog = new TextInputDialog(viewModel.getOpeningHours());
+                    timeDialog = new TextInputDialog(viewModel.getOpeningHours()); // set the dialog default value according to the desired edit
                 } else {
-                    timeDialog = new TextInputDialog(viewModel.getClosingHours());
+                    timeDialog = new TextInputDialog(viewModel.getClosingHours()); // set the dialog default value according to the desired edit
                 }
-                timeDialog.setTitle("Working Hours");
+                timeDialog.setTitle("Working Hours"); // ->
                 timeDialog.setHeaderText("Enter your desired " + result.get() + ".");
-                timeDialog.setContentText("Remember! The format needs to be like 07:00 or 12:00 or 23:35!");
-                Optional<String> timeResult = timeDialog.showAndWait();
+                timeDialog.setContentText("Remember! The format needs to be like 07:00 or 12:00 or 23:35!"); // <- preferences for the Text Input Dialog
+                Optional<String> timeResult = timeDialog.showAndWait(); // show the dialog and wait for an answer
                 if (timeResult.isPresent()) {
-                    try {
+                    try { // put the results catching into a try block to catch additional validation erros for the input
                         if (result.get().equals("opening time")) {
                             viewModel.setOpeningHours(timeResult.get());
                             Logger.getInstance().log(LoggerType.DEBUG, "Opening time set to: " + timeResult.get());
@@ -136,11 +182,10 @@ public class DashboardViewController extends ViewController {
                             Logger.getInstance().log(LoggerType.DEBUG, "Closing time set to: " + timeResult.get());
                         }
                         Logger.getInstance().log(LoggerType.DEBUG, "Result time: " + timeResult.get());
-                        valid = true;
+                        valid = true; // once the input was sent to the viewModel and no invalidation exception occurs, the dialog can exit
                     } catch (Exception e) {
                         Logger.getInstance().log(LoggerType.ERROR, "Illegal argument for " + result.get());
                     }
-
                 }
             }
         }

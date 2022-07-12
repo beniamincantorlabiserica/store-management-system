@@ -11,19 +11,22 @@ import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * DAO for the dashboard
+ */
 public class DashboardDatabaseManager {
     public DashboardDatabaseManager() {}
 
+    /**
+     * @return an object containing the working hours now contained into the database
+     */
     public WorkingHours getWorkingHours() {
         Logger.getInstance().log(LoggerType.DEBUG, "DashboardDatabaseManager -> getWorkingHours()");
         String query = "select value from preferences where preference = 'workingHours'";
         ResultSet rs = queryDB(query);
         try {
-            if(!rs.next()) {
-                return new WorkingHours();
-            } else {
-                return new WorkingHours(rs.getString("value"));
-            }
+            rs.next();
+            return new WorkingHours(rs.getString("value"));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -110,7 +113,8 @@ public class DashboardDatabaseManager {
     public String getCheckoutsThisMonth() {
         int year = LocalDateTime.now().getYear();
         String month = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM"));
-        String query = "SELECT COUNT(DISTINCT id) as checkouts from checkouts where '" + year + "/" + month + "/01' <= checkouts.timestamp and checkouts.timestamp < '" + year + "/" + month+1 + "/01';";
+        String nextMonth = String.valueOf(Integer.parseInt(month));
+        String query = "SELECT COUNT(DISTINCT id) as checkouts from checkouts where '" + year + "/" + month + "/01' <= checkouts.timestamp and checkouts.timestamp < '" + year + "/" + nextMonth + "/01';";
         ResultSet rs = queryDB(query);
         String checkouts;
         try {
@@ -125,7 +129,8 @@ public class DashboardDatabaseManager {
     public String getItemsThisMonth() {
         int year = LocalDateTime.now().getYear();
         String month = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM"));
-        String query = "SELECT SUM(checkouts.quantity) as items from checkouts where '" + year + "/" + month + "/01' <= checkouts.timestamp and checkouts.timestamp < '" + year + "/" + month+1 + "/01';";
+        String nextMonth = String.valueOf(Integer.parseInt(month));
+        String query = "SELECT SUM(checkouts.quantity) as items from checkouts where '" + year + "/" + month + "/01' <= checkouts.timestamp and checkouts.timestamp < '" + year + "/" + nextMonth + "/01';";
         ResultSet rs = queryDB(query);
         String items;
         try {
@@ -140,7 +145,8 @@ public class DashboardDatabaseManager {
     public String getSalesThisMonth() {
         int year = LocalDateTime.now().getYear();
         String month = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM"));
-        String query = "SELECT SUM(checkouts.price) as sales from checkouts where '" + year + "-" + month + "-01' <= checkouts.timestamp and checkouts.timestamp < '" + year + "-" + month+1 + "-01';";
+        String nextMonth = String.valueOf(Integer.parseInt(month));
+        String query = "SELECT SUM(checkouts.price) as sales from checkouts where '" + year + "/" + month + "/01' <= checkouts.timestamp and checkouts.timestamp < '" + year + "/" + nextMonth + "/01';";
         ResultSet rs = queryDB(query);
         String sales;
         try {

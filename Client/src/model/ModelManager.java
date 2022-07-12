@@ -8,6 +8,9 @@ import networking.RemoteModel;
 import java.rmi.RemoteException;
 import java.time.LocalTime;
 
+/**
+ * The client model manager
+ */
 public class ModelManager implements Model {
     private RemoteModel clientModel;
     /**
