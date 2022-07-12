@@ -9,6 +9,10 @@ import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
+/**
+ * Provides the client side segment of the communication between the client and the server
+ * Used by the ModelManager
+ */
 public class NetworkManager implements RemoteModel {
     private final RemoteModel remoteModel;
 
