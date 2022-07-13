@@ -7,5 +7,8 @@ public interface StartViewModelInterface {
     void reset();
     boolean isNetwork();
     void retryNetwork();
+
+    String getOpeningHours();
+    String getClosingHours();
 }
 

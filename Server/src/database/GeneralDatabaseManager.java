@@ -14,7 +14,7 @@ public class GeneralDatabaseManager {
                 "CREATE TABLE IF NOT EXISTS preferences (preference VARCHAR(20) UNIQUE, value varchar(50));" +
                 "CREATE TABLE IF NOT EXISTS checkouts (id INT, itemID INT REFERENCES items(id), quantity INT, price INT, paymentMethod VARCHAR(15), timestamp VARCHAR(50));" +
                 "INSERT INTO preferences (preference, value) values ('workingHours', '09:00 17:00') ON CONFLICT(preference) DO NOTHING;" +
-                "INSERT INTO users (password, role) VALUES ('gg77', 'cashier'), ('gg99', 'master') ON CONFLICT(role) DO NOTHING;";
+                "INSERT INTO users (password, role) VALUES ('gg77', 'cashier'), ('gg99', 'storeManager'), ('gg57', 'master') ON CONFLICT(role) DO NOTHING;";
         DBConnection dbConnection = new DBConnection();
         Connection connection = dbConnection.getConnection();
         try {
