@@ -28,6 +28,11 @@ public class StartViewModel implements StartViewModelInterface {
     }
 
     @Override
+    public void logout() {
+        model.logout();
+    }
+
+    @Override
     public String getOpeningHours() {
         return model.getOpeningHours();
     }

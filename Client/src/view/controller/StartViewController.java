@@ -71,6 +71,7 @@ public class StartViewController extends ViewController {
                         alert.setTitle("Outside of working hours.");
                         alert.setHeaderText("Use Master Password in order to log in.");
                         alert.showAndWait();
+                        viewModel.logout();
                     }
                 } else {
                     // TODO cashier UI and use of it
@@ -82,9 +83,15 @@ public class StartViewController extends ViewController {
                         alert.setContentText("Description: You have logged in as a cashier. It does not have an UI nor a functionality. \n" +
                                 "To be able to log out and log in as a master, you need to restart the client app.");
                         alert.showAndWait();
-
+                        viewModel.logout();
                         // TODO after implementing, remove this alert-box
                         Logger.getInstance().log("Cashier logged in!");
+                    } else {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Outside of working hours.");
+                        alert.setHeaderText("Use Master Password in order to log in.");
+                        alert.showAndWait();
+                        viewModel.logout();
                     }
                 }
             } else {

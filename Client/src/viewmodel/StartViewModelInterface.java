@@ -7,7 +7,7 @@ public interface StartViewModelInterface {
     void reset();
     boolean isNetwork();
     void retryNetwork();
-
+    void logout();
     String getOpeningHours();
     String getClosingHours();
 }
