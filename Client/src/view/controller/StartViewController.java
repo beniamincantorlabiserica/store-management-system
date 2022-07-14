@@ -104,6 +104,16 @@ public class StartViewController extends ViewController {
         }
     }
 
+    /**
+     * This method is checking if the current time is in between the working
+     * hours of the system.
+     * @param openingHours takes in the opening hours as string
+     * @param closingHours takes in the closing hours as string
+     * The parameters are converted into Date type and compared with the current time
+     * which is also converted to Date type
+     * @return boolean (true - if the current time is in  between the working hours,
+     *                  false - if the current time is not in between the  working hours)
+     */
     private boolean checkWorkingHours(String openingHours, String closingHours) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
         LocalDateTime now = LocalDateTime.now();
