@@ -26,9 +26,6 @@ Parts ready for uploading:
 - [ ] JavaDoc
 - [ ] UserGuide
 
-### Meetings
-- [X] 3 Jul 2022
-
 ## Project
 ### Main idea
 The project consists of two java applications for internal sales and inventory management.
