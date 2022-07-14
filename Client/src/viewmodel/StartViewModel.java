@@ -28,6 +28,21 @@ public class StartViewModel implements StartViewModelInterface {
     }
 
     @Override
+    public void logout() {
+        model.logout();
+    }
+
+    @Override
+    public String getOpeningHours() {
+        return model.getOpeningHours();
+    }
+
+    @Override
+    public String getClosingHours() {
+        return model.getClosingHours();
+    }
+
+    @Override
     public User login(String password) {
         Logger.getInstance().log(LoggerType.DEBUG, "StartViewModel -> login()");
         try {
@@ -37,4 +52,5 @@ public class StartViewModel implements StartViewModelInterface {
             throw new RuntimeException(e);
         }
     }
+
 }

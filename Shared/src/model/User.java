@@ -16,6 +16,9 @@ public class User implements Serializable {
     public boolean isMaster() {
         return role.equals("master");
     }
+    public boolean isStoreManager() {
+        return role.equals("storeManager");
+    }
 
     public User(String role) {
         this.role = role;
