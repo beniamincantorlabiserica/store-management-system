@@ -8,4 +8,6 @@ public interface DashBoardViewModelInterface {
     String getOpeningHours();
     String getClosingHours();
     void startUpdateThread();
+    boolean masterCheck(String s);
+    void updatePassword(String role, String password);
 }

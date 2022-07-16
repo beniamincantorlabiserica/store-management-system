@@ -1,6 +1,5 @@
 package view.controller;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.*;
@@ -125,17 +124,82 @@ public class DashboardViewController extends ViewController {
      */
     @FXML
     public void onPasswordsButtonPressed() {
-        // TODO change password dialog with dropdown with choice for "master" or "cashier",
-        // TODO a master password field (old master password) and two new password
-        // TODO fields (new password + confirm new password)
-        Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle("Unimplemented feature");
-        alert.setHeaderText("This feature is not yet implemented.");
-        alert.setContentText("""
-                Description: change password dialog with dropdown with choice for "master" or "cashier",
-                 a master password field (old master password) and two new password\s
-                fields (new password + confirm new password)""");
-        alert.showAndWait();
+        List<String> choices = new ArrayList<>();
+        choices.add("Store Manager"); // ->
+        choices.add("Cashier"); // <- choices for the Choice Dialog
+
+        ChoiceDialog<String> dialog = new ChoiceDialog<>("Store Manager", choices); // ->
+        dialog.setTitle("Password Change");
+        dialog.setContentText("What password do you want to change?"); // <- preferences for the Choice Dialog
+        Optional<String> result = dialog.showAndWait(); // show the dialog and wait for an answer
+        if (result.isPresent()) {
+            String choice = result.get();
+            if(!showMasterPasswordCheckDialog()) {
+                Logger.getInstance().log(LoggerType.ERROR, "Wrong master password");
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle("Wrong Master Password");
+                alert.setContentText("The password you entered was wrong.");
+                alert.showAndWait();
+                return;
+            }
+            Logger.getInstance().log("Master password OK");
+            if(choice.equals("Store Manager") || choice.equals("Cashier")){
+                try {
+                    viewModel.updatePassword(choice, showPasswordChangeDialog(choice));
+                } catch (Exception e) {
+                    if(e.getMessage().contains("PASSWORD")) {
+                        Alert alert = new Alert(AlertType.ERROR);
+                        alert.setTitle("Password Invalid");
+                        alert.setContentText("The password should have more than 3 characters.");
+                        alert.showAndWait();
+                    }
+                }
+            }
+        }
+    }
+
+
+    /**
+     * displays a dialog with a text field input expecting the correct master password
+     * @return true if the master password matches, false otherwise
+     */
+    private boolean showMasterPasswordCheckDialog() {
+        TextInputDialog dialog = new TextInputDialog("Master password...");
+        dialog.setTitle("Master Password Check");
+        dialog.setContentText("Please enter the master password:");
+        Optional<String> result = dialog.showAndWait();
+        return result.isPresent() && viewModel.masterCheck(result.get()); // checks the provided dialog password against the master password from the database
+    }
+
+    /**
+     * @param role expects the role for which the password will be changed (cashier or storeManager)
+     * @return the new password for the specified role
+     */
+    private String showPasswordChangeDialog(String role) {
+        TextInputDialog dialog = new TextInputDialog("");
+        dialog.setTitle("New " + role + " password");
+        dialog.setContentText("Please enter the desired new password for the " + role + ":");
+        Optional<String> result = dialog.showAndWait();
+        if(result.isPresent()) {
+            if (!validateNewPassword(result.get())) { // validate the entered password
+                throw new RuntimeException("PASSWORD_INVALID");
+            }
+            return result.get();
+        }
+        throw new RuntimeException("DIALOG_CANCELLED");
+    }
+
+    /**
+     * validates the password sent as a string parameter
+     * @param s expects the password to be validated
+     * @return true if the password passes the validation tests, false otherwise
+     */
+    private boolean validateNewPassword(String s) {
+        if(s.length() < 4) {
+            Logger.getInstance().log(LoggerType.ERROR, "The new password should contain more than 3 characters");
+            return false;
+        }
+        return true;
     }
 
     /**

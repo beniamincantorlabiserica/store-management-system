@@ -74,6 +74,20 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public boolean masterCheck(String s) {
+        return s.equals(currentUser.getMasterPassword());
+    }
+
+    @Override
+    public void updatePassword(String role, String password) {
+        try {
+            clientModel.updatePassword(role, password);
+        } catch (RemoteException e) {
+            Logger.getInstance().log(LoggerType.DEBUG, "Remote exception in updating password: " + e.getMessage());
+        }
+    }
+
+    @Override
     public void logout() {
         this.currentUser = null;
         Logger.getInstance().log("User logged out");

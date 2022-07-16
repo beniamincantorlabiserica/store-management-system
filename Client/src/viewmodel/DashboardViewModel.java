@@ -14,7 +14,6 @@ import java.time.Year;
 import java.time.format.DateTimeFormatter;
 
 public class DashboardViewModel implements DashBoardViewModelInterface {
-
     private final Model model;
 
     private final Thread updateThread;
@@ -134,6 +133,16 @@ public class DashboardViewModel implements DashBoardViewModelInterface {
     @Override
     public void startUpdateThread() {
         this.updateThread.start();
+    }
+
+    @Override
+    public boolean masterCheck(String s) {
+        return model.masterCheck(s);
+    }
+
+    @Override
+    public void updatePassword(String role, String password) {
+        model.updatePassword(role, password);
     }
 
     public SimpleStringProperty getDateProperty() {

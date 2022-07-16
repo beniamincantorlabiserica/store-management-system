@@ -17,12 +17,14 @@ public class ServerModelManager implements ServerModel {
         workingHours = getWorkingHours();
     }
 
-    public void changePassword(String password, String role) {
-        managerFactory.getUsersDatabaseManager().updatePassword(password, role);
-    }
     @Override
     public User login(String password) {
         return managerFactory.getUsersDatabaseManager().login(password);
+    }
+
+    @Override
+    public void updatePassword(String password, String role) {
+        managerFactory.getUsersDatabaseManager().updatePassword(password, role);
     }
 
     @Override

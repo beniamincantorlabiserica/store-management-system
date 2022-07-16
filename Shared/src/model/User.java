@@ -1,9 +1,23 @@
 package model;
 
+import logger.Logger;
+import logger.LoggerType;
+
 import java.io.Serializable;
 
 public class User implements Serializable {
     private String role;
+    private final String password;
+    private final String masterPassword;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getMasterPassword() {
+        Logger.getInstance().log(LoggerType.DEBUG, "Expected master password: " + masterPassword);
+        return masterPassword;
+    }
 
     public void setRole(String role) {
         this.role = role;
@@ -20,7 +34,9 @@ public class User implements Serializable {
         return role.equals("storeManager");
     }
 
-    public User(String role) {
+    public User(String role, String password, String masterPassword) {
         this.role = role;
+        this.password = password;
+        this.masterPassword = masterPassword;
     }
 }

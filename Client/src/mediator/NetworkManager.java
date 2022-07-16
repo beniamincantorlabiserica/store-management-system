@@ -44,9 +44,9 @@ public class NetworkManager implements RemoteModel {
      *                         the same as the one from another role
      */
     @Override
-    public void changePassword(String password, String role) throws RemoteException {
+    public void updatePassword(String password, String role) throws RemoteException {
         Logger.getInstance().log(LoggerType.DEBUG,"Change password reached");
-        remoteModel.changePassword(password, role);
+        remoteModel.updatePassword(password, role);
     }
 
     /** receives an object with information about the working hours from the server

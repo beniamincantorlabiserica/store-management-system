@@ -32,10 +32,11 @@ public class ServerNetworkManager implements RemoteModel {
     }
 
     @Override
-    public void changePassword(String password, String role) throws RemoteException {
-        Logger.getInstance().log(LoggerType.DEBUG, "ServerModelManager -> changePassword()");
-        serverModel.changePassword(password, role);
+    public void updatePassword(String password, String role) {
+        Logger.getInstance().log(LoggerType.DEBUG, "ServerModelManager -> updatePassword()");
+        serverModel.updatePassword(password, role);
     }
+
 
     private void startServer() throws RemoteException, MalformedURLException {
         UnicastRemoteObject.exportObject( this, 0);
