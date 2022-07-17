@@ -1,7 +1,6 @@
 package view.controller;
 
-import javafx.scene.control.Alert;
-import javafx.scene.control.PasswordField;
+import javafx.scene.control.*;
 import logger.Logger;
 import logger.LoggerType;
 import model.User;
@@ -10,25 +9,27 @@ import view.ViewController;
 import viewmodel.StartViewModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 
+import java.rmi.RemoteException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.Optional;
 
 
 public class StartViewController extends ViewController {
     private StartViewModel viewModel;
     @FXML
+    public Label titleLabel;
+    @FXML
     private PasswordField passwordField;
+    @FXML
+    public Button mainButton;
 
-    public StartViewController() {
-
-    }
+    public StartViewController() {}
 
     @Override
     protected void init() {
@@ -44,15 +45,65 @@ public class StartViewController extends ViewController {
                 System.exit(0);
             }
         }
+        checkLocked();
+    }
+
+    /**
+     * performs a check to see if the store should be locked or not and applies the
+     * correct visual changes
+     */
+    private void checkLocked() {
+        try {
+            if(viewModel.getLockedState()) {
+                Logger.getInstance().log(LoggerType.DEBUG, "Store is locked, applying changes..");
+                titleLabel.setText("STORE LOCKED");
+                passwordField.visibleProperty().set(false);
+                mainButton.setText("UNLOCK");
+            } else {
+                Logger.getInstance().log(LoggerType.DEBUG, "Store is unlocked, applying changes..");
+                titleLabel.setText("STORE");
+                passwordField.visibleProperty().set(true);
+                mainButton.setText("Login");
+            }
+        } catch (RemoteException e) {
+            Logger.getInstance().log(LoggerType.ERROR, "Error when fetching locked state: " + e.getMessage());
+        }
     }
 
     @Override
     public void reset() {
         passwordField.clear();
         viewModel.reset();
+        checkLocked();
     }
 
-    public void login(ActionEvent actionEvent) {
+    /**
+     * handles the button pressing event, dynamically switching between the modes of the button,
+     * between unlock button or log in button, depending on the status of the store
+     */
+    public void onMainButtonPressed() {
+        try {
+            if(viewModel.getLockedState()) {
+                boolean knowsMasterPassword = showMasterPasswordCheckDialog();
+                if(!knowsMasterPassword) {
+                    Logger.getInstance().log(LoggerType.ERROR, "Wrong master password");
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Wrong Master Password");
+                    alert.setContentText("The password you entered was wrong.");
+                    alert.showAndWait();
+                    return;
+                } else {
+                    Logger.getInstance().log("Unlocking successful");
+                    viewModel.setLockedState(false);
+                    reset();
+                }
+                return;
+            }
+        } catch (RemoteException e) {
+            Logger.getInstance().log(LoggerType.ERROR, "Error when fetching locked state: " + e.getMessage());
+            return;
+        }
+
         User user;
         try {
             user = viewModel.login(passwordField.getText());
@@ -119,7 +170,7 @@ public class StartViewController extends ViewController {
         LocalDateTime now = LocalDateTime.now();
         DateFormat dateFormat = new SimpleDateFormat("hh:mm");
         try {
-            Date timeNow = dateFormat.parse(String.valueOf(dtf.format(now)));
+            Date timeNow = dateFormat.parse(dtf.format(now));
             Date openingH = dateFormat.parse(openingHours);
             Date closingH = dateFormat.parse(closingHours);
             if (timeNow.getTime() >= openingH.getTime() && timeNow.getTime() <= closingH.getTime()) {
@@ -129,5 +180,17 @@ public class StartViewController extends ViewController {
             throw new RuntimeException(e);
         }
         return false;
+    }
+
+    /**
+     * displays a dialog with a text field input expecting the correct master password
+     * @return true if the master password matches, false otherwise
+     */
+    private boolean showMasterPasswordCheckDialog() {
+        TextInputDialog dialog = new TextInputDialog("Master password...");
+        dialog.setTitle("Master Password Check");
+        dialog.setContentText("Please enter the master password:");
+        Optional<String> result = dialog.showAndWait();
+        return result.isPresent() && viewModel.masterCheck(result.get()); // checks the provided dialog password against the master password from the database
     }
 }

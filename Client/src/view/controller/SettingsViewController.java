@@ -9,8 +9,6 @@ import logger.Logger;
 import logger.LoggerType;
 import view.View;
 import view.ViewController;
-import viewmodel.DashboardViewModel;
-import viewmodel.SettingsViewModel;
 import viewmodel.SettingsViewModelInterface;
 
 import java.util.ArrayList;
@@ -54,12 +52,7 @@ public class SettingsViewController extends ViewController {
         Optional<String> result = dialog.showAndWait(); // show the dialog and wait for an answer
         if (result.isPresent()) {
             String choice = result.get();
-            if(!showMasterPasswordCheckDialog()) {
-                Logger.getInstance().log(LoggerType.ERROR, "Wrong master password");
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Wrong Master Password");
-                alert.setContentText("The password you entered was wrong.");
-                alert.showAndWait();
+            if(userKnowsMasterPassword()) {
                 return;
             }
             Logger.getInstance().log("Master password OK");
@@ -172,5 +165,27 @@ public class SettingsViewController extends ViewController {
                 }
             }
         }
+    }
+
+    public void onForceLockButtonPressed(ActionEvent actionEvent) {
+        if(userKnowsMasterPassword()) {
+            return;
+        }
+        viewModel.setLockedState(true);
+        getViewHandler().openView(View.START);
+        Logger.getInstance().log("Force locking...");
+        Logger.getInstance().log(LoggerType.WARNING, "The master password has been used to force lock the store!");
+    }
+
+    private boolean userKnowsMasterPassword() {
+        if(!showMasterPasswordCheckDialog()) {
+            Logger.getInstance().log(LoggerType.ERROR, "Wrong master password");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Wrong Master Password");
+            alert.setContentText("The password you entered was wrong.");
+            alert.showAndWait();
+            return true;
+        }
+        return false;
     }
 }

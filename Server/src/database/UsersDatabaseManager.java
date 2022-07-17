@@ -11,14 +11,15 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class UsersDatabaseManager {
-    Connection connection = null;
+    private final Connection connection;
     Statement statement = null;
 
-    public UsersDatabaseManager() {}
+    public UsersDatabaseManager(Connection connection) {
+        this.connection = connection;
+    }
 
     public User login(String password) {
-        DBConnection dbConnection = new DBConnection();
-        connection = dbConnection.getConnection();
+        Logger.getInstance().log(LoggerType.DEBUG,"login()");
         ResultSet rs;
         String role = null;
         try {
@@ -28,7 +29,6 @@ public class UsersDatabaseManager {
             if (rs.next()) {
                 role = rs.getString("role");
             }
-            connection.close();
             if (role == null) {
                 Logger.getInstance().log(LoggerType.WARNING, "Failed attempt to login with password " + password);
                 return null;
@@ -49,9 +49,8 @@ public class UsersDatabaseManager {
      * provides the master password from the database by querying it
      * @return the master password from the database as a string
      */
-    private String getMasterPassword() {
-        DBConnection dbConnection = new DBConnection();
-        connection = dbConnection.getConnection();
+    public String getMasterPassword() {
+        Logger.getInstance().log(LoggerType.DEBUG,"getMasterPassword()");
         String masterPassword = null;
         try {
             String query = "select password from users where role='master'";
@@ -74,8 +73,7 @@ public class UsersDatabaseManager {
      */
     public void updatePassword(String role, String password) throws RuntimeException {
         Logger.getInstance().log(LoggerType.DEBUG, "Password: " + password + " Role: " + role);
-        DBConnection dbConnection = new DBConnection();
-        connection = dbConnection.getConnection();
+        Logger.getInstance().log(LoggerType.DEBUG,"updatePassword()");
         ResultSet rs;
         try {
             String query = "Select * from users";
@@ -89,7 +87,6 @@ public class UsersDatabaseManager {
                     } else {
                         Logger.getInstance().log(LoggerType.ERROR, "Passwords can not be the same for the store manager and the cashier");
                     }
-                    connection.close();
                     throw new RuntimeException("PASSWORD_ALREADY_IN_USE");
                 }
             }
@@ -99,7 +96,6 @@ public class UsersDatabaseManager {
             statement = connection.createStatement();
             statement.executeUpdate(query);
             Logger.getInstance().log(LoggerType.WARNING, "Password changed for " + role + " to " + password);
-            connection.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -6,6 +6,7 @@ import model.User;
 import model.WorkingHours;
 import networking.RemoteModel;
 import java.rmi.Naming;
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
@@ -47,6 +48,11 @@ public class NetworkManager implements RemoteModel {
     public void updatePassword(String password, String role) throws RemoteException {
         Logger.getInstance().log(LoggerType.DEBUG,"Change password reached");
         remoteModel.updatePassword(password, role);
+    }
+
+    @Override
+    public String getMasterPassword() throws RemoteException {
+        return remoteModel.getMasterPassword();
     }
 
     /** receives an object with information about the working hours from the server
@@ -115,5 +121,15 @@ public class NetworkManager implements RemoteModel {
     @Override
     public String getSalesThisMonth() throws RemoteException {
         return remoteModel.getSalesThisMonth();
+    }
+
+    @Override
+    public void setLockedState(boolean b) throws RemoteException {
+        remoteModel.setLockedState(b);
+    }
+
+    @Override
+    public boolean getLockedState() throws RemoteException {
+        return remoteModel.getLockedState();
     }
 }

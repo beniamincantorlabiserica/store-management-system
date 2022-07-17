@@ -38,4 +38,9 @@ public class SettingsViewModel implements SettingsViewModelInterface {
     public void updatePassword(String role, String password) {
         model.updatePassword(role, password);
     }
+
+    @Override
+    public void setLockedState(boolean b) {
+        model.setLockedState(b);
+    }
 }

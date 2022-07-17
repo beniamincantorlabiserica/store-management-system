@@ -15,12 +15,21 @@ import java.time.format.DateTimeFormatter;
  * DAO for the dashboard
  */
 public class DashboardDatabaseManager {
-    public DashboardDatabaseManager() {}
+    private final Connection connection;
+    private WorkingHours workingHours;
+
+    public DashboardDatabaseManager(Connection connection) {
+        this.connection = connection;
+        workingHours = null;
+    }
 
     /**
      * @return an object containing the working hours now contained into the database
      */
     public WorkingHours getWorkingHours() {
+        if (workingHours != null) {
+            return workingHours;
+        }
         Logger.getInstance().log(LoggerType.DEBUG, "DashboardDatabaseManager -> getWorkingHours()");
         String query = "select value from preferences where preference = 'workingHours'";
         ResultSet rs = queryDB(query);
@@ -36,6 +45,7 @@ public class DashboardDatabaseManager {
         Logger.getInstance().log(LoggerType.DEBUG, "DashboardDatabaseManager -> setWorkingHours()");
         String query = "update preferences set value = '" + workingHours + "' where preference = 'workingHours'";
         updateDB(query);
+        this.workingHours = null;
     }
 
     /**
@@ -159,11 +169,9 @@ public class DashboardDatabaseManager {
     }
 
     private void updateDB(String query) {
-        DBConnection dbConnection = new DBConnection();
-        Connection connection = dbConnection.getConnection();
+        Logger.getInstance().log(LoggerType.DEBUG,"updateDB()");
         try {
             connection.createStatement().executeUpdate(query);
-            connection.close();
         } catch (SQLException e) {
             Logger.getInstance().log(LoggerType.ERROR, "DashboardDatabaseManager : SQL Error " + e.getMessage());
         }
@@ -172,11 +180,9 @@ public class DashboardDatabaseManager {
     private ResultSet queryDB(String query) {
         ResultSet resultSet = null;
         try {
-            DBConnection dbConnection = new DBConnection();
-            Connection connection = dbConnection.getConnection();
+            Logger.getInstance().log(LoggerType.DEBUG,"queryDB");
             Statement statement = connection.createStatement();
             resultSet = statement.executeQuery(query);
-            connection.close();
         } catch (SQLException e) {
             Logger.getInstance().log(LoggerType.ERROR, "DashboardDatabaseManager : SQL Error " + e.getMessage());
         }

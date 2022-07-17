@@ -13,4 +13,6 @@ public interface SettingsViewModelInterface {
     boolean masterCheck(String s);
 
     void updatePassword(String role, String password);
+
+    void setLockedState(boolean b);
 }

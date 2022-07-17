@@ -19,11 +19,14 @@ public class ModelManager implements Model {
      *  false otherwise
      */
     private boolean network;
+
+    private String locked;
     private User currentUser;
 
     public ModelManager() {
         clientModel = null;
         network = false;
+        locked = null;
         try {
             clientModel = new NetworkManager();
             network = true;
@@ -75,6 +78,13 @@ public class ModelManager implements Model {
 
     @Override
     public boolean masterCheck(String s) {
+        if(currentUser == null) {
+            try {
+                return s.equals(clientModel.getMasterPassword());
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
         return s.equals(currentUser.getMasterPassword());
     }
 
@@ -90,6 +100,7 @@ public class ModelManager implements Model {
     @Override
     public void logout() {
         this.currentUser = null;
+        this.locked = null;
         Logger.getInstance().log("User logged out");
     }
 
@@ -197,5 +208,25 @@ public class ModelManager implements Model {
     @Override
     public int getOpeningHourInteger() {
         return Integer.parseInt(getOpeningHours().substring(0, 2));
+    }
+
+    @Override
+    public void setLockedState(boolean b) {
+        if (locked.equals(String.valueOf(b))) {
+            Logger.getInstance().log(LoggerType.ERROR, "Trying to overwrite server data with the same data, cancelling..");
+            return;
+        }
+        try {
+            clientModel.setLockedState(b);
+            locked = String.valueOf(b);
+        } catch (Exception e) {
+            throw new RuntimeException("LOCK_STATE_SET_FAILED");
+        }
+    }
+
+    @Override
+    public boolean getLockedState() throws RemoteException {
+        locked = String.valueOf(clientModel.getLockedState());
+        return Boolean.parseBoolean(locked);
     }
 }
