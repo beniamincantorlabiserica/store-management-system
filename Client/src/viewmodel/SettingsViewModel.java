@@ -41,6 +41,9 @@ public class SettingsViewModel implements SettingsViewModelInterface {
 
     @Override
     public void setLockedState(boolean b) {
+        if(b) {
+            model.logout();
+        }
         model.setLockedState(b);
     }
 }
