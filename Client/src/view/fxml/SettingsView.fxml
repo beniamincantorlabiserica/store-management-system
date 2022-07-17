@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="410.0" prefWidth="615.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controller.SettingsViewController">
+<AnchorPane prefHeight="430.0" prefWidth="615.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controller.SettingsViewController">
    <VBox prefHeight="400.0" prefWidth="600.0">
       <HBox alignment="CENTER" prefHeight="118.0" prefWidth="600.0">
          <Label text="SETTINGS">
