@@ -6,5 +6,5 @@ import java.util.ArrayList;
 
 public interface InventoryViewModelInterface {
     ArrayList<Item> getItems();
-    void reset();
+
 }

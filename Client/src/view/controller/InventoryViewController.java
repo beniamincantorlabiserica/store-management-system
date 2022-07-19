@@ -27,6 +27,13 @@ public class InventoryViewController extends ViewController {
     public Button back;
     private InventoryViewModel viewModel;
 
+    /**
+     * Called by view handler when view is created for the first time
+     *
+     * Resets the values of the table rows
+     *
+     * Sets row's values as Item(name,quantity,price)
+     */
     @Override
     protected void init() {
         viewModel = getViewModelFactory().getInventoryViewModel();
@@ -36,11 +43,21 @@ public class InventoryViewController extends ViewController {
         price.setCellValueFactory(new PropertyValueFactory<Item, Integer>("price"));
     }
 
+    /**
+     * Returns to Dashboard
+     */
     @FXML
     public void onBackButtonPressed() {
         getViewHandler().openView(View.DASHBOARD);
     }
 
+    /**
+     * Initializes a new ObservableList
+     *
+     * Populates observable list
+     *
+     * Sets items in the table
+     */
     @Override
     public void reset() {
         Logger.getInstance().log(LoggerType.DEBUG, "InventoryViewController -> reset()");

@@ -16,6 +16,9 @@ public class InventoryDatabaseManager {
     }
 
 
+    /**
+     * @return an ArrayList of items from database
+     */
     public ArrayList<Item> getItems() {
 
         ArrayList<Item> items = new ArrayList<>();

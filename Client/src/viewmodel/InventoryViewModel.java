@@ -12,8 +12,6 @@ import java.util.ArrayList;
 public class InventoryViewModel implements InventoryViewModelInterface {
 
     private final Model model;
-//    @FXML
-//    public TableView<Item> table;
 
     public InventoryViewModel(Model model, ViewModelState viewModelState) {
         this.model = model;
@@ -23,10 +21,5 @@ public class InventoryViewModel implements InventoryViewModelInterface {
     public ArrayList<Item> getItems() {
         return model.getItems();
     }
-    @Override
-    public void reset() {
-//        ObservableList<Item> items = FXCollections.observableArrayList();
-//        items.addAll(model.getItems());
-//        table.setItems(items);
-    }
+
 }
