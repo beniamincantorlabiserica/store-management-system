@@ -7,6 +7,7 @@ import networking.RemoteModel;
 
 import java.rmi.RemoteException;
 import java.time.LocalTime;
+import java.util.ArrayList;
 
 /**
  * The client model manager
@@ -236,5 +237,14 @@ public class ModelManager implements Model {
     public boolean getLockedState() throws RemoteException {
         locked = String.valueOf(clientModel.getLockedState());
         return Boolean.parseBoolean(locked);
+    }
+
+    @Override
+    public ArrayList<Item> getItems() {
+        try {
+            return clientModel.getItems();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

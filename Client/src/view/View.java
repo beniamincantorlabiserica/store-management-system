@@ -3,7 +3,9 @@ package view;
 public enum View {
     START("fxml/StartView.fxml"),
     DASHBOARD("fxml/DashboardView.fxml"),
+    INVENTORY("fxml/InventoryView.fxml"),
     SETTINGS("fxml/SettingsView.fxml");
+
 
     private final String fxmlFile;
 

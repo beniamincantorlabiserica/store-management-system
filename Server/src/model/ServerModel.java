@@ -1,11 +1,6 @@
 package model;
 
-import database.ManagerFactory;
-import networking.RemoteSettingsModel;
-
-import java.rmi.RemoteException;
-
-public interface ServerModel extends ServerUsersModel, ServerItemModel, ServerDashboardModel, ServerSettingsModel {
+public interface ServerModel extends ServerUsersModel, ServerItemModel, ServerDashboardModel, ServerSettingsModel, ServerInventoryModel {
     void powerOff();
 
     void softRestart();

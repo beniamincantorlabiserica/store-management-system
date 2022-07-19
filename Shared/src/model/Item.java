@@ -1,19 +1,18 @@
 package model;
 
-public class Item {
+import java.io.Serializable;
+
+public class Item implements Serializable {
     public int id;
     public String name;
     public int price;
-    public String category;
-    public String description;
+
     public int quantity;
 
-    public Item(int id, String name, int price, String category, String description, int quantity) {
+    public Item(int id, String name, int price, int quantity) {
         this.id = id;
         this.name = name;
         this.price = price;
-        this.category = category;
-        this.description = description;
         this.quantity = quantity;
     }
 
@@ -41,22 +40,6 @@ public class Item {
 
     public void setPrice(int price) {
         this.price = price;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public int getQuantity() {

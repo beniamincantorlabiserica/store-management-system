@@ -4,7 +4,7 @@ import database.ManagerFactory;
 import logger.Logger;
 import logger.LoggerType;
 
-import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 public class ServerModelManager implements ServerModel {
     private ManagerFactory managerFactory;
@@ -138,5 +138,10 @@ public class ServerModelManager implements ServerModel {
     public void softRestart() {
         powerOff();
         boot();
+    }
+
+    @Override
+    public ArrayList<Item> getItems() {
+        return managerFactory.getInventoryDatabaseManager().getItems();
     }
 }
