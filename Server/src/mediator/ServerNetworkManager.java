@@ -2,11 +2,11 @@ package mediator;
 
 import logger.Logger;
 import logger.LoggerType;
+import model.Item;
 import model.ServerModel;
 import model.User;
 import model.WorkingHours;
 import networking.RemoteModel;
-
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -15,6 +15,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.ExportException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 
 public class ServerNetworkManager implements RemoteModel {
     private final ServerModel serverModel;
@@ -108,7 +109,12 @@ public class ServerNetworkManager implements RemoteModel {
     }
 
     @Override
-    public boolean getLockedState() throws RemoteException{
+    public boolean getLockedState() throws RemoteException {
         return serverModel.getLockedState();
+    }
+
+    @Override
+    public ArrayList<Item> getItems() throws RemoteException {
+        return serverModel.getItems();
     }
 }

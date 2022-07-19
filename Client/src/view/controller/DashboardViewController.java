@@ -2,17 +2,11 @@ package view.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.scene.control.Alert.*;
-import logger.Logger;
-import logger.LoggerType;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import view.View;
 import view.ViewController;
 import viewmodel.DashboardViewModel;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * contains the view controller components related to the dashboard
@@ -109,11 +103,12 @@ public class DashboardViewController extends ViewController {
     @FXML
     public void onInventoryButtonPressed() {
         // TODO inventory page with list of items & ability to edit amount of item x & price of item.
-        Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle("Unimplemented feature");
-        alert.setHeaderText("This feature is not yet implemented.");
-        alert.setContentText("Description: inventory page with list of items & ability to edit amount of item x & price of item.");
-        alert.showAndWait();
+//        Alert alert = new Alert(AlertType.ERROR);
+//        alert.setTitle("Unimplemented feature");
+//        alert.setHeaderText("This feature is not yet implemented.");
+//        alert.setContentText("Description: inventory page with list of items & ability to edit amount of item x & price of item.");
+//        alert.showAndWait();
+        getViewHandler().openView(View.INVENTORY);
     }
 
     public void onSettingsButtonPressed(ActionEvent actionEvent) {

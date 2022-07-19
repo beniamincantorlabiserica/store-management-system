@@ -2,13 +2,15 @@ package mediator;
 
 import logger.Logger;
 import logger.LoggerType;
+import model.Item;
 import model.User;
 import model.WorkingHours;
 import networking.RemoteModel;
+
 import java.rmi.Naming;
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 
 /**
  * Provides the client side segment of the communication between the client and the server
@@ -131,5 +133,10 @@ public class NetworkManager implements RemoteModel {
     @Override
     public boolean getLockedState() throws RemoteException {
         return remoteModel.getLockedState();
+    }
+
+    @Override
+    public ArrayList<Item> getItems() throws RemoteException {
+        return remoteModel.getItems();
     }
 }

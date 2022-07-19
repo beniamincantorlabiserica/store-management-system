@@ -1,7 +1,6 @@
 package database;
 
 import logger.Logger;
-import networking.RemoteSettingsModel;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -12,10 +11,12 @@ public class ManagerFactory {
     private final UsersDatabaseManager usersDatabaseManager;
     private final DashboardDatabaseManager dashboardDatabaseManager;
     private final PreferencesDatabaseManager preferencesDatabaseManager;
+    private final InventoryDatabaseManager inventoryDatabaseManager;
 
     public ManagerFactory(){
         DBConnection dbConnection = new DBConnection();
         connection = dbConnection.getConnection();
+        inventoryDatabaseManager = new InventoryDatabaseManager(connection);
         generalDatabaseManager = new GeneralDatabaseManager(connection);
         usersDatabaseManager = new UsersDatabaseManager(connection);
         dashboardDatabaseManager = new DashboardDatabaseManager(connection);
@@ -36,6 +37,10 @@ public class ManagerFactory {
 
     public PreferencesDatabaseManager getPreferenceDatabaseManager() {
         return preferencesDatabaseManager;
+    }
+
+    public InventoryDatabaseManager getInventoryDatabaseManager() {
+        return inventoryDatabaseManager;
     }
 
     public void closeConnection() {
