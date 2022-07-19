@@ -112,7 +112,8 @@ public class StartViewController extends ViewController {
                     getViewHandler().openView(View.DASHBOARD);
                     Logger.getInstance().log("Master logged in!");
                 } else if (user.isStoreManager()) {
-                    if (checkWorkingHours(viewModel.getOpeningHours(), viewModel.getClosingHours()))
+                    Logger.getInstance().log(LoggerType.DEBUG, viewModel.getOpeningHours() + " --> " + viewModel.getClosingHours());
+                    if (viewModel.isOpen())
                     {
                         getViewHandler().openView(View.DASHBOARD);
                         Logger.getInstance().log("Store Manager logged in!");
@@ -126,7 +127,7 @@ public class StartViewController extends ViewController {
                     }
                 } else {
                     // TODO cashier UI and use of it
-                    if (checkWorkingHours(viewModel.getOpeningHours(), viewModel.getClosingHours()))
+                    if (viewModel.isOpen())
                     {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Unimplemented feature");
@@ -165,6 +166,7 @@ public class StartViewController extends ViewController {
      * @return boolean (true - if the current time is in  between the working hours,
      *                  false - if the current time is not in between the  working hours)
      */
+    @Deprecated
     private boolean checkWorkingHours(String openingHours, String closingHours) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
         LocalDateTime now = LocalDateTime.now();

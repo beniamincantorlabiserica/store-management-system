@@ -15,5 +15,6 @@ public interface StartViewModelInterface {
     boolean getLockedState() throws RemoteException;
     boolean masterCheck(String s);
     void setLockedState(boolean b);
+    boolean isOpen();
 }
 

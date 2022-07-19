@@ -59,6 +59,14 @@ public class StartViewModel implements StartViewModelInterface {
         model.setLockedState(b);
     }
 
+    /**
+     * @return true if the store is open (between the opening and the closing time) or closed
+     */
+    @Override
+    public boolean isOpen() {
+        return model.isOpen();
+    }
+
     @Override
     public User login(String password) {
         Logger.getInstance().log(LoggerType.DEBUG, "StartViewModel -> login()");
