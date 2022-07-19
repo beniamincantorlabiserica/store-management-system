@@ -7,22 +7,35 @@ import logger.LoggerType;
 import java.rmi.RemoteException;
 
 public class ServerModelManager implements ServerModel {
-    private final ManagerFactory managerFactory;
+    private ManagerFactory managerFactory;
 
-    private final WorkingHours workingHours;
+    private WorkingHours workingHours;
 
     public ServerModelManager() {
+        Logger.getInstance().log("Starting server model..");
+        boot();
+    }
+
+    private void boot() {
         managerFactory = new ManagerFactory();
+        Logger.getInstance().log(LoggerType.DEBUG, "Database Managers created");
         managerFactory.getGeneralDatabaseManager().checkDB();
         workingHours = getWorkingHours();
     }
 
-    public void changePassword(String password, String role) {
-        managerFactory.getUsersDatabaseManager().updatePassword(password, role);
-    }
     @Override
     public User login(String password) {
         return managerFactory.getUsersDatabaseManager().login(password);
+    }
+
+    @Override
+    public void updatePassword(String password, String role) {
+        managerFactory.getUsersDatabaseManager().updatePassword(password, role);
+    }
+
+    @Override
+    public String getMasterPassword() {
+        return managerFactory.getUsersDatabaseManager().getMasterPassword();
     }
 
     @Override
@@ -104,5 +117,26 @@ public class ServerModelManager implements ServerModel {
 
     private void updateWorkingHours() {
         managerFactory.getDashboardDatabaseManager().setWorkingHours(workingHours.getSQLReadyWorkingHours());
+    }
+
+    @Override
+    public void setLockedState(boolean b) throws RuntimeException {
+        managerFactory.getPreferenceDatabaseManager().setLockedState(b);
+        Logger.getInstance().log(LoggerType.DEBUG, "setLockedState(" + b + ")");
+    }
+
+    @Override
+    public boolean getLockedState() {
+        return managerFactory.getPreferenceDatabaseManager().getLockedState();
+    }
+
+    public void powerOff() {
+        managerFactory.closeConnection();
+    }
+
+    @Override
+    public void softRestart() {
+        powerOff();
+        boot();
     }
 }

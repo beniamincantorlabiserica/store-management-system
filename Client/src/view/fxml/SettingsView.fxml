@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="430.0" prefWidth="615.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controller.SettingsViewController">
+   <VBox prefHeight="400.0" prefWidth="600.0">
+      <HBox alignment="CENTER" prefHeight="118.0" prefWidth="600.0">
+         <Label text="SETTINGS">
+            <font>
+               <Font size="30.0" />
+            </font>
+         </Label>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="39.0" prefWidth="600.0">
+         <Button layoutX="310.0" layoutY="64.0" mnemonicParsing="false" onAction="#onPasswordsButtonPressed" prefHeight="25.0" prefWidth="107.0" text="Passwords">
+            <HBox.margin>
+               <Insets />
+            </HBox.margin>
+         </Button>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="45.0" prefWidth="600.0">
+         <Button mnemonicParsing="false" onAction="#onWorkingHoursButtonPressed" prefHeight="25.0" prefWidth="111.0" text="Working Hours">
+            <HBox.margin>
+               <Insets />
+            </HBox.margin>
+         </Button>
+         <Button layoutX="255.0" layoutY="20.0" mnemonicParsing="false" onAction="#onForceLockButtonPressed" prefHeight="25.0" prefWidth="111.0" text="Force Lock Store">
+            <HBox.margin>
+               <Insets left="15.0" />
+            </HBox.margin>
+         </Button>
+      </HBox>
+      <HBox alignment="BOTTOM_LEFT" prefHeight="200.0" prefWidth="600.0">
+         <Button mnemonicParsing="false" onAction="#onBackButtonPressed" prefHeight="25.0" prefWidth="87.0" text="Back">
+            <HBox.margin>
+               <Insets bottom="15.0" left="15.0" />
+            </HBox.margin>
+         </Button>
+      </HBox>
+   </VBox>
+</AnchorPane>

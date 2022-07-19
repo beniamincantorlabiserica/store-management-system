@@ -65,14 +65,9 @@
                <Insets bottom="10.0" left="50.0" />
             </HBox.margin>
          </Button>
-         <Button layoutX="310.0" layoutY="64.0" mnemonicParsing="false" onAction="#onPasswordsButtonPressed" prefHeight="25.0" prefWidth="107.0" text="Passwords">
+         <Button layoutX="310.0" layoutY="64.0" mnemonicParsing="false" onAction="#onSettingsButtonPressed" prefHeight="25.0" prefWidth="107.0" text="Settings">
             <HBox.margin>
                <Insets bottom="10.0" left="15.0" />
-            </HBox.margin>
-         </Button>
-         <Button mnemonicParsing="false" onAction="#onWorkingHoursButtonPressed" prefHeight="25.0" prefWidth="111.0" text="Working Hours">
-            <HBox.margin>
-               <Insets bottom="10.0" left="15.0" right="15.0" />
             </HBox.margin>
          </Button>
       </HBox>

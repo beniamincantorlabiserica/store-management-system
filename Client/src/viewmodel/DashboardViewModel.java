@@ -14,7 +14,6 @@ import java.time.Year;
 import java.time.format.DateTimeFormatter;
 
 public class DashboardViewModel implements DashBoardViewModelInterface {
-
     private final Model model;
 
     private final Thread updateThread;
@@ -112,29 +111,11 @@ public class DashboardViewModel implements DashBoardViewModelInterface {
     }
 
     @Override
-    public void setOpeningHours(String s) throws RuntimeException {
-        model.setOpeningHours(s);
-    }
-
-    @Override
-    public void setClosingHours(String s) throws RuntimeException {
-        model.setClosingHours(s);
-    }
-
-    @Override
-    public String getOpeningHours() {
-        return model.getOpeningHours();
-    }
-
-    @Override
-    public String getClosingHours() {
-        return model.getClosingHours();
-    }
-
-    @Override
     public void startUpdateThread() {
         this.updateThread.start();
     }
+
+
 
     public SimpleStringProperty getDateProperty() {
         return dateProperty;

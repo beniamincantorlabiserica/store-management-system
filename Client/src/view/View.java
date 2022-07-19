@@ -2,7 +2,8 @@ package view;
 
 public enum View {
     START("fxml/StartView.fxml"),
-    DASHBOARD("fxml/DashboardView.fxml");
+    DASHBOARD("fxml/DashboardView.fxml"),
+    SETTINGS("fxml/SettingsView.fxml");
 
     private final String fxmlFile;
 

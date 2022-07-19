@@ -15,7 +15,9 @@ public class StartViewModel implements StartViewModelInterface {
     }
 
     @Override
-    public void reset() {}
+    public void reset() {
+        Logger.getInstance().log(LoggerType.DEBUG, "StartViewModel reset()");
+    }
 
     @Override
     public boolean isNetwork() {
@@ -40,6 +42,29 @@ public class StartViewModel implements StartViewModelInterface {
     @Override
     public String getClosingHours() {
         return model.getClosingHours();
+    }
+
+    @Override
+    public boolean getLockedState() throws RemoteException {
+        return model.getLockedState();
+    }
+
+    @Override
+    public boolean masterCheck(String s) {
+        return model.masterCheck(s);
+    }
+
+    @Override
+    public void setLockedState(boolean b) {
+        model.setLockedState(b);
+    }
+
+    /**
+     * @return true if the store is open (between the opening and the closing time) or closed
+     */
+    @Override
+    public boolean isOpen() {
+        return model.isOpen();
     }
 
     @Override
