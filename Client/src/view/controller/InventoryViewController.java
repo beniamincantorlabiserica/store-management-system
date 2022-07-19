@@ -7,6 +7,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import logger.Logger;
+import logger.LoggerType;
 import model.Item;
 import view.View;
 import view.ViewController;
@@ -27,10 +29,8 @@ public class InventoryViewController extends ViewController {
 
     @Override
     protected void init() {
-        ObservableList<Item> items = FXCollections.observableArrayList();
         viewModel = getViewModelFactory().getInventoryViewModel();
-        items.addAll(viewModel.getItems());
-        table.setItems(items);
+        reset();
         item.setCellValueFactory(new PropertyValueFactory<Item, String>("name"));
         quantity.setCellValueFactory(new PropertyValueFactory<Item, Integer>("quantity"));
         price.setCellValueFactory(new PropertyValueFactory<Item, Integer>("price"));
@@ -43,5 +43,9 @@ public class InventoryViewController extends ViewController {
 
     @Override
     public void reset() {
+        Logger.getInstance().log(LoggerType.DEBUG, "InventoryViewController -> reset()");
+        ObservableList<Item> items = FXCollections.observableArrayList();
+        items.addAll(viewModel.getItems());
+        table.setItems(items);
     }
 }
