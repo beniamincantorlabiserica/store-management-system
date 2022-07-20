@@ -2,11 +2,15 @@ package view.controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.util.converter.IntegerStringConverter;
 import logger.Logger;
 import logger.LoggerType;
 import model.Item;
@@ -20,6 +24,8 @@ public class InventoryViewController extends ViewController {
     @FXML
     public TableView<Item> table;
     @FXML
+    public TableColumn<Item, Integer> id;
+    @FXML
     public TableColumn<Item, Integer> quantity;
     @FXML
     public TableColumn<Item, Integer> price;
@@ -29,18 +35,24 @@ public class InventoryViewController extends ViewController {
 
     /**
      * Called by view handler when view is created for the first time
-     *
+     * <p>
      * Resets the values of the table rows
-     *
+     * <p>
      * Sets row's values as Item(name,quantity,price)
      */
     @Override
     protected void init() {
         viewModel = getViewModelFactory().getInventoryViewModel();
         reset();
+        id.setCellValueFactory(new PropertyValueFactory<Item, Integer>("id"));
         item.setCellValueFactory(new PropertyValueFactory<Item, String>("name"));
         quantity.setCellValueFactory(new PropertyValueFactory<Item, Integer>("quantity"));
         price.setCellValueFactory(new PropertyValueFactory<Item, Integer>("price"));
+        price.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+        price.setOnEditCommit(itemIntegerCellEditEvent -> {
+            Item item = itemIntegerCellEditEvent.getRowValue();
+            viewModel.changePrice(item.getId(),itemIntegerCellEditEvent.getNewValue());
+        });
     }
 
     /**
@@ -51,11 +63,13 @@ public class InventoryViewController extends ViewController {
         getViewHandler().openView(View.DASHBOARD);
     }
 
+
+
     /**
      * Initializes a new ObservableList
-     *
+     * <p>
      * Populates observable list
-     *
+     * <p>
      * Sets items in the table
      */
     @Override
@@ -64,5 +78,6 @@ public class InventoryViewController extends ViewController {
         ObservableList<Item> items = FXCollections.observableArrayList();
         items.addAll(viewModel.getItems());
         table.setItems(items);
+        table.setEditable(true);
     }
 }

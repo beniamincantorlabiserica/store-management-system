@@ -22,4 +22,10 @@ public class InventoryViewModel implements InventoryViewModelInterface {
         return model.getItems();
     }
 
+    @Override
+    public void changePrice(int id, int price) {
+        model.changePrice(id,price);
+    }
+
+
 }

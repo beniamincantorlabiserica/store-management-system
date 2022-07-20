@@ -144,4 +144,9 @@ public class ServerModelManager implements ServerModel {
     public ArrayList<Item> getItems() {
         return managerFactory.getInventoryDatabaseManager().getItems();
     }
+
+    @Override
+    public void changePrice(int id, int price) {
+        managerFactory.getInventoryDatabaseManager().changePrice(id,price);
+    }
 }

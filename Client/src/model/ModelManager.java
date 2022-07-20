@@ -247,4 +247,13 @@ public class ModelManager implements Model {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public void changePrice(int id, int price) {
+        try {
+            clientModel.changePrice(id,price);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

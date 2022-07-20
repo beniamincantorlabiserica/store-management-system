@@ -117,4 +117,9 @@ public class ServerNetworkManager implements RemoteModel {
     public ArrayList<Item> getItems() throws RemoteException {
         return serverModel.getItems();
     }
+
+    @Override
+    public void changePrice(int id, int price) {
+        serverModel.changePrice(id,price);
+    }
 }
