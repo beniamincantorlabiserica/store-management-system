@@ -168,15 +168,21 @@ public class ModelManager implements Model {
     public void setOpeningHours(String openingTime) {
         try {
             clientModel.setOpeningHours(openingTime);
+            checkLockedState();
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void checkLockedState() {
+        setLockedState(!isOpen());
     }
 
     @Override
     public void setClosingHours(String closingTime) {
         try {
             clientModel.setClosingHours(closingTime);
+            checkLockedState();
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }

@@ -136,8 +136,7 @@ public class SettingsViewController extends ViewController {
         dialog.setContentText("What do you want to edit?"); // <- preferences for the Choice Dialog
         Optional<String> result = dialog.showAndWait(); // show the dialog and wait for an answer
         if (result.isPresent()) {
-            boolean valid = false; // var to keep displaying the Text Input Dialog if the text from the text field is not valid
-            while ((result.get().equals("opening time") || result.get().equals("closing time")) && !valid) {
+            if ((result.get().equals("opening time") || result.get().equals("closing time"))) {
                 TextInputDialog timeDialog;
                 if (result.get().contains("open")) {
                     timeDialog = new TextInputDialog(viewModel.getOpeningHours()); // set the dialog default value according to the desired edit
@@ -158,7 +157,6 @@ public class SettingsViewController extends ViewController {
                             Logger.getInstance().log(LoggerType.DEBUG, "Closing time set to: " + timeResult.get());
                         }
                         Logger.getInstance().log(LoggerType.DEBUG, "Result time: " + timeResult.get());
-                        valid = true; // once the input was sent to the viewModel and no invalidation exception occurs, the dialog can exit
                     } catch (Exception e) {
                         Logger.getInstance().log(LoggerType.ERROR, "Illegal argument for " + result.get());
                     }
