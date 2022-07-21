@@ -1,5 +1,6 @@
 package view.controller;
 
+import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import logger.Logger;
 import logger.LoggerType;
@@ -7,8 +8,6 @@ import model.User;
 import view.View;
 import view.ViewController;
 import viewmodel.StartViewModel;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 
 import java.rmi.RemoteException;
 import java.text.DateFormat;
@@ -23,13 +22,16 @@ import java.util.Optional;
 public class StartViewController extends ViewController {
     private StartViewModel viewModel;
     @FXML
+    public Label passwordLabel;
+    @FXML
     public Label titleLabel;
     @FXML
     private PasswordField passwordField;
     @FXML
     public Button mainButton;
 
-    public StartViewController() {}
+    public StartViewController() {
+    }
 
     @Override
     protected void init() {
@@ -58,11 +60,13 @@ public class StartViewController extends ViewController {
                 Logger.getInstance().log(LoggerType.DEBUG, "Store is locked, applying changes..");
                 titleLabel.setText("STORE LOCKED");
                 passwordField.visibleProperty().set(false);
+                passwordLabel.visibleProperty().set(false);
                 mainButton.setText("UNLOCK");
             } else {
                 Logger.getInstance().log(LoggerType.DEBUG, "Store is unlocked, applying changes..");
                 titleLabel.setText("STORE");
                 passwordField.visibleProperty().set(true);
+                passwordLabel.visibleProperty().set(true);
                 mainButton.setText("Login");
             }
         } catch (RemoteException e) {
