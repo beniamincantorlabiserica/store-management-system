@@ -18,6 +18,10 @@ import view.View;
 import view.ViewController;
 import viewmodel.InventoryViewModel;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.stream.Collectors;
+
 public class InventoryViewController extends ViewController {
     @FXML
     public TableColumn<Item, String> item;
@@ -76,7 +80,9 @@ public class InventoryViewController extends ViewController {
     public void reset() {
         Logger.getInstance().log(LoggerType.DEBUG, "InventoryViewController -> reset()");
         ObservableList<Item> items = FXCollections.observableArrayList();
+
         items.addAll(viewModel.getItems());
+
         table.setItems(items);
         table.setEditable(true);
     }

@@ -27,7 +27,7 @@ public class InventoryDatabaseManager {
         ArrayList<Item> items = new ArrayList<>();
         try {
 
-            String query = "Select * from items";
+            String query = "Select * from items order by id";
             ResultSet rs;
             statement = connection.createStatement();
             rs = statement.executeQuery(query);
