@@ -4,11 +4,16 @@ package database;
 import logger.Logger;
 import logger.LoggerType;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
+import java.sql.*;
 
 public class DBConnection {
-    public Connection getConnection() {
+    private final Connection connection;
+
+    public DBConnection() {
+        this.connection = init();
+    }
+
+    public Connection init() {
         Connection connection = null;
         try {
             Class.forName("org.postgresql.Driver");
@@ -27,5 +32,30 @@ public class DBConnection {
             e.printStackTrace();
         }
         return connection;
+    }
+
+    public ResultSet queryDB(String query) {
+        ResultSet resultSet = null;
+        try {
+            Logger.getInstance().log(LoggerType.DEBUG, "queryDB() \nquery: " + query);
+            Statement statement = connection.createStatement();
+            resultSet = statement.executeQuery(query);
+        } catch (SQLException e) {
+            Logger.getInstance().log(LoggerType.ERROR, "SQL Error " + e.getMessage() + "\nQuery: " + query);
+        }
+        return resultSet;
+    }
+
+    public void updateDB(String query) {
+        Logger.getInstance().log(LoggerType.DEBUG, "updateDB() \nquery: " + query);
+        try {
+            connection.createStatement().executeUpdate(query);
+        } catch (SQLException e) {
+            Logger.getInstance().log(LoggerType.ERROR, "SQL Error " + e.getMessage() + "\nQuery: " + query);
+        }
+    }
+
+    public void close() throws SQLException {
+        this.connection.close();
     }
 }

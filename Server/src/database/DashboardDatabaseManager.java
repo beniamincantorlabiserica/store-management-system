@@ -4,21 +4,17 @@ import logger.Logger;
 import logger.LoggerType;
 import model.WorkingHours;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 /**
  * DAO for the dashboard
  */
 public class DashboardDatabaseManager {
-    private final Connection connection;
+    private final DBConnection connection;
     private WorkingHours workingHours;
 
-    public DashboardDatabaseManager(Connection connection) {
+    public DashboardDatabaseManager(DBConnection connection) {
         this.connection = connection;
         workingHours = null;
     }
@@ -31,8 +27,10 @@ public class DashboardDatabaseManager {
             return workingHours;
         }
         Logger.getInstance().log(LoggerType.DEBUG, "DashboardDatabaseManager -> getWorkingHours()");
-        String query = "select value from preferences where preference = 'workingHours'";
-        ResultSet rs = queryDB(query);
+        String query = "SELECT value " +
+                "FROM preferences " +
+                "WHERE preference = 'workingHours'";
+        ResultSet rs = connection.queryDB(query);
         try {
             rs.next();
             return new WorkingHours(rs.getString("value"));
@@ -43,8 +41,10 @@ public class DashboardDatabaseManager {
 
     public void setWorkingHours(String workingHours) {
         Logger.getInstance().log(LoggerType.DEBUG, "DashboardDatabaseManager -> setWorkingHours()");
-        String query = "update preferences set value = '" + workingHours + "' where preference = 'workingHours'";
-        updateDB(query);
+        String query = "UPDATE preferences " +
+                "SET value = '" + workingHours + "' " +
+                "WHERE preference = 'workingHours'";
+        connection.updateDB(query);
         this.workingHours = null;
     }
 
@@ -57,10 +57,8 @@ public class DashboardDatabaseManager {
      */
     public String getCheckoutsToday() {
         Logger.getInstance().log(LoggerType.DEBUG, "DashboardDatabaseManager -> getCheckoutsToday()");
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-        LocalDateTime now = LocalDateTime.now();
-        String query = "Select count(distinct id) as checkouts from checkouts where timestamp='" + dtf.format(now) + "'";
-        ResultSet rs = queryDB(query);
+        String query = "SELECT COUNT(DISTINCT id) AS checkouts FROM checkouts WHERE DATE(timestamp) = CURRENT_DATE";
+        ResultSet rs = connection.queryDB(query);
         String checkouts;
         try {
             rs.next();
@@ -81,10 +79,8 @@ public class DashboardDatabaseManager {
      */
     public String getItemsToday() {
         Logger.getInstance().log(LoggerType.DEBUG, "DashboardDatabaseManager -> getItemsToday()");
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-        LocalDateTime now = LocalDateTime.now();
-        String query = "Select sum(checkouts.quantity) as items from checkouts where timestamp='" + dtf.format(now) + "'";
-        ResultSet rs = queryDB(query);
+        String query = "SELECT SUM(checkouts.quantity) AS items FROM checkouts WHERE DATE(timestamp) = CURRENT_DATE";
+        ResultSet rs = connection.queryDB(query);
         String items;
         try {
             rs.next();
@@ -105,14 +101,12 @@ public class DashboardDatabaseManager {
      */
     public String getSalesToday() {
         Logger.getInstance().log(LoggerType.DEBUG, "DashboardDatabaseManager -> getSalesToday()");
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-        LocalDateTime now = LocalDateTime.now();
-        String query = "Select sum(checkouts.price) as sales from checkouts where timestamp='" + dtf.format(now) + "'";
-        ResultSet rs = queryDB(query);
+        String query = "SELECT SUM(ck.quantity * i.price) AS sales FROM checkouts ck JOIN items i ON i.id = ck.itemid WHERE DATE(timestamp) = CURRENT_DATE";
+        ResultSet rs = connection.queryDB(query);
         String sales;
         try {
             rs.next();
-            sales = String.valueOf(rs.getInt("sales"));
+            sales = String.valueOf(rs.getDouble("sales"));
             Logger.getInstance().log(LoggerType.DEBUG, "SALES TODAY: " + sales);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -121,11 +115,8 @@ public class DashboardDatabaseManager {
     }
 
     public String getCheckoutsThisMonth() {
-        int year = LocalDateTime.now().getYear();
-        String month = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM"));
-        String nextMonth = String.valueOf(Integer.parseInt(month));
-        String query = "SELECT COUNT(DISTINCT id) as checkouts from checkouts where '" + year + "/" + month + "/01' <= checkouts.timestamp and checkouts.timestamp < '" + year + "/" + nextMonth + "/01';";
-        ResultSet rs = queryDB(query);
+        String query = "SELECT COUNT(DISTINCT id) AS checkouts FROM checkouts WHERE timestamp >= CURRENT_DATE - INTERVAL '30D'";
+        ResultSet rs = connection.queryDB(query);
         String checkouts;
         try {
             rs.next();
@@ -137,11 +128,8 @@ public class DashboardDatabaseManager {
     }
 
     public String getItemsThisMonth() {
-        int year = LocalDateTime.now().getYear();
-        String month = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM"));
-        String nextMonth = String.valueOf(Integer.parseInt(month));
-        String query = "SELECT SUM(checkouts.quantity) as items from checkouts where '" + year + "/" + month + "/01' <= checkouts.timestamp and checkouts.timestamp < '" + year + "/" + nextMonth + "/01';";
-        ResultSet rs = queryDB(query);
+        String query = "SELECT SUM(checkouts.quantity) AS items FROM checkouts WHERE timestamp >= CURRENT_DATE - INTERVAL '30D'";
+        ResultSet rs = connection.queryDB(query);
         String items;
         try {
             rs.next();
@@ -153,39 +141,19 @@ public class DashboardDatabaseManager {
     }
 
     public String getSalesThisMonth() {
-        int year = LocalDateTime.now().getYear();
-        String month = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM"));
-        String nextMonth = String.valueOf(Integer.parseInt(month));
-        String query = "SELECT SUM(checkouts.price) as sales from checkouts where '" + year + "/" + month + "/01' <= checkouts.timestamp and checkouts.timestamp < '" + year + "/" + nextMonth + "/01';";
-        ResultSet rs = queryDB(query);
+        String query = "SELECT SUM(ck.quantity * i.price) AS sales " +
+                "FROM checkouts ck " +
+                "JOIN items i " +
+                "ON i.id = ck.itemid " +
+                "WHERE timestamp >= CURRENT_DATE - INTERVAL '30D'";
+        ResultSet rs = connection.queryDB(query);
         String sales;
         try {
             rs.next();
-            sales = String.valueOf(rs.getInt("sales"));
+            sales = String.valueOf(rs.getDouble("sales"));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return sales;
-    }
-
-    private void updateDB(String query) {
-        Logger.getInstance().log(LoggerType.DEBUG,"updateDB()");
-        try {
-            connection.createStatement().executeUpdate(query);
-        } catch (SQLException e) {
-            Logger.getInstance().log(LoggerType.ERROR, "DashboardDatabaseManager : SQL Error " + e.getMessage());
-        }
-    }
-
-    private ResultSet queryDB(String query) {
-        ResultSet resultSet = null;
-        try {
-            Logger.getInstance().log(LoggerType.DEBUG,"queryDB");
-            Statement statement = connection.createStatement();
-            resultSet = statement.executeQuery(query);
-        } catch (SQLException e) {
-            Logger.getInstance().log(LoggerType.ERROR, "DashboardDatabaseManager : SQL Error " + e.getMessage());
-        }
-        return resultSet;
     }
 }

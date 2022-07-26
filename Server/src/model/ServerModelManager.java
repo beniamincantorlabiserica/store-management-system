@@ -4,6 +4,7 @@ import database.ManagerFactory;
 import logger.Logger;
 import logger.LoggerType;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 public class ServerModelManager implements ServerModel {
@@ -11,7 +12,14 @@ public class ServerModelManager implements ServerModel {
 
     private WorkingHours workingHours;
 
+    private boolean isInventoryCacheValid;
+
+    private ArrayList<Item> inventoryCache;
+
+    private Integer checkoutId;
+
     public ServerModelManager() {
+        isInventoryCacheValid = false;
         Logger.getInstance().log("Starting server model..");
         boot();
     }
@@ -21,6 +29,9 @@ public class ServerModelManager implements ServerModel {
         Logger.getInstance().log(LoggerType.DEBUG, "Database Managers created");
         managerFactory.getGeneralDatabaseManager().checkDB();
         workingHours = getWorkingHours();
+        inventoryCache = getItems();
+        isInventoryCacheValid = true;
+        checkoutId = null;
     }
 
     @Override
@@ -142,11 +153,45 @@ public class ServerModelManager implements ServerModel {
 
     @Override
     public ArrayList<Item> getItems() {
-        return managerFactory.getInventoryDatabaseManager().getItems();
+        if (!isInventoryCacheValid) {
+            return managerFactory.getInventoryDatabaseManager().getItems();
+        }
+        return inventoryCache;
     }
 
     @Override
     public void changePrice(int id, int price) {
-        managerFactory.getInventoryDatabaseManager().changePrice(id,price);
+        managerFactory.getInventoryDatabaseManager().changePrice(id, price);
+    }
+
+    @Override
+    public Item scanItem(String barCode) throws RemoteException {
+        int itemId = Integer.parseInt(barCode);
+        Item addedItem = managerFactory.getInventoryDatabaseManager().isItem(itemId);
+        if (addedItem == null) {
+            throw new RemoteException("WRONG_BARCODE");
+        }
+        if (addedItem.getQuantity() == 0) {
+            throw new RemoteException("NO_MORE_ITEMS_IN_STOCK");
+        }
+        if (checkoutId == null) {
+            checkoutId = managerFactory.getCheckoutDatabaseManager().getNextAvailableCheckoutNumber();
+        }
+
+        managerFactory.getCheckoutDatabaseManager().addItemToCheckout(checkoutId, itemId, "MOBILEPAY");
+        managerFactory.getInventoryDatabaseManager().updateQuantity(itemId, addedItem.getQuantity() - 1);
+
+        addedItem.setQuantity(addedItem.getQuantity() - 1);
+        return addedItem;
+    }
+
+    @Override
+    public Double checkout() throws RemoteException {
+        if (checkoutId == null) {
+            throw new RemoteException("NO_ITEMS_TO_CHECKOUT");
+        }
+        Double total = managerFactory.getCheckoutDatabaseManager().getTotalForCheckout(checkoutId);
+        checkoutId = null;
+        return total;
     }
 }
