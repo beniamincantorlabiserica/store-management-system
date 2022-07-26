@@ -5,6 +5,8 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import logger.Logger;
+import logger.LoggerType;
 import model.Item;
 import view.ViewController;
 import viewmodel.CashRegisterViewModel;
@@ -32,17 +34,15 @@ public class CashRegisterViewController extends ViewController {
     @FXML
     public TextField scanInput;
     private CashRegisterViewModel viewModel; // contains a reference to the viewModel
-    private ObservableList<Item> items;
     private ArrayList<Item> currentItems;
 
     public CashRegisterViewController() { } // Empty constructor
     @Override
     protected void init() {
         viewModel = getViewModelFactory().getCashRegisterViewModel(); // fetches the viewModel variable from the viewModel factory class
-        items = FXCollections.observableArrayList();
+        totalPrice.setText("0");
         currentItems = new ArrayList<>();
-        table.setItems(items);
-        table.setEditable(true);
+        reset();
         id.setCellValueFactory(new PropertyValueFactory<Item, Integer>("id"));
         item.setCellValueFactory(new PropertyValueFactory<Item, String>("name"));
         quantity.setCellValueFactory(new PropertyValueFactory<Item, Integer>("quantity"));
@@ -50,9 +50,12 @@ public class CashRegisterViewController extends ViewController {
     }
 
     public void onScanPressed() {
+
         String id = scanInput.getText();
         scanInput.setText("");
-        items.addAll(viewModel.scanItem(id));
+        currentItems = viewModel.scanItem(id);
+        reset();
+        calculateTotal();
     }
 
     public void onCheckoutPressed() {
@@ -62,12 +65,18 @@ public class CashRegisterViewController extends ViewController {
     public void calculateTotal() {
         double sum = 0;
         for (Item item : currentItems) {
-            sum = item.getPrice();
+            Logger.getInstance().log(LoggerType.DEBUG, "Item: " + item.name);
+            sum += item.getPrice();
         }
+        totalPrice.setText(String.valueOf(sum));
+        Logger.getInstance().log(LoggerType.DEBUG, "----------------------");
     }
 
     @Override
     public void reset() {
-
+        ObservableList<Item> items = FXCollections.observableArrayList();
+        items.addAll(currentItems);
+        table.setItems(items);
+        table.setEditable(true);
     }
 }
