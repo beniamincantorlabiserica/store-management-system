@@ -266,13 +266,12 @@ public class ModelManager implements Model {
 
     @Override
     public ArrayList<Item> scanItem(String barCode) throws RuntimeException {
-        Item addedItem = null;
+        Item addedItem;
         try {
             addedItem = clientModel.scanItem(barCode);
             currentCheckout.add(addedItem);
         } catch (RemoteException e) {
             Logger.getInstance().log(LoggerType.ERROR, "scanItem ModelManager error: " + e.getMessage());
-            currentCheckout = new ArrayList<>();
         }
         return currentCheckout;
     }
@@ -283,7 +282,8 @@ public class ModelManager implements Model {
         try {
             return clientModel.checkout();
         } catch (RemoteException e) {
-            throw new RuntimeException(e);
+            Logger.getInstance().log(LoggerType.ERROR, e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
 }

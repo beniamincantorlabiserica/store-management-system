@@ -187,6 +187,9 @@ public class ServerModelManager implements ServerModel {
 
     @Override
     public Double checkout() throws RemoteException {
+        if (checkoutId == null) {
+            throw new RemoteException("NO_ITEMS_TO_CHECKOUT");
+        }
         Double total = managerFactory.getCheckoutDatabaseManager().getTotalForCheckout(checkoutId);
         checkoutId = null;
         return total;

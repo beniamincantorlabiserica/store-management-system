@@ -2,7 +2,6 @@ package database;
 
 import logger.Logger;
 import logger.LoggerType;
-import timestamp.StoreTimeStamp;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -38,7 +37,7 @@ public class CheckoutDatabaseManager {
 
     private void addNewItemToCheckout(int checkoutId, int itemId, String paymentType) {
         Logger.getInstance().log(LoggerType.DEBUG, "addNewItemToCheckout(" + checkoutId + ", " + itemId + ")");
-        String query = "INSERT INTO checkouts VALUES (" + checkoutId + ", " + itemId + ", 1, '" + paymentType + "', '" + StoreTimeStamp.getTimeStamp() + "')";
+        String query = "INSERT INTO checkouts VALUES (" + checkoutId + ", " + itemId + ", 1, '" + paymentType + "')";
         connection.updateDB(query);
     }
 
