@@ -4,17 +4,15 @@ import logger.Logger;
 import logger.LoggerType;
 import model.User;
 
-
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 public class UsersDatabaseManager {
-    private final Connection connection;
+    private final DBConnection connection;
     Statement statement = null;
 
-    public UsersDatabaseManager(Connection connection) {
+    public UsersDatabaseManager(DBConnection connection) {
         this.connection = connection;
     }
 
@@ -24,8 +22,7 @@ public class UsersDatabaseManager {
         String role = null;
         try {
             String query = "Select role from users where password= '" + password + "' limit 1";
-            statement = connection.createStatement();
-            rs = statement.executeQuery(query);
+            rs = connection.queryDB(query);
             if (rs.next()) {
                 role = rs.getString("role");
             }
@@ -54,8 +51,7 @@ public class UsersDatabaseManager {
         String masterPassword = null;
         try {
             String query = "select password from users where role='master'";
-            statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery(query);
+            ResultSet rs = connection.queryDB(query);
             if(rs.next()) {
                 masterPassword = rs.getString("password");
             }
@@ -77,8 +73,7 @@ public class UsersDatabaseManager {
         ResultSet rs;
         try {
             String query = "Select * from users";
-            statement = connection.createStatement();
-            rs = statement.executeQuery(query);
+            rs = connection.queryDB(query);
             while (rs.next()) {
                 String oldPassword = rs.getString("password");
                 if (oldPassword.equals(password)) {
@@ -92,9 +87,8 @@ public class UsersDatabaseManager {
             }
             role = role.contains("Store") ? "storeManager" : "cashier";
             query = "update users set password='" + password
-                            + "' where role='" + role + "'";
-            statement = connection.createStatement();
-            statement.executeUpdate(query);
+                    + "' where role='" + role + "'";
+            connection.updateDB(query);
             Logger.getInstance().log(LoggerType.WARNING, "Password changed for " + role + " to " + password);
         } catch (Exception e) {
             e.printStackTrace();

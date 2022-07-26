@@ -15,14 +15,14 @@ import java.util.ArrayList;
 public class ModelManager implements Model {
     private RemoteModel clientModel;
     /**
-     * @value
-     *  true if the client successfully connected to the server through RMI
-     *  false otherwise
+     * @value true if the client successfully connected to the server through RMI
+     * false otherwise
      */
     private boolean network;
-
     private String locked;
     private User currentUser;
+
+    private ArrayList<Item> currentCheckout;
 
     public ModelManager() {
         clientModel = null;
@@ -35,6 +35,7 @@ public class ModelManager implements Model {
             Logger.getInstance().log(LoggerType.ERROR, "Connection error. Is the server offline?");
         }
         currentUser = null;
+        currentCheckout = new ArrayList<>();
     }
 
     public User login(String password) {
@@ -257,9 +258,32 @@ public class ModelManager implements Model {
     @Override
     public void changePrice(int id, int price) {
         try {
-            clientModel.changePrice(id,price);
+            clientModel.changePrice(id, price);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public ArrayList<Item> scanItem(String barCode) throws RuntimeException {
+        Item addedItem;
+        try {
+            addedItem = clientModel.scanItem(barCode);
+            currentCheckout.add(addedItem);
+        } catch (RemoteException e) {
+            Logger.getInstance().log(LoggerType.ERROR, "scanItem ModelManager error: " + e.getMessage());
+        }
+        return currentCheckout;
+    }
+
+    @Override
+    public Double checkout() throws RuntimeException {
+        currentCheckout = new ArrayList<>();
+        try {
+            return clientModel.checkout();
+        } catch (RemoteException e) {
+            Logger.getInstance().log(LoggerType.ERROR, e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
 }
