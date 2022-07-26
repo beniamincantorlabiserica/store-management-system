@@ -120,6 +120,16 @@ public class ServerNetworkManager implements RemoteModel {
 
     @Override
     public void changePrice(int id, int price) {
-        serverModel.changePrice(id,price);
+        serverModel.changePrice(id, price);
+    }
+
+    @Override
+    public Item scanItem(String barCode) throws RemoteException {
+        return serverModel.scanItem(barCode);
+    }
+
+    @Override
+    public Double checkout() throws RemoteException {
+        return serverModel.checkout();
     }
 }
