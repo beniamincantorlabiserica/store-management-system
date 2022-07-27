@@ -2,12 +2,10 @@ package view.controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.converter.IntegerStringConverter;
@@ -44,14 +42,14 @@ public class InventoryViewController extends ViewController {
     protected void init() {
         viewModel = getViewModelFactory().getInventoryViewModel();
         reset();
-        id.setCellValueFactory(new PropertyValueFactory<Item, Integer>("id"));
-        item.setCellValueFactory(new PropertyValueFactory<Item, String>("name"));
-        quantity.setCellValueFactory(new PropertyValueFactory<Item, Integer>("quantity"));
-        price.setCellValueFactory(new PropertyValueFactory<Item, Integer>("price"));
+        id.setCellValueFactory(new PropertyValueFactory<>("id"));
+        item.setCellValueFactory(new PropertyValueFactory<>("name"));
+        quantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        price.setCellValueFactory(new PropertyValueFactory<>("price"));
         price.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
         price.setOnEditCommit(itemIntegerCellEditEvent -> {
             Item item = itemIntegerCellEditEvent.getRowValue();
-            viewModel.changePrice(item.getId(),itemIntegerCellEditEvent.getNewValue());
+            viewModel.changePrice(item.getId(), itemIntegerCellEditEvent.getNewValue());
         });
     }
 
