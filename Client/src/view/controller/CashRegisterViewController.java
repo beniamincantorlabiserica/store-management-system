@@ -50,6 +50,14 @@ public class CashRegisterViewController extends ViewController {
         price.setCellValueFactory(new PropertyValueFactory<Item, Integer>("price"));
     }
 
+    /**
+     * THe function retrieves the id entered by the user,
+     * sets the TextField to a null string.
+     * It is trying to get the items from the view model,
+     * and if there are no exeptions the function calls reset() and
+     * calculateTotal() functions, if there is an exeption,
+     * the function displays an alert
+     */
     public void onScanPressed() {
 
         String id = scanInput.getText();
@@ -61,7 +69,7 @@ public class CashRegisterViewController extends ViewController {
         } catch (Exception e) {
             if (e.getMessage().equals("WRONG_BARCODE"));
             {
-                Logger.getInstance().log(LoggerType.DEBUG, "O ajuns aici");
+                Logger.getInstance().log(LoggerType.DEBUG, "Wrong Barcode");
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Wrong Barcode");
                 alert.setHeaderText("Please use a valid barcode.");
@@ -76,6 +84,10 @@ public class CashRegisterViewController extends ViewController {
         viewModel.checkout();
     }
 
+    /**
+     * The function calculates the total price of the
+     * items in the ArrayList and displays it in the totalPrice label
+     */
     public void calculateTotal() {
         double sum = 0;
         for (Item item : currentItems) {
