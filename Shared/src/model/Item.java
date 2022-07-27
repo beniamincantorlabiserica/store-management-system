@@ -49,6 +49,4 @@ public class Item implements Serializable {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-
-
 }

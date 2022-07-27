@@ -1,35 +1,25 @@
 package database;
 
-import logger.Logger;
-import logger.LoggerType;
 import model.Item;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 
 public class InventoryDatabaseManager {
     private final DBConnection connection;
-    Statement statement = null;
 
     public InventoryDatabaseManager(DBConnection connection) {
         this.connection = connection;
     }
 
-
     /**
      * @return an ArrayList of items from database
      */
     public ArrayList<Item> getItems() {
-
         ArrayList<Item> items = new ArrayList<>();
         try {
-
             String query = "Select * from items order by id";
-
-
             ResultSet rs = connection.queryDB(query);
             while (rs.next()) {
                 Item item = new Item(rs.getInt("id"), rs.getString("name"),
@@ -51,11 +41,11 @@ public class InventoryDatabaseManager {
             e.printStackTrace();
         }
     }
+
     public Item isItem(int id) {
         String query = "SELECT * FROM items WHERE id = " + id;
         ResultSet rs = connection.queryDB(query);
         try {
-
             if (!rs.next()) {
                 return null;
             }
@@ -64,7 +54,6 @@ public class InventoryDatabaseManager {
                     rs.getInt("price"),
                     rs.getInt("quantity"));
         } catch (SQLException e) {
-
             throw new RuntimeException(e);
         }
     }
@@ -77,9 +66,4 @@ public class InventoryDatabaseManager {
             e.printStackTrace();
         }
     }
-
-
-
-
-
 }
