@@ -265,13 +265,14 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public ArrayList<Item> scanItem(String barCode) throws RuntimeException {
+    public ArrayList<Item> scanItem(String barCode){
         Item addedItem;
         try {
             addedItem = clientModel.scanItem(barCode);
             currentCheckout.add(addedItem);
         } catch (RemoteException e) {
             Logger.getInstance().log(LoggerType.ERROR, "scanItem ModelManager error: " + e.getMessage());
+            throw new RuntimeException(e);
         }
         return currentCheckout;
     }

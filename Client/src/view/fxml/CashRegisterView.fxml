@@ -18,7 +18,7 @@
             <TableColumn fx:id="price" prefWidth="75.0" text="Price" />
         </columns>
       </TableView>
-      <Button fx:id="checkout" layoutX="514.0" layoutY="28.0" mnemonicParsing="false" text="Checkout" />
+      <Button fx:id="checkout" onAction="#onScanPressed" layoutX="514.0" layoutY="28.0" mnemonicParsing="false" text="Checkout" />
       <Label layoutX="344.0" layoutY="30.0" prefHeight="20.0" prefWidth="47.0" text="Total:">
          <font>
             <Font size="16.0" />

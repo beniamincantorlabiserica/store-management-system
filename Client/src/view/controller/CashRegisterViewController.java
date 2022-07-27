@@ -11,6 +11,7 @@ import model.Item;
 import view.ViewController;
 import viewmodel.CashRegisterViewModel;
 
+import javax.swing.*;
 import java.util.ArrayList;
 
 public class CashRegisterViewController extends ViewController {
@@ -53,13 +54,26 @@ public class CashRegisterViewController extends ViewController {
 
         String id = scanInput.getText();
         scanInput.setText("");
-        currentItems = viewModel.scanItem(id);
-        reset();
-        calculateTotal();
+        try {
+            currentItems = viewModel.scanItem(id);
+            reset();
+            calculateTotal();
+        } catch (Exception e) {
+            if (e.getMessage().equals("WRONG_BARCODE"));
+            {
+                Logger.getInstance().log(LoggerType.DEBUG, "O ajuns aici");
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Wrong Barcode");
+                alert.setHeaderText("Please use a valid barcode.");
+                alert.showAndWait();
+
+            }
+        }
+
     }
 
     public void onCheckoutPressed() {
-
+        viewModel.checkout();
     }
 
     public void calculateTotal() {
