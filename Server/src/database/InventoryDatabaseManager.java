@@ -22,8 +22,8 @@ public class InventoryDatabaseManager {
             String query = "Select * from items order by id";
             ResultSet rs = connection.queryDB(query);
             while (rs.next()) {
-                Item item = new Item(rs.getInt("id"), rs.getString("name"),
-                        rs.getInt("price"), rs.getInt("quantity"));
+                Item item = new Item(rs.getLong("id"), rs.getString("name"),
+                        rs.getDouble("price"), rs.getInt("quantity"));
                 items.add(item);
             }
         } catch (Exception e) {
@@ -33,7 +33,7 @@ public class InventoryDatabaseManager {
         return items;
     }
 
-    public void changePrice(int id, int price) {
+    public void changePrice(Long id, Double price) {
         try {
             String query = "UPDATE items SET price=" + price + "WHERE id = " + id;
             connection.updateDB(query);
@@ -49,9 +49,9 @@ public class InventoryDatabaseManager {
             if (!rs.next()) {
                 return null;
             }
-            return new Item(rs.getInt("id"),
+            return new Item(rs.getLong("id"),
                     rs.getString("name"),
-                    rs.getInt("price"),
+                    rs.getDouble("price"),
                     rs.getInt("quantity"));
         } catch (SQLException e) {
             throw new RuntimeException(e);

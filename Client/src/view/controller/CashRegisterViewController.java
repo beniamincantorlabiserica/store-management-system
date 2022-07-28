@@ -12,10 +12,8 @@ import view.View;
 import view.ViewController;
 import viewmodel.CashRegisterViewModel;
 
-import javax.swing.*;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Objects;
 
 public class CashRegisterViewController extends ViewController {
 
@@ -65,39 +63,32 @@ public class CashRegisterViewController extends ViewController {
      * the function displays an alert
      */
     public void onScanPressed() {
-
         String id = scanInput.getText();
         scanInput.setText("");
         try {
             currentItems = viewModel.scanItem(id);
             Item currentItem = currentItems.get(currentItems.size() - 1);
             currentItems.remove(currentItem);
-            if(!addItemToCheckout(currentItem))
-            {
+            if (!addItemToCheckout(currentItem)) {
                 currentItems.add(currentItem);
             }
             reset();
             calculateTotal();
         } catch (RuntimeException e) {
-            if (e.getMessage().equals("WRONG_BARCODE"))
-            {
+            if (e.getMessage().equals("WRONG_BARCODE")) {
                 Logger.getInstance().log(LoggerType.DEBUG, "Wrong Barcode");
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Wrong Barcode");
                 alert.setHeaderText("Please use a valid barcode.");
                 alert.showAndWait();
-            } else if (e.getMessage().equals("NO_MORE_ITEMS_IN_STOCK"))
-            {
+            } else if (e.getMessage().equals("NO_MORE_ITEMS_IN_STOCK")) {
                 Logger.getInstance().log(LoggerType.DEBUG, "No More Items In Stock");
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("No More Items In Stock");
                 alert.setHeaderText("There are no more items in stock.");
                 alert.showAndWait();
-            } else {
-                Logger.getInstance().log(LoggerType.ERROR, "UNKNOWN EXEPTION ");
             }
         }
-
     }
 
     public void onCheckoutPressed() {
@@ -110,11 +101,11 @@ public class CashRegisterViewController extends ViewController {
 
     public boolean addItemToCheckout(Item item) {
         for (Item i : currentItems) {
-           if (item.getId() == i.getId()){
-               i.setQuantity(i.getQuantity() + 1);
-               return true;
-           }
-       }
+            if (Objects.equals(item.getId(), i.getId())) {
+                i.setQuantity(i.getQuantity() + 1);
+                return true;
+            }
+        }
        return false;
     }
 

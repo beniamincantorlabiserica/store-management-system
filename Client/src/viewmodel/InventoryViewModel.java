@@ -1,9 +1,5 @@
 package viewmodel;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
-import javafx.scene.control.TableView;
 import model.Item;
 import model.Model;
 
@@ -23,8 +19,8 @@ public class InventoryViewModel implements InventoryViewModelInterface {
     }
 
     @Override
-    public void changePrice(int id, int price) {
-        model.changePrice(id,price);
+    public void changePrice(Long id, Double price) {
+        model.changePrice(id, price);
     }
 
 

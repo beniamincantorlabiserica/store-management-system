@@ -141,7 +141,7 @@ public class NetworkManager implements RemoteModel {
     }
 
     @Override
-    public void changePrice(int id, int price) throws RemoteException {
+    public void changePrice(Long id, Double price) throws RemoteException {
         remoteModel.changePrice(id, price);
     }
 

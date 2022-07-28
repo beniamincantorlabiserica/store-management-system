@@ -3,13 +3,12 @@ package model;
 import java.io.Serializable;
 
 public class Item implements Serializable {
-    public int id;
+    public Long id;
     public String name;
-    public int price;
-
+    public double price;
     public int quantity;
 
-    public Item(int id, String name, int price, int quantity) {
+    public Item(Long id, String name, double price, int quantity) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -18,11 +17,11 @@ public class Item implements Serializable {
 
     public Item() {}
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -34,11 +33,11 @@ public class Item implements Serializable {
         this.name = name;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 

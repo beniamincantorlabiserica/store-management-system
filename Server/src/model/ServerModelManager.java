@@ -160,7 +160,7 @@ public class ServerModelManager implements ServerModel {
     }
 
     @Override
-    public void changePrice(int id, int price) {
+    public void changePrice(Long id, Double price) {
         managerFactory.getInventoryDatabaseManager().changePrice(id, price);
     }
 
