@@ -179,7 +179,7 @@ public class ServerModelManager implements ServerModel {
         }
 
         managerFactory.getCheckoutDatabaseManager().addItemToCheckout(checkoutId, itemId, "MOBILEPAY");
-        managerFactory.getInventoryDatabaseManager().updateQuantity(itemId, addedItem.getQuantity() - 1);
+        //managerFactory.getInventoryDatabaseManager().updateQuantity(itemId, addedItem.getQuantity() - 1);
 
         addedItem.setQuantity(addedItem.getQuantity() - 1);
         return addedItem;

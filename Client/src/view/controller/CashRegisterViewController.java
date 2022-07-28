@@ -67,21 +67,30 @@ public class CashRegisterViewController extends ViewController {
             reset();
             calculateTotal();
         } catch (Exception e) {
-            if (e.getMessage().equals("WRONG_BARCODE"));
+            if (e.getMessage().equals("WRONG_BARCODE"))
             {
                 Logger.getInstance().log(LoggerType.DEBUG, "Wrong Barcode");
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Wrong Barcode");
                 alert.setHeaderText("Please use a valid barcode.");
                 alert.showAndWait();
-
+            } else {
+                if (e.getMessage().equals("NO_MORE_ITEMS_IN_STOCK"))
+                {
+                    Logger.getInstance().log(LoggerType.DEBUG, "No More Items In Stock");
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("No More Items In Stock");
+                    alert.setHeaderText("There are no more items in stock.");
+                    alert.showAndWait();
+                }
             }
         }
 
     }
 
     public void onCheckoutPressed() {
-        viewModel.checkout();
+        double total = viewModel.checkout();
+        Logger.getInstance().log(LoggerType.DEBUG, "Total price from checkout: " + total);
     }
 
     /**
