@@ -1,7 +1,5 @@
 package database;
 
-import logger.Logger;
-import logger.LoggerType;
 import model.Item;
 
 import java.sql.ResultSet;
@@ -15,16 +13,13 @@ public class InventoryDatabaseManager {
         this.connection = connection;
     }
 
-
     /**
      * @return an ArrayList of items from database
      */
     public ArrayList<Item> getItems() {
-
         ArrayList<Item> items = new ArrayList<>();
         try {
-
-            String query = "Select * from items";
+            String query = "Select * from items order by id";
             ResultSet rs = connection.queryDB(query);
             while (rs.next()) {
                 Item item = new Item(rs.getInt("id"), rs.getString("name"),
@@ -71,11 +66,4 @@ public class InventoryDatabaseManager {
             e.printStackTrace();
         }
     }
-
-    private void updateDB(String query) {
-        Logger.getInstance().log(LoggerType.DEBUG, "updateDB()");
-        connection.queryDB(query);
-    }
-
-
 }
