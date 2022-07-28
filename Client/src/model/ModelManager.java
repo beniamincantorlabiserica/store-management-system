@@ -269,6 +269,7 @@ public class ModelManager implements Model {
         Item addedItem;
         try {
             addedItem = clientModel.scanItem(barCode);
+            addedItem.setQuantity(1);
             currentCheckout.add(addedItem);
         } catch (RemoteException e) {
             Logger.getInstance().log(LoggerType.ERROR, "scanItem ModelManager error: " + e.getMessage());
