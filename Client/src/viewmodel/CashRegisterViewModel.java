@@ -23,4 +23,9 @@ public class CashRegisterViewModel implements CashRegisterViewModelInterface{
     public double checkout() throws RuntimeException {
         return model.checkout();
     }
+
+    @Override
+    public void logout() throws RuntimeException {
+        model.logout();
+    }
 }

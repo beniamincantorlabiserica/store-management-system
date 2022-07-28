@@ -18,19 +18,20 @@
             <TableColumn fx:id="price" prefWidth="75.0" text="Price" />
         </columns>
       </TableView>
-      <Button fx:id="checkout" onAction="#onCheckoutPressed" layoutX="514.0" layoutY="28.0" mnemonicParsing="false" text="Checkout" />
+      <Button fx:id="checkout" layoutX="514.0" layoutY="28.0" mnemonicParsing="false" onAction="#onCheckoutPressed" text="Checkout" />
       <Label layoutX="344.0" layoutY="30.0" prefHeight="20.0" prefWidth="47.0" text="Total:">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
-      <TextField fx:id="scanInput" layoutX="341.0" layoutY="316.0" />
-      <Label layoutX="344.0" layoutY="287.0" prefHeight="17.0" prefWidth="155.0" text="Enter new item" />
+      <TextField fx:id="scanInput" layoutX="341.0" layoutY="292.0" />
+      <Label layoutX="344.0" layoutY="265.0" prefHeight="17.0" prefWidth="155.0" text="Enter new item" />
       <Label fx:id="totalPrice" layoutX="391.0" layoutY="30.0" text="Label">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
-      <Button fx:id="scanItem" onAction="#onScanPressed" layoutX="514.0" layoutY="316.0" mnemonicParsing="false" text="Scan Item" />
+      <Button fx:id="scanItem" layoutX="514.0" layoutY="292.0" mnemonicParsing="false" onAction="#onScanPressed" text="Scan Item" />
+      <Button fx:id="logoutButton" layoutX="525.0" layoutY="327.0" mnemonicParsing="false" onAction="#logout" text="Log Out" />
    </children>
 </AnchorPane>

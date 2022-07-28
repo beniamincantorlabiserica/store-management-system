@@ -8,11 +8,14 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import logger.Logger;
 import logger.LoggerType;
 import model.Item;
+import view.View;
 import view.ViewController;
 import viewmodel.CashRegisterViewModel;
 
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CashRegisterViewController extends ViewController {
 
@@ -25,11 +28,14 @@ public class CashRegisterViewController extends ViewController {
     @FXML
     public TableColumn<Item, Integer> quantity;
     @FXML
-    public TableColumn<Item, Integer> price;
+    public TableColumn<Item, Double> price;
     @FXML
     public Button checkout;
     @FXML
     public Button scanItem;
+
+    @FXML
+    public Button logoutButton;
     @FXML
     public Label totalPrice;
     @FXML
@@ -44,10 +50,10 @@ public class CashRegisterViewController extends ViewController {
         totalPrice.setText("0");
         currentItems = new ArrayList<>();
         reset();
-        id.setCellValueFactory(new PropertyValueFactory<Item, Integer>("id"));
-        item.setCellValueFactory(new PropertyValueFactory<Item, String>("name"));
-        quantity.setCellValueFactory(new PropertyValueFactory<Item, Integer>("quantity"));
-        price.setCellValueFactory(new PropertyValueFactory<Item, Integer>("price"));
+        id.setCellValueFactory(new PropertyValueFactory<>("id"));
+        item.setCellValueFactory(new PropertyValueFactory<>("name"));
+        quantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        price.setCellValueFactory(new PropertyValueFactory<>("price"));
     }
 
     /**
@@ -64,9 +70,15 @@ public class CashRegisterViewController extends ViewController {
         scanInput.setText("");
         try {
             currentItems = viewModel.scanItem(id);
+            Item currentItem = currentItems.get(currentItems.size() - 1);
+            currentItems.remove(currentItem);
+            if(!addItemToCheckout(currentItem))
+            {
+                currentItems.add(currentItem);
+            }
             reset();
             calculateTotal();
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             if (e.getMessage().equals("WRONG_BARCODE"))
             {
                 Logger.getInstance().log(LoggerType.DEBUG, "Wrong Barcode");
@@ -74,15 +86,15 @@ public class CashRegisterViewController extends ViewController {
                 alert.setTitle("Wrong Barcode");
                 alert.setHeaderText("Please use a valid barcode.");
                 alert.showAndWait();
+            } else if (e.getMessage().equals("NO_MORE_ITEMS_IN_STOCK"))
+            {
+                Logger.getInstance().log(LoggerType.DEBUG, "No More Items In Stock");
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("No More Items In Stock");
+                alert.setHeaderText("There are no more items in stock.");
+                alert.showAndWait();
             } else {
-                if (e.getMessage().equals("NO_MORE_ITEMS_IN_STOCK"))
-                {
-                    Logger.getInstance().log(LoggerType.DEBUG, "No More Items In Stock");
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("No More Items In Stock");
-                    alert.setHeaderText("There are no more items in stock.");
-                    alert.showAndWait();
-                }
+                Logger.getInstance().log(LoggerType.ERROR, "UNKNOWN EXEPTION ");
             }
         }
 
@@ -90,7 +102,20 @@ public class CashRegisterViewController extends ViewController {
 
     public void onCheckoutPressed() {
         double total = viewModel.checkout();
+        currentItems = new ArrayList<>();
+        reset();
+        totalPrice.setText("0");
         Logger.getInstance().log(LoggerType.DEBUG, "Total price from checkout: " + total);
+    }
+
+    public boolean addItemToCheckout(Item item) {
+        for (Item i : currentItems) {
+           if (item.getId() == i.getId()){
+               i.setQuantity(i.getQuantity() + 1);
+               return true;
+           }
+       }
+       return false;
     }
 
     /**
@@ -101,17 +126,24 @@ public class CashRegisterViewController extends ViewController {
         double sum = 0;
         for (Item item : currentItems) {
             Logger.getInstance().log(LoggerType.DEBUG, "Item: " + item.name);
-            sum += item.getPrice();
+            sum += item.getPrice() * item.getQuantity();
         }
         totalPrice.setText(String.valueOf(sum));
         Logger.getInstance().log(LoggerType.DEBUG, "----------------------");
     }
 
+    public void logout() {
+        viewModel.logout();
+        getViewHandler().openView(View.START);
+    }
+
     @Override
     public void reset() {
         ObservableList<Item> items = FXCollections.observableArrayList();
+        items.clear();
         items.addAll(currentItems);
         table.setItems(items);
         table.setEditable(true);
+        table.refresh();
     }
 }
