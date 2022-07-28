@@ -170,8 +170,7 @@ public class ServerModelManager implements ServerModel {
         Item addedItem = managerFactory.getInventoryDatabaseManager().isItem(itemId);
         if (addedItem == null) {
             throw new RemoteException("WRONG_BARCODE");
-        }
-        if (addedItem.getQuantity() == 0) {
+        } else if (addedItem.getQuantity() == 0) {
             throw new RemoteException("NO_MORE_ITEMS_IN_STOCK");
         }
         if (checkoutId == null) {
