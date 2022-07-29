@@ -160,7 +160,7 @@ public class ServerModelManager implements ServerModel {
     }
 
     @Override
-    public void changePrice(int id, int price) {
+    public void changePrice(Long id, Double price) {
         managerFactory.getInventoryDatabaseManager().changePrice(id, price);
     }
 
@@ -170,8 +170,7 @@ public class ServerModelManager implements ServerModel {
         Item addedItem = managerFactory.getInventoryDatabaseManager().isItem(itemId);
         if (addedItem == null) {
             throw new RemoteException("WRONG_BARCODE");
-        }
-        if (addedItem.getQuantity() == 0) {
+        } else if (addedItem.getQuantity() == 0) {
             throw new RemoteException("NO_MORE_ITEMS_IN_STOCK");
         }
         if (checkoutId == null) {
@@ -179,7 +178,7 @@ public class ServerModelManager implements ServerModel {
         }
 
         managerFactory.getCheckoutDatabaseManager().addItemToCheckout(checkoutId, itemId, "MOBILEPAY");
-        managerFactory.getInventoryDatabaseManager().updateQuantity(itemId, addedItem.getQuantity() - 1);
+        //managerFactory.getInventoryDatabaseManager().updateQuantity(itemId, addedItem.getQuantity() - 1);
 
         addedItem.setQuantity(addedItem.getQuantity() - 1);
         return addedItem;

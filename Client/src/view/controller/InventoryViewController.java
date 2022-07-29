@@ -8,7 +8,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.util.converter.IntegerStringConverter;
+import javafx.util.converter.DoubleStringConverter;
 import logger.Logger;
 import logger.LoggerType;
 import model.Item;
@@ -22,11 +22,11 @@ public class InventoryViewController extends ViewController {
     @FXML
     public TableView<Item> table;
     @FXML
-    public TableColumn<Item, Integer> id;
+    public TableColumn<Item, Long> id;
     @FXML
     public TableColumn<Item, Integer> quantity;
     @FXML
-    public TableColumn<Item, Integer> price;
+    public TableColumn<Item, Double> price;
     @FXML
     public Button back;
     private InventoryViewModel viewModel;
@@ -46,7 +46,7 @@ public class InventoryViewController extends ViewController {
         item.setCellValueFactory(new PropertyValueFactory<>("name"));
         quantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         price.setCellValueFactory(new PropertyValueFactory<>("price"));
-        price.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+        price.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
         price.setOnEditCommit(itemIntegerCellEditEvent -> {
             Item item = itemIntegerCellEditEvent.getRowValue();
             viewModel.changePrice(item.getId(), itemIntegerCellEditEvent.getNewValue());

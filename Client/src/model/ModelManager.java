@@ -256,7 +256,7 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public void changePrice(int id, int price) {
+    public void changePrice(Long id, Double price) {
         try {
             clientModel.changePrice(id, price);
         } catch (RemoteException e) {
@@ -269,9 +269,15 @@ public class ModelManager implements Model {
         Item addedItem;
         try {
             addedItem = clientModel.scanItem(barCode);
+            addedItem.setQuantity(1);
             currentCheckout.add(addedItem);
         } catch (RemoteException e) {
             Logger.getInstance().log(LoggerType.ERROR, "scanItem ModelManager error: " + e.getMessage());
+            if (e.getMessage().contains("NO_MORE_ITEMS_IN_STOCK")) {
+                throw new RuntimeException("NO_MORE_ITEMS_IN_STOCK");
+            } else {
+                throw new RuntimeException("WRONG_BARCODE");
+            }
         }
         return currentCheckout;
     }

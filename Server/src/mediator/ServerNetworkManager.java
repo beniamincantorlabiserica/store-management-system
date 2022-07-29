@@ -119,7 +119,7 @@ public class ServerNetworkManager implements RemoteModel {
     }
 
     @Override
-    public void changePrice(int id, int price) {
+    public void changePrice(Long id, Double price) {
         serverModel.changePrice(id, price);
     }
 
