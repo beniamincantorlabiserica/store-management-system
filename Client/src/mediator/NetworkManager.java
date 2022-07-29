@@ -3,6 +3,7 @@ package mediator;
 import logger.Logger;
 import logger.LoggerType;
 import model.Item;
+import model.PaymentType;
 import model.User;
 import model.WorkingHours;
 import networking.RemoteModel;
@@ -153,5 +154,10 @@ public class NetworkManager implements RemoteModel {
     @Override
     public Double checkout() throws RemoteException {
         return remoteModel.checkout();
+    }
+
+    @Override
+    public void completePayment(PaymentType paymentType) {
+        remoteModel.completePayment(paymentType);
     }
 }

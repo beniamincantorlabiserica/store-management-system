@@ -283,6 +283,11 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public void completePayment(PaymentType paymentType) throws RuntimeException {
+        clientModel.completePayment(paymentType);
+    }
+
+    @Override
     public Double checkout() throws RuntimeException {
         currentCheckout = new ArrayList<>();
         try {

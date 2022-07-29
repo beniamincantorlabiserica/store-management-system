@@ -178,7 +178,7 @@ public class ServerModelManager implements ServerModel {
         }
 
         managerFactory.getCheckoutDatabaseManager().addItemToCheckout(checkoutId, itemId, "MOBILEPAY");
-        //managerFactory.getInventoryDatabaseManager().updateQuantity(itemId, addedItem.getQuantity() - 1);
+        managerFactory.getInventoryDatabaseManager().updateQuantity(itemId, addedItem.getQuantity() - 1);
 
         addedItem.setQuantity(addedItem.getQuantity() - 1);
         return addedItem;
@@ -189,8 +189,12 @@ public class ServerModelManager implements ServerModel {
         if (checkoutId == null) {
             throw new RemoteException("NO_ITEMS_TO_CHECKOUT");
         }
-        Double total = managerFactory.getCheckoutDatabaseManager().getTotalForCheckout(checkoutId);
+        return managerFactory.getCheckoutDatabaseManager().getTotalForCheckout(checkoutId);
+    }
+
+    @Override
+    public void completePayment(PaymentType paymentType) {
+        managerFactory.getCheckoutDatabaseManager().setPaymentType(checkoutId, paymentType);
         checkoutId = null;
-        return total;
     }
 }

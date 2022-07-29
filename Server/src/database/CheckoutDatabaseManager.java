@@ -2,6 +2,7 @@ package database;
 
 import logger.Logger;
 import logger.LoggerType;
+import model.PaymentType;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -76,5 +77,13 @@ public class CheckoutDatabaseManager {
             Logger.getInstance().log(LoggerType.ERROR, "Database error when trying to get totals for checkout " + checkoutId);
             throw new RuntimeException(e);
         }
+    }
+
+    public void setPaymentType(Integer checkoutId, PaymentType paymentType) {
+        Logger.getInstance().log(LoggerType.DEBUG, "setPaymentType(" + checkoutId + ", " + paymentType + ")");
+        String query = "UPDATE checkouts " +
+                "SET paymentmethod = " + paymentType + " " +
+                "WHERE id = " + checkoutId;
+        connection.updateDB(query);
     }
 }
