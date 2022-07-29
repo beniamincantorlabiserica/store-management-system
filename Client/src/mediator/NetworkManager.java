@@ -157,7 +157,7 @@ public class NetworkManager implements RemoteModel {
     }
 
     @Override
-    public void completePayment(PaymentType paymentType) {
+    public void completePayment(PaymentType paymentType) throws RemoteException {
         remoteModel.completePayment(paymentType);
     }
 }

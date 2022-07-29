@@ -284,7 +284,11 @@ public class ModelManager implements Model {
 
     @Override
     public void completePayment(PaymentType paymentType) throws RuntimeException {
-        clientModel.completePayment(paymentType);
+        try {
+            clientModel.completePayment(paymentType);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
