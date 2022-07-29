@@ -2,10 +2,7 @@ package mediator;
 
 import logger.Logger;
 import logger.LoggerType;
-import model.Item;
-import model.ServerModel;
-import model.User;
-import model.WorkingHours;
+import model.*;
 import networking.RemoteModel;
 
 import java.net.MalformedURLException;
@@ -131,5 +128,20 @@ public class ServerNetworkManager implements RemoteModel {
     @Override
     public Double checkout() throws RemoteException {
         return serverModel.checkout();
+    }
+
+    @Override
+    public void cancelCheckout() {
+        serverModel.cancelCheckout();
+    }
+
+    @Override
+    public void cancelCheckout(Integer checkoutId) {
+        serverModel.cancelCheckout(checkoutId);
+    }
+
+    @Override
+    public void completePayment(PaymentType paymentType) {
+        serverModel.completePayment(paymentType);
     }
 }

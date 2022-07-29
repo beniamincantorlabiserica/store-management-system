@@ -7,6 +7,5 @@ import java.util.ArrayList;
 public interface CashRegisterViewModelInterface {
     ArrayList<Item> scanItem(String barCode) throws RuntimeException;
     double checkout() throws RuntimeException;
-
     void logout() throws RuntimeException;
 }

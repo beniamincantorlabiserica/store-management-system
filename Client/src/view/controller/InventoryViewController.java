@@ -50,6 +50,7 @@ public class InventoryViewController extends ViewController {
         price.setOnEditCommit(itemIntegerCellEditEvent -> {
             Item item = itemIntegerCellEditEvent.getRowValue();
             viewModel.changePrice(item.getId(), itemIntegerCellEditEvent.getNewValue());
+            reset();
         });
     }
 
@@ -77,5 +78,6 @@ public class InventoryViewController extends ViewController {
         items.addAll(viewModel.getItems());
         table.setItems(items);
         table.setEditable(true);
+        table.refresh();
     }
 }

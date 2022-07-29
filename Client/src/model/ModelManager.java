@@ -292,4 +292,31 @@ public class ModelManager implements Model {
             throw new RuntimeException(e.getMessage());
         }
     }
+
+    @Override
+    public void completePayment(PaymentType paymentType) throws RuntimeException {
+        try {
+            clientModel.completePayment(paymentType);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void cancelCheckout() throws RuntimeException {
+        try {
+            clientModel.cancelCheckout();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void undoCheckout(Integer checkoutId) throws RuntimeException {
+        try {
+            clientModel.cancelCheckout(checkoutId);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

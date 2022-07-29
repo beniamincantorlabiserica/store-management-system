@@ -23,7 +23,7 @@ public class InventoryDatabaseManager {
             ResultSet rs = connection.queryDB(query);
             while (rs.next()) {
                 Item item = new Item(rs.getLong("id"), rs.getString("name"),
-                        rs.getDouble("price"), rs.getInt("quantity"));
+                        rs.getDouble("price"), rs.getInt("quantity"), rs.getTimestamp("lastedit").toLocalDateTime());
                 items.add(item);
             }
         } catch (Exception e) {
@@ -35,7 +35,7 @@ public class InventoryDatabaseManager {
 
     public void changePrice(Long id, Double price) {
         try {
-            String query = "UPDATE items SET price=" + price + "WHERE id = " + id;
+            String query = "UPDATE items SET price=" + price + ", lastedit=now() WHERE id = " + id;
             connection.updateDB(query);
         } catch (Exception e) {
             e.printStackTrace();
@@ -52,7 +52,8 @@ public class InventoryDatabaseManager {
             return new Item(rs.getLong("id"),
                     rs.getString("name"),
                     rs.getDouble("price"),
-                    rs.getInt("quantity"));
+                    rs.getInt("quantity"),
+                    rs.getTimestamp("lastedit").toLocalDateTime());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

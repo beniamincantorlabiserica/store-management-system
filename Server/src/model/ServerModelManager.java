@@ -19,19 +19,18 @@ public class ServerModelManager implements ServerModel {
     private Integer checkoutId;
 
     public ServerModelManager() {
-        isInventoryCacheValid = false;
+        this.isInventoryCacheValid = false;
         Logger.getInstance().log("Starting server model..");
         boot();
     }
 
     private void boot() {
-        managerFactory = new ManagerFactory();
-        Logger.getInstance().log(LoggerType.DEBUG, "Database Managers created");
-        managerFactory.getGeneralDatabaseManager().checkDB();
-        workingHours = getWorkingHours();
-        inventoryCache = getItems();
-        isInventoryCacheValid = true;
-        checkoutId = null;
+        this.managerFactory = new ManagerFactory();
+        this.managerFactory.getGeneralDatabaseManager().checkDB();
+        this.workingHours = getWorkingHours();
+        this.inventoryCache = getItems();
+        this.isInventoryCacheValid = true;
+        this.checkoutId = null;
     }
 
     @Override
@@ -173,12 +172,12 @@ public class ServerModelManager implements ServerModel {
         } else if (addedItem.getQuantity() == 0) {
             throw new RemoteException("NO_MORE_ITEMS_IN_STOCK");
         }
-        if (checkoutId == null) {
-            checkoutId = managerFactory.getCheckoutDatabaseManager().getNextAvailableCheckoutNumber();
+        if (this.checkoutId == null) {
+            this.checkoutId = managerFactory.getCheckoutDatabaseManager().getNextAvailableCheckoutNumber();
         }
 
         managerFactory.getCheckoutDatabaseManager().addItemToCheckout(checkoutId, itemId, "MOBILEPAY");
-        //managerFactory.getInventoryDatabaseManager().updateQuantity(itemId, addedItem.getQuantity() - 1);
+        managerFactory.getInventoryDatabaseManager().updateQuantity(itemId, addedItem.getQuantity() - 1);
 
         addedItem.setQuantity(addedItem.getQuantity() - 1);
         return addedItem;
@@ -186,11 +185,26 @@ public class ServerModelManager implements ServerModel {
 
     @Override
     public Double checkout() throws RemoteException {
-        if (checkoutId == null) {
+        if (this.checkoutId == null) {
             throw new RemoteException("NO_ITEMS_TO_CHECKOUT");
         }
-        Double total = managerFactory.getCheckoutDatabaseManager().getTotalForCheckout(checkoutId);
-        checkoutId = null;
-        return total;
+        return managerFactory.getCheckoutDatabaseManager().getTotalForCheckout(this.checkoutId);
+    }
+
+    @Override
+    public void cancelCheckout() {
+        managerFactory.getCheckoutDatabaseManager().rollbackCheckout(this.checkoutId);
+        this.checkoutId = null;
+    }
+
+    @Override
+    public void cancelCheckout(Integer checkoutId) {
+        managerFactory.getCheckoutDatabaseManager().rollbackCheckout(checkoutId);
+    }
+
+    @Override
+    public void completePayment(PaymentType paymentType) {
+        managerFactory.getCheckoutDatabaseManager().setPaymentType(this.checkoutId, paymentType);
+        this.checkoutId = null;
     }
 }
