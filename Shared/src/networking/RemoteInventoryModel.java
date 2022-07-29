@@ -8,6 +8,5 @@ import java.util.ArrayList;
 
 public interface RemoteInventoryModel extends Remote {
     ArrayList<Item> getItems() throws RemoteException;
-
     void changePrice(Long id, Double price) throws RemoteException;
 }
