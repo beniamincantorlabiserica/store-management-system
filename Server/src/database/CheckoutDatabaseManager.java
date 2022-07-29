@@ -6,6 +6,8 @@ import model.PaymentType;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CheckoutDatabaseManager {
     private final DBConnection connection;
@@ -82,8 +84,30 @@ public class CheckoutDatabaseManager {
     public void setPaymentType(Integer checkoutId, PaymentType paymentType) {
         Logger.getInstance().log(LoggerType.DEBUG, "setPaymentType(" + checkoutId + ", " + paymentType + ")");
         String query = "UPDATE checkouts " +
-                "SET paymentmethod = " + paymentType + " " +
+                "SET paymentmethod = '" + paymentType + "' " +
                 "WHERE id = " + checkoutId;
+        connection.updateDB(query);
+    }
+
+    public void rollbackCheckout(Integer checkoutId) {
+        Logger.getInstance().log(LoggerType.DEBUG, "rollbackCheckout(" + checkoutId + ")");
+        String query = "SELECT itemid, quantity FROM checkouts WHERE id = " + checkoutId;
+        ResultSet rs = connection.queryDB(query);
+        Map<Integer, Integer> itemsToRollback = new HashMap<>();
+        try {
+            while (rs.next()) {
+                itemsToRollback.put(rs.getInt("itemid"), rs.getInt("quantity"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        for (Integer i : itemsToRollback.keySet()) {
+            query = "UPDATE items " +
+                    "SET quantity = quantity + " + itemsToRollback.get(i) + " " +
+                    "WHERE id = " + i;
+            connection.updateDB(query);
+        }
+        query = "DELETE FROM checkouts WHERE id = " + checkoutId;
         connection.updateDB(query);
     }
 }

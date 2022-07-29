@@ -157,6 +157,16 @@ public class NetworkManager implements RemoteModel {
     }
 
     @Override
+    public void cancelCheckout() throws RemoteException {
+        remoteModel.cancelCheckout();
+    }
+
+    @Override
+    public void cancelCheckout(Integer checkoutId) throws RemoteException {
+        remoteModel.cancelCheckout(checkoutId);
+    }
+
+    @Override
     public void completePayment(PaymentType paymentType) throws RemoteException {
         remoteModel.completePayment(paymentType);
     }

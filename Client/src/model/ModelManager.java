@@ -283,6 +283,17 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public Double checkout() throws RuntimeException {
+        currentCheckout = new ArrayList<>();
+        try {
+            return clientModel.checkout();
+        } catch (RemoteException e) {
+            Logger.getInstance().log(LoggerType.ERROR, e.getMessage());
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Override
     public void completePayment(PaymentType paymentType) throws RuntimeException {
         try {
             clientModel.completePayment(paymentType);
@@ -292,13 +303,20 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public Double checkout() throws RuntimeException {
-        currentCheckout = new ArrayList<>();
+    public void cancelCheckout() throws RuntimeException {
         try {
-            return clientModel.checkout();
+            clientModel.cancelCheckout();
         } catch (RemoteException e) {
-            Logger.getInstance().log(LoggerType.ERROR, e.getMessage());
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void undoCheckout(Integer checkoutId) throws RuntimeException {
+        try {
+            clientModel.cancelCheckout(checkoutId);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
         }
     }
 }

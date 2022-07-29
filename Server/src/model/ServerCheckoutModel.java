@@ -6,4 +6,8 @@ public interface ServerCheckoutModel {
     Item scanItem(String barCode) throws RemoteException;
 
     Double checkout() throws RemoteException;
+
+    void cancelCheckout();
+
+    void cancelCheckout(Integer checkoutId);
 }

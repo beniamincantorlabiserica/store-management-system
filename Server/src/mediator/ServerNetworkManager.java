@@ -131,6 +131,16 @@ public class ServerNetworkManager implements RemoteModel {
     }
 
     @Override
+    public void cancelCheckout() {
+        serverModel.cancelCheckout();
+    }
+
+    @Override
+    public void cancelCheckout(Integer checkoutId) {
+        serverModel.cancelCheckout(checkoutId);
+    }
+
+    @Override
     public void completePayment(PaymentType paymentType) {
         serverModel.completePayment(paymentType);
     }
