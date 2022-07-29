@@ -28,8 +28,7 @@ public class ServerModelManager implements ServerModel {
         this.managerFactory = new ManagerFactory();
         this.managerFactory.getGeneralDatabaseManager().checkDB();
         this.workingHours = getWorkingHours();
-        this.inventoryCache = getItems();
-        this.isInventoryCacheValid = true;
+        this.updateInventoryCache();
         this.checkoutId = null;
     }
 
@@ -153,14 +152,20 @@ public class ServerModelManager implements ServerModel {
     @Override
     public ArrayList<Item> getItems() {
         if (!isInventoryCacheValid) {
-            return managerFactory.getInventoryDatabaseManager().getItems();
+            updateInventoryCache();
         }
         return inventoryCache;
+    }
+
+    private void updateInventoryCache() {
+        this.inventoryCache = managerFactory.getInventoryDatabaseManager().getItems();
+        this.isInventoryCacheValid = true;
     }
 
     @Override
     public void changePrice(Long id, Double price) {
         managerFactory.getInventoryDatabaseManager().changePrice(id, price);
+        isInventoryCacheValid = false;
     }
 
     @Override
@@ -175,10 +180,9 @@ public class ServerModelManager implements ServerModel {
         if (this.checkoutId == null) {
             this.checkoutId = managerFactory.getCheckoutDatabaseManager().getNextAvailableCheckoutNumber();
         }
-
-        managerFactory.getCheckoutDatabaseManager().addItemToCheckout(checkoutId, itemId, "MOBILEPAY");
+        managerFactory.getCheckoutDatabaseManager().addItemToCheckout(checkoutId, itemId, "UNPAID");
         managerFactory.getInventoryDatabaseManager().updateQuantity(itemId, addedItem.getQuantity() - 1);
-
+        isInventoryCacheValid = false;
         addedItem.setQuantity(addedItem.getQuantity() - 1);
         return addedItem;
     }
@@ -194,17 +198,20 @@ public class ServerModelManager implements ServerModel {
     @Override
     public void cancelCheckout() {
         managerFactory.getCheckoutDatabaseManager().rollbackCheckout(this.checkoutId);
+        isInventoryCacheValid = false;
         this.checkoutId = null;
     }
 
     @Override
     public void cancelCheckout(Integer checkoutId) {
         managerFactory.getCheckoutDatabaseManager().rollbackCheckout(checkoutId);
+        isInventoryCacheValid = false;
     }
 
     @Override
     public void completePayment(PaymentType paymentType) {
         managerFactory.getCheckoutDatabaseManager().setPaymentType(this.checkoutId, paymentType);
+        isInventoryCacheValid = false;
         this.checkoutId = null;
     }
 }
