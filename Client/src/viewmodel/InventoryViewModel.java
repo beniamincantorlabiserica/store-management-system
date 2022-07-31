@@ -4,6 +4,7 @@ import logger.Logger;
 import logger.LoggerType;
 import model.Item;
 import model.Model;
+import model.User;
 
 import java.util.ArrayList;
 
@@ -21,21 +22,26 @@ public class InventoryViewModel implements InventoryViewModelInterface {
     }
 
     @Override
-    public void changePrice(Long id, Double price, String role) {
-        if(role.equals("cashier")){
-            Logger.getInstance().log(LoggerType.ERROR, "You need to be a Master to perform this action!");
-        }else {
+    public void changePrice(Long id, Double price) {
+        if (getUser().isCashier()) {
+            Logger.getInstance().log(LoggerType.ERROR, "You need to be a Store Manager to perform this action!");
+        } else {
             model.changePrice(id, price);
         }
     }
 
     @Override
-    public void updateQuantity(int id, int quantity, String role) {
-        if(role.equals("cashier")) {
-            model.updateQuantity(id, quantity);
-        }else {
+    public void updateQuantity(int id, int quantity) {
+        if (!getUser().isCashier()) {
             Logger.getInstance().log(LoggerType.ERROR, "You need to be a Cashier to perform this action!");
+        } else {
+            model.updateQuantity(id, quantity);
         }
+    }
+
+    @Override
+    public User getUser() {
+        return model.getUser();
     }
 
 

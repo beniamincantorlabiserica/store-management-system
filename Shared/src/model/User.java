@@ -30,6 +30,7 @@ public class User implements Serializable {
     public boolean isMaster() {
         return role.equals("master");
     }
+
     public boolean isCashier() {
         return role.equals("cashier");
     }

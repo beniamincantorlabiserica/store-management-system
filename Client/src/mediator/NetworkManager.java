@@ -148,7 +148,7 @@ public class NetworkManager implements RemoteModel {
 
     @Override
     public void updateQuantity(int id, int quantity) throws RemoteException {
-        remoteModel.updateQuantity(id,quantity);
+        remoteModel.updateQuantity(id, quantity);
     }
 
     @Override

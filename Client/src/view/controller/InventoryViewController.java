@@ -13,7 +13,6 @@ import javafx.util.converter.IntegerStringConverter;
 import logger.Logger;
 import logger.LoggerType;
 import model.Item;
-import model.User;
 import view.View;
 import view.ViewController;
 import viewmodel.InventoryViewModel;
@@ -32,7 +31,6 @@ public class InventoryViewController extends ViewController {
     @FXML
     public Button back;
     private InventoryViewModel viewModel;
-    private static User user;
 
     /**
      * Called by view handler when view is created for the first time
@@ -47,44 +45,28 @@ public class InventoryViewController extends ViewController {
         reset();
         id.setCellValueFactory(new PropertyValueFactory<>("id"));
         item.setCellValueFactory(new PropertyValueFactory<>("name"));
-
         quantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         quantity.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
         quantity.setOnEditCommit(itemIntegerCellEditEvent -> {
             Item item = itemIntegerCellEditEvent.getRowValue();
-            viewModel.updateQuantity(Math.toIntExact(item.getId()),itemIntegerCellEditEvent.getNewValue(),getRoleOfCurrentUser());
+            viewModel.updateQuantity(Math.toIntExact(item.getId()), itemIntegerCellEditEvent.getNewValue());
             reset();
         });
-
         price.setCellValueFactory(new PropertyValueFactory<>("price"));
         price.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
         price.setOnEditCommit(itemIntegerCellEditEvent -> {
             Item item = itemIntegerCellEditEvent.getRowValue();
-            viewModel.changePrice(item.getId(), itemIntegerCellEditEvent.getNewValue(),getRoleOfCurrentUser());
+            viewModel.changePrice(item.getId(), itemIntegerCellEditEvent.getNewValue());
             reset();
         });
     }
 
     /**
-     * Returns to Dashboard
+     * Returns to the Cashier UI if user is logged in as cashier or to the Dashboard UI otherwise
      */
     @FXML
     public void onBackButtonPressed() {
-        if(user!=null &&user.isCashier()){
-            System.out.println(user.getRole() + " onBackButtonPressed");
-            getViewHandler().openView(View.CASH_REGISTER);
-        }else {
-            getViewHandler().openView(View.DASHBOARD);
-        }
-    }
-    public String getRoleOfCurrentUser(){
-        if(user!=null) {
-            return user.getRole();
-        }
-        return  "";
-    }
-    public void userSetCashier(){
-        user = new User("cashier","gg77","gg57");
+        getViewHandler().openView(viewModel.getUser().isCashier() ? View.CASH_REGISTER : View.DASHBOARD);
     }
 
     /**

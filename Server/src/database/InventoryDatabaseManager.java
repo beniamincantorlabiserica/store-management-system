@@ -29,7 +29,6 @@ public class InventoryDatabaseManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println(items);
         return items;
     }
 
