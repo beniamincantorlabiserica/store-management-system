@@ -9,4 +9,5 @@ public interface InventoryModel {
     ArrayList<Item> getItems();
 
     void changePrice(Long id, Double price);
+    void updateQuantity(int id, int quantity);
 }

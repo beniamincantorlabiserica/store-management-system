@@ -9,9 +9,11 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.converter.DoubleStringConverter;
+import javafx.util.converter.IntegerStringConverter;
 import logger.Logger;
 import logger.LoggerType;
 import model.Item;
+import model.User;
 import view.View;
 import view.ViewController;
 import viewmodel.InventoryViewModel;
@@ -30,6 +32,7 @@ public class InventoryViewController extends ViewController {
     @FXML
     public Button back;
     private InventoryViewModel viewModel;
+    private static User user;
 
     /**
      * Called by view handler when view is created for the first time
@@ -44,12 +47,20 @@ public class InventoryViewController extends ViewController {
         reset();
         id.setCellValueFactory(new PropertyValueFactory<>("id"));
         item.setCellValueFactory(new PropertyValueFactory<>("name"));
+
         quantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        quantity.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+        quantity.setOnEditCommit(itemIntegerCellEditEvent -> {
+            Item item = itemIntegerCellEditEvent.getRowValue();
+            viewModel.updateQuantity(Math.toIntExact(item.getId()),itemIntegerCellEditEvent.getNewValue(),getRoleOfCurrentUser());
+            reset();
+        });
+
         price.setCellValueFactory(new PropertyValueFactory<>("price"));
         price.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
         price.setOnEditCommit(itemIntegerCellEditEvent -> {
             Item item = itemIntegerCellEditEvent.getRowValue();
-            viewModel.changePrice(item.getId(), itemIntegerCellEditEvent.getNewValue());
+            viewModel.changePrice(item.getId(), itemIntegerCellEditEvent.getNewValue(),getRoleOfCurrentUser());
             reset();
         });
     }
@@ -59,10 +70,22 @@ public class InventoryViewController extends ViewController {
      */
     @FXML
     public void onBackButtonPressed() {
-        getViewHandler().openView(View.DASHBOARD);
+        if(user!=null &&user.isCashier()){
+            System.out.println(user.getRole() + " onBackButtonPressed");
+            getViewHandler().openView(View.CASH_REGISTER);
+        }else {
+            getViewHandler().openView(View.DASHBOARD);
+        }
     }
-
-
+    public String getRoleOfCurrentUser(){
+        if(user!=null) {
+            return user.getRole();
+        }
+        return  "";
+    }
+    public void userSetCashier(){
+        user = new User("cashier","gg77","gg57");
+    }
 
     /**
      * Initializes a new ObservableList

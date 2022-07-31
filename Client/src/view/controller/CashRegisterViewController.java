@@ -3,8 +3,11 @@ package view.controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Region;
 import logger.Logger;
 import logger.LoggerType;
 import model.Item;
@@ -12,6 +15,8 @@ import view.View;
 import view.ViewController;
 import viewmodel.CashRegisterViewModel;
 
+import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -123,6 +128,16 @@ public class CashRegisterViewController extends ViewController {
         Logger.getInstance().log(LoggerType.DEBUG, "----------------------");
     }
 
+    public void onAddItemButtonPressed() throws IOException {
+        passData();
+       getViewHandler().openView(View.INVENTORY);
+
+    }
+public void passData() throws IOException {
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("InventoryView.fxml"));
+    InventoryViewController inventoryViewController = new InventoryViewController();
+    inventoryViewController.userSetCashier();
+}
     public void logout() {
         viewModel.logout();
         getViewHandler().openView(View.START);

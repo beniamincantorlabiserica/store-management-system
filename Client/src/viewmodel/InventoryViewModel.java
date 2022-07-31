@@ -1,5 +1,7 @@
 package viewmodel;
 
+import logger.Logger;
+import logger.LoggerType;
 import model.Item;
 import model.Model;
 
@@ -19,8 +21,21 @@ public class InventoryViewModel implements InventoryViewModelInterface {
     }
 
     @Override
-    public void changePrice(Long id, Double price) {
-        model.changePrice(id, price);
+    public void changePrice(Long id, Double price, String role) {
+        if(role.equals("cashier")){
+            Logger.getInstance().log(LoggerType.ERROR, "You need to be a Master to perform this action!");
+        }else {
+            model.changePrice(id, price);
+        }
+    }
+
+    @Override
+    public void updateQuantity(int id, int quantity, String role) {
+        if(role.equals("cashier")) {
+            model.updateQuantity(id, quantity);
+        }else {
+            Logger.getInstance().log(LoggerType.ERROR, "You need to be a Cashier to perform this action!");
+        }
     }
 
 

@@ -265,6 +265,15 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public void updateQuantity(int id, int quantity) {
+        try{
+            clientModel.updateQuantity(id,quantity);
+        }catch (RemoteException e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public ArrayList<Item> scanItem(String barCode) throws RuntimeException {
         Item addedItem;
         try {

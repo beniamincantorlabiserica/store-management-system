@@ -169,6 +169,12 @@ public class ServerModelManager implements ServerModel {
     }
 
     @Override
+    public void updateQuantity(int id, int quantity) {
+        managerFactory.getInventoryDatabaseManager().updateQuantity(id,quantity);
+        isInventoryCacheValid = false;
+    }
+
+    @Override
     public Item scanItem(String barCode) throws RemoteException {
         int itemId = Integer.parseInt(barCode);
         Item addedItem = managerFactory.getInventoryDatabaseManager().isItem(itemId);

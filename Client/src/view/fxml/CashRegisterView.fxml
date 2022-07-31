@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controller.CashRegisterViewController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controller.CashRegisterViewController">
    <children>
       <TableView fx:id="table" layoutX="-3.0" prefHeight="400.0" prefWidth="302.0">
         <columns>
@@ -33,5 +33,6 @@
       </Label>
       <Button fx:id="scanItem" layoutX="514.0" layoutY="292.0" mnemonicParsing="false" onAction="#onScanPressed" text="Scan Item" />
       <Button fx:id="logoutButton" layoutX="525.0" layoutY="327.0" mnemonicParsing="false" onAction="#logout" text="Log Out" />
+      <Button fx:id="addItem" layoutX="515.0" layoutY="86.0" mnemonicParsing="false" onAction="#onAddItemButtonPressed" text="Add item" />
    </children>
 </AnchorPane>
