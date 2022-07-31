@@ -30,4 +30,9 @@ public interface UserModel {
      * @param password expects the new password for the specified role
      */
     void updatePassword(String role, String password);
+
+    /**
+     * @return the current logged-in User, null otherwise
+     */
+    User getUser();
 }

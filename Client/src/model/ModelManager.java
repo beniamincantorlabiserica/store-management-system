@@ -100,6 +100,11 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public User getUser() {
+        return currentUser;
+    }
+
+    @Override
     public void logout() {
         this.currentUser = null;
         this.locked = null;
@@ -259,6 +264,15 @@ public class ModelManager implements Model {
     public void changePrice(Long id, Double price) {
         try {
             clientModel.changePrice(id, price);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void updateQuantity(int id, int quantity) {
+        try {
+            clientModel.updateQuantity(id, quantity);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }

@@ -121,6 +121,11 @@ public class ServerNetworkManager implements RemoteModel {
     }
 
     @Override
+    public void updateQuantity(int id, int quantity) throws RemoteException {
+        serverModel.updateQuantity(id, quantity);
+    }
+
+    @Override
     public Item scanItem(String barCode) throws RemoteException {
         return serverModel.scanItem(barCode);
     }

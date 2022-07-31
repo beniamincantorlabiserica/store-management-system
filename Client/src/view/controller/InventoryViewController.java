@@ -9,6 +9,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.converter.DoubleStringConverter;
+import javafx.util.converter.IntegerStringConverter;
 import logger.Logger;
 import logger.LoggerType;
 import model.Item;
@@ -45,6 +46,12 @@ public class InventoryViewController extends ViewController {
         id.setCellValueFactory(new PropertyValueFactory<>("id"));
         item.setCellValueFactory(new PropertyValueFactory<>("name"));
         quantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        quantity.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+        quantity.setOnEditCommit(itemIntegerCellEditEvent -> {
+            Item item = itemIntegerCellEditEvent.getRowValue();
+            viewModel.updateQuantity(Math.toIntExact(item.getId()), itemIntegerCellEditEvent.getNewValue());
+            reset();
+        });
         price.setCellValueFactory(new PropertyValueFactory<>("price"));
         price.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
         price.setOnEditCommit(itemIntegerCellEditEvent -> {
@@ -55,14 +62,12 @@ public class InventoryViewController extends ViewController {
     }
 
     /**
-     * Returns to Dashboard
+     * Returns to the Cashier UI if user is logged in as cashier or to the Dashboard UI otherwise
      */
     @FXML
     public void onBackButtonPressed() {
-        getViewHandler().openView(View.DASHBOARD);
+        getViewHandler().openView(viewModel.getUser().isCashier() ? View.CASH_REGISTER : View.DASHBOARD);
     }
-
-
 
     /**
      * Initializes a new ObservableList

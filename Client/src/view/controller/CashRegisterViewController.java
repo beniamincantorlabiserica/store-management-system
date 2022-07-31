@@ -28,12 +28,7 @@ public class CashRegisterViewController extends ViewController {
     @FXML
     public TableColumn<Item, Double> price;
     @FXML
-    public Button checkout;
-    @FXML
-    public Button scanItem;
-
-    @FXML
-    public Button logoutButton;
+    public Button scanItemButton;
     @FXML
     public Label totalPrice;
     @FXML
@@ -123,7 +118,12 @@ public class CashRegisterViewController extends ViewController {
         Logger.getInstance().log(LoggerType.DEBUG, "----------------------");
     }
 
-    public void logout() {
+    public void onInventoryButtonPressed() {
+        getViewHandler().openView(View.INVENTORY);
+
+    }
+
+    public void onLogoutButtonPressed() {
         viewModel.logout();
         getViewHandler().openView(View.START);
     }
