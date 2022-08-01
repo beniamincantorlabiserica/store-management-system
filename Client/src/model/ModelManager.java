@@ -231,7 +231,7 @@ public class ModelManager implements Model {
      * {@inheritDoc}
      */
     @Override
-    public String getClosingHours() {
+    public LocalTime getClosingHours() {
         try {
             return clientModel.getWorkingHours().getClosingTime();
         } catch (RemoteException e) {
@@ -256,7 +256,7 @@ public class ModelManager implements Model {
      * {@inheritDoc}
      */
     @Override
-    public String getOpeningHours() {
+    public LocalTime getOpeningHours() {
         try {
             return clientModel.getWorkingHours().getOpeningTime();
         } catch (RemoteException e) {
@@ -283,7 +283,7 @@ public class ModelManager implements Model {
      */
     @Override
     public int getClosingHourInteger() {
-        return Integer.parseInt(getClosingHours().substring(0, 2));
+        return getClosingHours().getHour();
     }
 
     /**
@@ -291,7 +291,7 @@ public class ModelManager implements Model {
      */
     @Override
     public int getOpeningHourInteger() {
-        return Integer.parseInt(getOpeningHours().substring(0, 2));
+        return getOpeningHours().getHour();
     }
 
     @Override
@@ -314,9 +314,7 @@ public class ModelManager implements Model {
     @Override
     public boolean isOpen() {
         LocalTime timeNow = LocalTime.now();
-        LocalTime openingTime = LocalTime.parse(getOpeningHours());
-        LocalTime closingTime = LocalTime.parse(getClosingHours());
-        return !timeNow.isAfter(closingTime) && !timeNow.isBefore(openingTime);
+        return !timeNow.isAfter(getClosingHours()) && !timeNow.isBefore(getOpeningHours());
     }
 
     /**

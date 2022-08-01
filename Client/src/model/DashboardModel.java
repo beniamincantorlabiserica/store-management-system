@@ -1,5 +1,7 @@
 package model;
 
+import java.time.LocalTime;
+
 public interface DashboardModel {
     /**
      * @return "OPEN" if the store is within working hours, "CLOSED" otherwise
@@ -39,12 +41,12 @@ public interface DashboardModel {
     /**
      * @return the closing time as "HH:mm"
      */
-    String getClosingHours();
+    LocalTime getClosingHours();
 
     /**
      * @return the opening time as "HH:mm"
      */
-    String getOpeningHours();
+    LocalTime getOpeningHours();
 
     /**
      * @return the closing hour as int

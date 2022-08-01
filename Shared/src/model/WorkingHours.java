@@ -14,10 +14,6 @@ public class WorkingHours implements Serializable {
         init(workingHours);
     }
 
-    public WorkingHours() {
-        this("09:00 17:00");
-    }
-
     private void init(String workingHours) {
         StringTokenizer tokenizer = new StringTokenizer(workingHours, " ");
         openingTime = LocalTime.parse(tokenizer.nextToken());
@@ -28,12 +24,12 @@ public class WorkingHours implements Serializable {
         return openingTime.format(DateTimeFormatter.ofPattern("HH:mm")) + " " + closingTime.format(DateTimeFormatter.ofPattern("HH:mm"));
     }
 
-    public String getOpeningTime() {
-        return openingTime.format(DateTimeFormatter.ofPattern("HH:mm"));
+    public LocalTime getOpeningTime() {
+        return openingTime;
     }
 
-    public String getClosingTime() {
-        return closingTime.format(DateTimeFormatter.ofPattern("HH:mm"));
+    public LocalTime getClosingTime() {
+        return closingTime;
     }
 
     public void setOpeningTime(String openingTime) {
