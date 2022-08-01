@@ -8,6 +8,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.util.converter.DefaultStringConverter;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import model.Item;
@@ -16,21 +17,23 @@ import util.logger.LoggerType;
 import view.View;
 import view.ViewController;
 import viewmodel.InventoryViewModel;
+import viewmodel.InventoryViewModelInterface;
+import viewmodel.ItemTableViewModel;
 
 public class InventoryViewController extends ViewController {
     @FXML
-    public TableColumn<Item, String> item;
+    public TableView<ItemTableViewModel> table;
     @FXML
-    public TableView<Item> table;
+    public TableColumn<ItemTableViewModel, String> item;
     @FXML
-    public TableColumn<Item, Long> id;
+    public TableColumn<ItemTableViewModel, String> id;
     @FXML
-    public TableColumn<Item, Integer> quantity;
+    public TableColumn<ItemTableViewModel, String> quantity;
     @FXML
-    public TableColumn<Item, Double> price;
+    public TableColumn<ItemTableViewModel, String> price;
     @FXML
     public Button back;
-    private InventoryViewModel viewModel;
+    private InventoryViewModelInterface viewModel;
 
     /**
      * Called by view handler when view is created for the first time
@@ -43,21 +46,24 @@ public class InventoryViewController extends ViewController {
     protected void init() {
         viewModel = getViewModelFactory().getInventoryViewModel();
         reset();
-        id.setCellValueFactory(new PropertyValueFactory<>("id"));
-        item.setCellValueFactory(new PropertyValueFactory<>("name"));
-        quantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
-        quantity.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+        id.setCellValueFactory(cellData -> cellData.getValue().getIdProperty());
+        item.setCellValueFactory(cellData -> cellData.getValue().getItemProperty());
+        quantity.setCellValueFactory(cellData -> cellData.getValue().getQuantityProperty());
+        quantity.setCellFactory(TextFieldTableCell.forTableColumn(new DefaultStringConverter()));
         quantity.setOnEditCommit(itemIntegerCellEditEvent -> {
-            Item item = itemIntegerCellEditEvent.getRowValue();
-            viewModel.updateQuantity(Math.toIntExact(item.getId()), itemIntegerCellEditEvent.getNewValue());
-            reset();
+            viewModel.updateQuantity(
+                    Integer.parseInt(String.valueOf(itemIntegerCellEditEvent.getRowValue().getIdProperty().getValue())),
+                    Integer.parseInt(itemIntegerCellEditEvent.getNewValue()));
+                    reset();
         });
-        price.setCellValueFactory(new PropertyValueFactory<>("price"));
-        price.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
+        price.setCellValueFactory(cellData -> cellData.getValue().getPriceProperty());
+        price.setCellFactory(TextFieldTableCell.forTableColumn(new DefaultStringConverter()));
         price.setOnEditCommit(itemIntegerCellEditEvent -> {
-            Item item = itemIntegerCellEditEvent.getRowValue();
-            viewModel.changePrice(item.getId(), itemIntegerCellEditEvent.getNewValue());
-            reset();
+
+            viewModel.changePrice(Long.valueOf(
+                    String.valueOf(itemIntegerCellEditEvent.getRowValue().getIdProperty().getValue())),
+                    Double.parseDouble(itemIntegerCellEditEvent.getNewValue()));
+                    reset();
         });
     }
 
@@ -79,9 +85,7 @@ public class InventoryViewController extends ViewController {
     @Override
     public void reset() {
         Logger.getInstance().log(LoggerType.DEBUG, "InventoryViewController -> reset()");
-        ObservableList<Item> items = FXCollections.observableArrayList();
-        items.addAll(viewModel.getItems());
-        table.setItems(items);
+        table.setItems(viewModel.getItems());
         table.setEditable(true);
         table.refresh();
     }

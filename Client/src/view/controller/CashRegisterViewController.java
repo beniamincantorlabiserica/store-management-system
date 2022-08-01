@@ -12,6 +12,7 @@ import util.logger.LoggerType;
 import view.View;
 import view.ViewController;
 import viewmodel.CashRegisterViewModel;
+import viewmodel.CashRegisterViewModelInterface;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +39,7 @@ public class CashRegisterViewController extends ViewController {
     public Label totalPrice;
     @FXML
     public TextField scanInput;
-    private CashRegisterViewModel viewModel; // contains a reference to the viewModel
+    private CashRegisterViewModelInterface viewModel; // contains a reference to the viewModel
     private ArrayList<Item> currentItems;
 
     public CashRegisterViewController() { } // Empty constructor

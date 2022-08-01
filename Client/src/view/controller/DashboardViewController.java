@@ -5,6 +5,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import view.View;
 import view.ViewController;
+import viewmodel.DashBoardViewModelInterface;
 import viewmodel.DashboardViewModel;
 
 /**
@@ -36,7 +37,7 @@ public class DashboardViewController extends ViewController {
     @FXML
     public ProgressBar monthProgressBar; // contains a value representing the days passed until the present moment between the first and the last days of the current month
 
-    private DashboardViewModel viewModel; // contains a reference to the viewModel
+    private DashBoardViewModelInterface viewModel; // contains a reference to the viewModel
 
     public DashboardViewController() {} // empty constructor
 

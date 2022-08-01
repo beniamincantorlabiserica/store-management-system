@@ -1,12 +1,13 @@
 package viewmodel;
 
+import javafx.collections.ObservableList;
 import model.Item;
 import model.User;
 
 import java.util.ArrayList;
 
 public interface InventoryViewModelInterface {
-    ArrayList<Item> getItems();
+    ObservableList<ItemTableViewModel> getItems();
 
     void changePrice(Long id, Double price);
 

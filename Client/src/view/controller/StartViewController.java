@@ -8,6 +8,7 @@ import util.logger.LoggerType;
 import view.View;
 import view.ViewController;
 import viewmodel.StartViewModel;
+import viewmodel.StartViewModelInterface;
 
 import java.rmi.RemoteException;
 import java.util.Optional;
@@ -20,7 +21,7 @@ public class StartViewController extends ViewController {
     public Label titleLabel; // holds the reference to the title label
     @FXML
     public Button mainButton; // holds the reference to the main button
-    private StartViewModel viewModel; // contains a reference to the corresponding viewModel
+    private StartViewModelInterface viewModel; // contains a reference to the corresponding viewModel
     @FXML
     private PasswordField passwordField; // holds the reference to the password field
 

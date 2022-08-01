@@ -1,7 +1,7 @@
 package database;
-
-import logger.Logger;
-import logger.LoggerType;
+import database.connection.DBConnection;
+import util.logger.Logger;
+import util.logger.LoggerType;
 
 public class GeneralDatabaseManager {
     private final DBConnection connection;

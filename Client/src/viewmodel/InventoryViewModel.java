@@ -1,5 +1,11 @@
 package viewmodel;
 
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import model.Item;
 import model.Model;
 import model.User;
@@ -11,14 +17,23 @@ import java.util.ArrayList;
 public class InventoryViewModel implements InventoryViewModelInterface {
 
     private final Model model;
+    private ObservableList<ItemTableViewModel> items;
+
 
     public InventoryViewModel(Model model, ViewModelState viewModelState) {
         this.model = model;
+        this.items = FXCollections.observableArrayList();
     }
 
     @Override
-    public ArrayList<Item> getItems() {
-        return model.getItems();
+    public ObservableList<ItemTableViewModel> getItems() {
+        items.clear();
+        ArrayList<Item> itemsArrayList = new ArrayList<>();
+        itemsArrayList = model.getItems();
+        for(Item item : itemsArrayList){
+            items.add(new ItemTableViewModel(item));
+        }
+        return items;
     }
 
     @Override
@@ -43,6 +58,8 @@ public class InventoryViewModel implements InventoryViewModelInterface {
     public User getUser() {
         return model.getUser();
     }
+
+
 
 
 }
