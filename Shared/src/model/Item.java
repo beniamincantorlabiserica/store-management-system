@@ -6,11 +6,11 @@ import java.time.LocalDateTime;
 public class Item implements Serializable {
     public Long id;
     public String name;
-    public double price;
-    public int quantity;
+    public Double price;
+    public Integer quantity;
     public LocalDateTime editDateTime;
 
-    public Item(Long id, String name, double price, int quantity, LocalDateTime lastEdit) {
+    public Item(Long id, String name, Double price, Integer quantity, LocalDateTime lastEdit) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -37,15 +37,11 @@ public class Item implements Serializable {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Double price) {
         this.price = price;
         setEditDateTime(LocalDateTime.now());
     }
@@ -54,12 +50,8 @@ public class Item implements Serializable {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
-    }
-
-    public LocalDateTime getEditDateTime() {
-        return editDateTime;
     }
 
     private void setEditDateTime(LocalDateTime editDateTime) {

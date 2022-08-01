@@ -1,11 +1,12 @@
 package viewmodel;
 
-import logger.Logger;
-import logger.LoggerType;
 import model.Model;
 import model.User;
+import util.logger.Logger;
+import util.logger.LoggerType;
 
 import java.rmi.RemoteException;
+import java.time.format.DateTimeFormatter;
 
 public class StartViewModel implements StartViewModelInterface {
     private final Model model;
@@ -36,12 +37,12 @@ public class StartViewModel implements StartViewModelInterface {
 
     @Override
     public String getOpeningHours() {
-        return model.getOpeningHours();
+        return model.getOpeningHours().format(DateTimeFormatter.ofPattern("HH:mm"));
     }
 
     @Override
     public String getClosingHours() {
-        return model.getClosingHours();
+        return model.getClosingHours().format(DateTimeFormatter.ofPattern("HH:mm"));
     }
 
     @Override

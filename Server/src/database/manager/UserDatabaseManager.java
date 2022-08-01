@@ -1,23 +1,26 @@
-package database;
+package database.manager;
 
-import logger.Logger;
-import logger.LoggerType;
+import database.UserDAO;
+import database.connection.DBConnection;
 import model.User;
+import util.logger.Logger;
+import util.logger.LoggerType;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class UsersDatabaseManager {
+public class UserDatabaseManager implements UserDAO {
     private final DBConnection connection;
     Statement statement = null;
 
-    public UsersDatabaseManager(DBConnection connection) {
+    public UserDatabaseManager(DBConnection connection) {
         this.connection = connection;
     }
 
+    @Override
     public User login(String password) {
-        Logger.getInstance().log(LoggerType.DEBUG,"login()");
+        Logger.getInstance().log(LoggerType.DEBUG, "login()");
         ResultSet rs;
         String role = null;
         try {
@@ -46,6 +49,7 @@ public class UsersDatabaseManager {
      * provides the master password from the database by querying it
      * @return the master password from the database as a string
      */
+    @Override
     public String getMasterPassword() {
         Logger.getInstance().log(LoggerType.DEBUG,"getMasterPassword()");
         String masterPassword = null;
@@ -67,6 +71,7 @@ public class UsersDatabaseManager {
      * @param password the new password for the role specified
      * @throws RuntimeException throws exception in case the database communication failed or happened to be incomplete
      */
+    @Override
     public void updatePassword(String role, String password) throws RuntimeException {
         Logger.getInstance().log(LoggerType.DEBUG, "Password: " + password + " Role: " + role);
         Logger.getInstance().log(LoggerType.DEBUG,"updatePassword()");

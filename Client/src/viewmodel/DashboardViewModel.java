@@ -2,15 +2,10 @@ package viewmodel;
 
 import javafx.application.Platform;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
-import logger.Logger;
 import model.Model;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.Year;
 import java.time.format.DateTimeFormatter;
 
 public class DashboardViewModel implements DashBoardViewModelInterface {
@@ -31,6 +26,11 @@ public class DashboardViewModel implements DashBoardViewModelInterface {
     private final SimpleDoubleProperty dayProgressBarProperty;
     private final SimpleDoubleProperty monthProgressBarProperty;
 
+    /**
+     * constructor
+     * @param model          expects a reference to the model
+     * @param viewModelState expects a reference to the viewModelState
+     */
     // TODO viewModelState - use or remove
     public DashboardViewModel(Model model, ViewModelState viewModelState) {
         this.model = model;
@@ -60,18 +60,28 @@ public class DashboardViewModel implements DashBoardViewModelInterface {
         updateThread.setDaemon(true);
     }
 
+    /**
+     * performs a soft reset in the dashboard, refreshing only the date, time and day of week properties with the real-time values
+     */
     private void softReset() {
-        this.dateProperty.set("DATE\n" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-        this.timeProperty.set("TIME\n" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+        this.dateProperty.set("DATE\n" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yy")));
+        this.timeProperty.set("TIME\n" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH/mm/ss")));
         this.dayOfWeekProperty.set("DAY OF WEEK\n" + LocalDateTime.now().getDayOfWeek().name());
     }
 
+    /**
+     * delegates the logout request to the model
+     * performs a reset
+     */
     @Override
     public void logout() {
         model.logout();
         reset();
     }
 
+    /**
+     * refresh all the viewModel properties to the current values
+     */
     @Override
     public void reset() {
         softReset();
@@ -82,40 +92,17 @@ public class DashboardViewModel implements DashBoardViewModelInterface {
         this.itemsTodayProperty.set("ITEMS TODAY\n" + model.getItemsToday());
         this.salesTodayProperty.set("SALES TODAY\n" + model.getSalesToday());
         this.salesThisMonthProperty.set("SALES THIS MONTH\n" + model.getSalesThisMonth());
-        this.dayProgressBarProperty.set(getDayProgress());
-        this.monthProgressBarProperty.set(getMonthProgress());
+        this.dayProgressBarProperty.set(model.getDayProgress());
+        this.monthProgressBarProperty.set(model.getMonthProgress());
     }
 
-    private double getMonthProgress() {
-        // x = LocalDateTime.now().getDayOfMonth()
-        // t = LocalDateTime.now().getCurrentMonthTotalDays()
-        // 1 ------- t
-        //  y  ------- x
-        // y = LocalDateTime.now().getDayOfMonth() / LocalDateTime.now().getCurrentMonthTotalDays()
-        return (double) LocalDateTime.now().getDayOfMonth() / (double) LocalDateTime.now().getMonth().length(Year.isLeap(LocalDateTime.now().getYear()));
-    }
-
-    private double getDayProgress() {
-        // x = now() - openingHour() // hours passed
-        // t = closingHour() - openingHour()
-        // 1 ------- t
-        // y  ------- x
-        // y = x / t
-        // y = ( now() - getOpeningHour() ) / ( closingHour() - openingHour() )
-        if (LocalTime.now().getHour() <= model.getOpeningHourInteger() || LocalTime.now().getHour() > model.getClosingHourInteger()) {
-            return 0;
-        }
-        double hoursPassed = LocalTime.now().getHour() - model.getOpeningHourInteger();
-        double totalHours = model.getClosingHourInteger() - model.getOpeningHourInteger();
-        return hoursPassed / totalHours;
-    }
-
+    /**
+     * starts the update thread that triggers the softUpdate() method each second
+     */
     @Override
     public void startUpdateThread() {
         this.updateThread.start();
     }
-
-
 
     public SimpleStringProperty getDateProperty() {
         return dateProperty;

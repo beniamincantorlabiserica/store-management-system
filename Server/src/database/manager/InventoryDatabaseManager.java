@@ -1,12 +1,14 @@
-package database;
+package database.manager;
 
+import database.InventoryDAO;
+import database.connection.DBConnection;
 import model.Item;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class InventoryDatabaseManager {
+public class InventoryDatabaseManager implements InventoryDAO {
     private final DBConnection connection;
 
     public InventoryDatabaseManager(DBConnection connection) {
@@ -16,6 +18,7 @@ public class InventoryDatabaseManager {
     /**
      * @return an ArrayList of items from database
      */
+    @Override
     public ArrayList<Item> getItems() {
         ArrayList<Item> items = new ArrayList<>();
         try {
@@ -32,6 +35,7 @@ public class InventoryDatabaseManager {
         return items;
     }
 
+    @Override
     public void changePrice(Long id, Double price) {
         try {
             String query = "UPDATE items SET price=" + price + ", lastedit=now() WHERE id = " + id;
@@ -41,6 +45,7 @@ public class InventoryDatabaseManager {
         }
     }
 
+    @Override
     public Item isItem(int id) {
         String query = "SELECT * FROM items WHERE id = " + id;
         ResultSet rs = connection.queryDB(query);
@@ -58,6 +63,7 @@ public class InventoryDatabaseManager {
         }
     }
 
+    @Override
     public void updateQuantity(int id, int quantity) {
         try {
             String query = "UPDATE items SET quantity = " + quantity + " WHERE id = " + id;

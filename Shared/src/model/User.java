@@ -1,7 +1,7 @@
 package model;
 
-import logger.Logger;
-import logger.LoggerType;
+import util.logger.Logger;
+import util.logger.LoggerType;
 
 import java.io.Serializable;
 

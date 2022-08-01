@@ -1,12 +1,12 @@
 package mediator;
 
-import logger.Logger;
-import logger.LoggerType;
 import model.Item;
 import model.PaymentType;
 import model.User;
 import model.WorkingHours;
 import networking.RemoteModel;
+import util.logger.Logger;
+import util.logger.LoggerType;
 
 import java.rmi.Naming;
 import java.rmi.RemoteException;
@@ -20,157 +20,246 @@ import java.util.ArrayList;
 public class NetworkManager implements RemoteModel {
     private final RemoteModel remoteModel;
 
+    private WorkingHours workingHoursCache;
+    private String checkoutsTodayCache;
+    private String checkoutsThisMonthCache;
+    private String itemsTodayCache;
+    private String itemsThisMonthCache;
+    private String salesTodayCache;
+    private String salesThisMonthCache;
+    private ArrayList<Item> itemsCache;
+
     public NetworkManager() throws RuntimeException {
         try {
             remoteModel = (RemoteModel) Naming.lookup("rmi://localhost:1099/Shop");
         } catch (Exception e) {
-            Logger.getInstance().log(LoggerType.ERROR,"RMI connection error (Stub lookup)");
+            Logger.getInstance().log(LoggerType.ERROR, "RMI connection error (Stub lookup)");
             throw new RuntimeException("STUB_UNREACHABLE");
         }
         try {
             UnicastRemoteObject.exportObject(this, 0);
         } catch (RemoteException e) {
-            Logger.getInstance().log(LoggerType.ERROR,"RMI connection error (exportObject)");
+            Logger.getInstance().log(LoggerType.ERROR, "RMI connection error (exportObject)");
         }
         Logger.getInstance().log("RMI connected successfully");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public User login(String password) throws RemoteException{
-        Logger.getInstance().log(LoggerType.DEBUG,"Login reached");
+    public User login(String password) throws RemoteException {
+        Logger.getInstance().log(LoggerType.DEBUG, "Login reached");
         return remoteModel.login(password);
     }
 
-    /** passes the request to change the password for a specific role to the server
-     * @param password the new password for the respective role
-     * @param role the role to get the password changed
-     * @throws RemoteException in case the password is the same as before / the password is
-     *                         the same as the one from another role
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void updatePassword(String password, String role) throws RemoteException {
-        Logger.getInstance().log(LoggerType.DEBUG,"Change password reached");
+        Logger.getInstance().log(LoggerType.DEBUG, "Change password reached");
         remoteModel.updatePassword(password, role);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getMasterPassword() throws RemoteException {
         return remoteModel.getMasterPassword();
     }
 
-    /** receives an object with information about the working hours from the server
-     * @return WorkingHours object
+    /**
+     * {@inheritDoc}
      */
     @Override
     public WorkingHours getWorkingHours() {
-        try {
-            return remoteModel.getWorkingHours();
-        } catch (RemoteException e) {
-            return null;
+        if (workingHoursCache == null) {
+            try {
+                workingHoursCache = remoteModel.getWorkingHours();
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
         }
+        return workingHoursCache;
     }
 
-    /** passes the request to set the opening time to the server
-     * @param openingTime a string containing 5 characters, out of which the first
-     *                    two are representing the hour and the last two the minutes
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void setOpeningHours(String openingTime) {
         try {
             remoteModel.setOpeningHours(openingTime);
+            workingHoursCache = null;
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
     }
 
-    /** passes the request to set the closing time to the server
-     * @param closingTime a string containing 5 characters, out of which the first
-     *                    two are representing the hour and the last two the minutes
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void setClosingHours(String closingTime) {
         try {
             remoteModel.setClosingHours(closingTime);
+            workingHoursCache = null;
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getCheckoutsToday() throws RemoteException {
-        return remoteModel.getCheckoutsToday();
+        if (checkoutsTodayCache == null) {
+            checkoutsTodayCache = remoteModel.getCheckoutsToday();
+        }
+        return checkoutsTodayCache;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getItemsToday() throws RemoteException {
-        return remoteModel.getItemsToday();
+        if (itemsTodayCache == null) {
+            itemsTodayCache = remoteModel.getItemsToday();
+        }
+        return itemsTodayCache;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getSalesToday() throws RemoteException {
-        return remoteModel.getSalesToday();
+        if (salesTodayCache == null) {
+            salesTodayCache = remoteModel.getSalesToday();
+        }
+        return salesTodayCache;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getCheckoutsThisMonth() throws RemoteException {
-        return remoteModel.getCheckoutsThisMonth();
+        if (checkoutsThisMonthCache == null) {
+            checkoutsThisMonthCache = remoteModel.getCheckoutsThisMonth();
+        }
+        return checkoutsThisMonthCache;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getItemsThisMonth() throws RemoteException {
-        return remoteModel.getItemsThisMonth();
+        if (itemsThisMonthCache == null) {
+            itemsThisMonthCache = remoteModel.getItemsThisMonth();
+        }
+        return itemsThisMonthCache;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getSalesThisMonth() throws RemoteException {
-        return remoteModel.getSalesThisMonth();
+        if (salesThisMonthCache == null) {
+            salesThisMonthCache = remoteModel.getSalesThisMonth();
+        }
+        return salesThisMonthCache;
     }
 
-    @Override
-    public void setLockedState(boolean b) throws RemoteException {
-        remoteModel.setLockedState(b);
-    }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean getLockedState() throws RemoteException {
         return remoteModel.getLockedState();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public ArrayList<Item> getItems() throws RemoteException {
-        return remoteModel.getItems();
+    public void setLockedState(boolean b) throws RemoteException {
+        remoteModel.setLockedState(b);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ArrayList<Item> getItems() throws RemoteException {
+        if (itemsCache == null) {
+            itemsCache = remoteModel.getItems();
+        }
+        return itemsCache;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void changePrice(Long id, Double price) throws RemoteException {
         remoteModel.changePrice(id, price);
+        itemsCache = null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void updateQuantity(int id, int quantity) throws RemoteException {
         remoteModel.updateQuantity(id, quantity);
+        itemsCache = null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Item scanItem(String barCode) throws RemoteException {
+        itemsCache = null;
         return remoteModel.scanItem(barCode);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Double checkout() throws RemoteException {
         return remoteModel.checkout();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void cancelCheckout() throws RemoteException {
+        itemsCache = null;
         remoteModel.cancelCheckout();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void cancelCheckout(Integer checkoutId) throws RemoteException {
+        itemsCache = null;
         remoteModel.cancelCheckout(checkoutId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void completePayment(PaymentType paymentType) throws RemoteException {
         remoteModel.completePayment(paymentType);

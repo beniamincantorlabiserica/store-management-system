@@ -1,10 +1,10 @@
 package viewmodel;
 
-import logger.Logger;
-import logger.LoggerType;
 import model.Item;
 import model.Model;
 import model.User;
+import util.logger.Logger;
+import util.logger.LoggerType;
 
 import java.util.ArrayList;
 

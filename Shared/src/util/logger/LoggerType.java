@@ -1,4 +1,4 @@
-package logger;
+package util.logger;
 
 public enum LoggerType {
     DEBUG(LoggerType.COLOR_BLUE + "[DEBUG]", 4),

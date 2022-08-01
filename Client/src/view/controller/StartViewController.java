@@ -2,37 +2,39 @@ package view.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import logger.Logger;
-import logger.LoggerType;
 import model.User;
+import util.logger.Logger;
+import util.logger.LoggerType;
 import view.View;
 import view.ViewController;
 import viewmodel.StartViewModel;
 
 import java.rmi.RemoteException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.Optional;
 
 
 public class StartViewController extends ViewController {
-    private StartViewModel viewModel;
     @FXML
-    public Label passwordLabel;
+    public Label passwordLabel; // holds the reference to the password label
     @FXML
-    public Label titleLabel;
+    public Label titleLabel; // holds the reference to the title label
     @FXML
-    private PasswordField passwordField;
+    public Button mainButton; // holds the reference to the main button
+    private StartViewModel viewModel; // contains a reference to the corresponding viewModel
     @FXML
-    public Button mainButton;
+    private PasswordField passwordField; // holds the reference to the password field
 
+    /**
+     * default no-args constructor
+     */
     public StartViewController() {
     }
 
+    /**
+     * ! always call this method after creating !
+     * receives a reference to the corresponding viewModel
+     * checks for network connection to the server and, if not present, asks the user to retry, otherwise close the app
+     */
     @Override
     protected void init() {
         viewModel = getViewModelFactory().getStartViewModel();
@@ -74,6 +76,9 @@ public class StartViewController extends ViewController {
         }
     }
 
+    /**
+     * resets the viewController to its default state
+     */
     @Override
     public void reset() {
         passwordField.clear();
@@ -146,38 +151,10 @@ public class StartViewController extends ViewController {
                 Logger.getInstance().log(LoggerType.WARNING, "Wrong password");
             }
         } catch (RuntimeException e) {
-            Logger.getInstance().log(LoggerType.ERROR, "Already logged in");
+            Logger.getInstance().log(LoggerType.ERROR, "Already logged in " + e.getMessage());
         } finally {
             reset();
         }
-    }
-
-    /**
-     * This method is checking if the current time is in between the working
-     * hours of the system.
-     * @param openingHours takes in the opening hours as string
-     * @param closingHours takes in the closing hours as string
-     * The parameters are converted into Date type and compared with the current time
-     * which is also converted to Date type
-     * @return boolean (true - if the current time is in  between the working hours,
-     *                  false - if the current time is not in between the  working hours)
-     */
-    @Deprecated
-    private boolean checkWorkingHours(String openingHours, String closingHours) {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
-        LocalDateTime now = LocalDateTime.now();
-        DateFormat dateFormat = new SimpleDateFormat("hh:mm");
-        try {
-            Date timeNow = dateFormat.parse(dtf.format(now));
-            Date openingH = dateFormat.parse(openingHours);
-            Date closingH = dateFormat.parse(closingHours);
-            if (timeNow.getTime() >= openingH.getTime() && timeNow.getTime() <= closingH.getTime()) {
-                return true;
-            }
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-        return false;
     }
 
     /**
