@@ -2,6 +2,7 @@ package viewmodel;
 
 import model.Item;
 import model.Model;
+import model.PaymentType;
 
 import java.util.ArrayList;
 
@@ -27,5 +28,15 @@ public class CashRegisterViewModel implements CashRegisterViewModelInterface{
     @Override
     public void logout() throws RuntimeException {
         model.logout();
+    }
+
+    @Override
+    public void completePayment(PaymentType paymentType) throws RuntimeException {
+        model.completePayment(paymentType);
+    }
+
+    @Override
+    public void cancelCheckout() throws RuntimeException {
+        model.cancelCheckout();
     }
 }
