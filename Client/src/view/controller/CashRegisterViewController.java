@@ -91,6 +91,12 @@ public class CashRegisterViewController extends ViewController {
         }
     }
 
+    /**
+     * The method displys the options of payment methods
+     * to the cashier to choose and then displays a
+     * confirmation pop up where the cashier can approve or
+     * disapprove the transaction
+     */
     public void onCheckoutPressed() {
         double total = viewModel.checkout();
         currentItems = new ArrayList<>();
@@ -137,7 +143,6 @@ public class CashRegisterViewController extends ViewController {
                 Logger.getInstance().log(LoggerType.ERROR, e.getMessage());
             }
         }
-
     }
 
     public boolean addItemToCheckout(Item item) {
