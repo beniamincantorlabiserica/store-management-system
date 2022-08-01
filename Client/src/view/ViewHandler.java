@@ -1,10 +1,9 @@
 package view;
 
-import javafx.application.Platform;
-import viewmodel.ViewModelFactory;
 import javafx.scene.Scene;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
+import viewmodel.ViewModelFactory;
 
 public class ViewHandler extends ViewCreator {
     private Stage stage;

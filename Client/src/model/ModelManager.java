@@ -6,7 +6,9 @@ import mediator.NetworkManager;
 import networking.RemoteModel;
 
 import java.rmi.RemoteException;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Year;
 import java.util.ArrayList;
 
 /**
@@ -24,6 +26,9 @@ public class ModelManager implements Model {
 
     private ArrayList<Item> currentCheckout;
 
+    /**
+     * no-args constructor
+     */
     public ModelManager() {
         clientModel = null;
         network = false;
@@ -38,6 +43,10 @@ public class ModelManager implements Model {
         currentCheckout = new ArrayList<>();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public User login(String password) {
         Logger.getInstance().log(LoggerType.DEBUG, "ModelManager -> login()");
         if (isLoggedIn()) {
@@ -54,9 +63,11 @@ public class ModelManager implements Model {
     }
 
     /**
+     * {@inheritDoc}
      * mark the network as available if the client can connect to the server
      * log an error otherwise
      */
+    @Override
     public void retryConnection() {
         try {
             clientModel = new NetworkManager();
@@ -67,20 +78,29 @@ public class ModelManager implements Model {
     }
 
     /**
+     * {@inheritDoc}
+     *
      * @return value of the variable network
      */
+    @Override
     public boolean isNetwork() {
         return network;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isLoggedIn() {
         return currentUser != null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean masterCheck(String s) {
-        if(currentUser == null) {
+        if (currentUser == null) {
             try {
                 return s.equals(clientModel.getMasterPassword());
             } catch (RemoteException e) {
@@ -90,6 +110,9 @@ public class ModelManager implements Model {
         return s.equals(currentUser.getMasterPassword());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void updatePassword(String role, String password) {
         try {
@@ -99,11 +122,17 @@ public class ModelManager implements Model {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public User getUser() {
         return currentUser;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void logout() {
         this.currentUser = null;
@@ -111,11 +140,17 @@ public class ModelManager implements Model {
         Logger.getInstance().log("User logged out");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getStoreStatus() {
         return LocalTime.now().getHour() < getClosingHourInteger() && LocalTime.now().getHour() > getOpeningHourInteger() ? "OPEN" : "CLOSED";
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getCheckoutsToday() {
         try {
@@ -125,6 +160,9 @@ public class ModelManager implements Model {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getItemsToday() {
         try {
@@ -134,6 +172,9 @@ public class ModelManager implements Model {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getSalesToday() {
         try {
@@ -143,6 +184,9 @@ public class ModelManager implements Model {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getCheckoutsThisMonth() {
         try {
@@ -152,6 +196,9 @@ public class ModelManager implements Model {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getItemsThisMonth() {
         try {
@@ -161,6 +208,9 @@ public class ModelManager implements Model {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getSalesThisMonth() {
         try {
@@ -170,20 +220,28 @@ public class ModelManager implements Model {
         }
     }
 
+    /**
+     * sets the locked state to the appropriate one given the working hours and current time
+     */
+    private void checkLockedState() {
+        setLockedState(!isOpen());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void setOpeningHours(String openingTime) {
+    public String getClosingHours() {
         try {
-            clientModel.setOpeningHours(openingTime);
-            checkLockedState();
+            return clientModel.getWorkingHours().getClosingTime();
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private void checkLockedState() {
-        setLockedState(!isOpen());
-    }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setClosingHours(String closingTime) {
         try {
@@ -194,15 +252,9 @@ public class ModelManager implements Model {
         }
     }
 
-    @Override
-    public String getClosingHours() {
-        try {
-            return clientModel.getWorkingHours().getClosingTime();
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getOpeningHours() {
         try {
@@ -213,16 +265,52 @@ public class ModelManager implements Model {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setOpeningHours(String openingTime) {
+        try {
+            clientModel.setOpeningHours(openingTime);
+            checkLockedState();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int getClosingHourInteger() {
         return Integer.parseInt(getClosingHours().substring(0, 2));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int getOpeningHourInteger() {
         return Integer.parseInt(getOpeningHours().substring(0, 2));
     }
 
+    @Override
+    public double getDayProgress() {
+        if (!isOpen()) {
+            return 0;
+        }
+        return (double) (LocalTime.now().getHour() - getOpeningHourInteger()) /
+                (double) (getClosingHourInteger() - getOpeningHourInteger());
+    }
+
+    @Override
+    public double getMonthProgress() {
+        return (double) LocalDateTime.now().getDayOfMonth() / (double) LocalDateTime.now().getMonth().length(Year.isLeap(LocalDateTime.now().getYear()));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isOpen() {
         LocalTime timeNow = LocalTime.now();
@@ -231,6 +319,18 @@ public class ModelManager implements Model {
         return !timeNow.isAfter(closingTime) && !timeNow.isBefore(openingTime);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean getLockedState() throws RemoteException {
+        locked = String.valueOf(clientModel.getLockedState());
+        return Boolean.parseBoolean(locked);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setLockedState(boolean b) {
         if (locked.equals(String.valueOf(b))) {
@@ -245,12 +345,9 @@ public class ModelManager implements Model {
         }
     }
 
-    @Override
-    public boolean getLockedState() throws RemoteException {
-        locked = String.valueOf(clientModel.getLockedState());
-        return Boolean.parseBoolean(locked);
-    }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ArrayList<Item> getItems() {
         try {
@@ -260,6 +357,9 @@ public class ModelManager implements Model {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void changePrice(Long id, Double price) {
         try {
@@ -269,6 +369,9 @@ public class ModelManager implements Model {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void updateQuantity(int id, int quantity) {
         try {
@@ -278,6 +381,9 @@ public class ModelManager implements Model {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ArrayList<Item> scanItem(String barCode) throws RuntimeException {
         Item addedItem;
@@ -296,6 +402,9 @@ public class ModelManager implements Model {
         return currentCheckout;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Double checkout() throws RuntimeException {
         currentCheckout = new ArrayList<>();
@@ -307,6 +416,9 @@ public class ModelManager implements Model {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void completePayment(PaymentType paymentType) throws RuntimeException {
         try {
@@ -316,6 +428,9 @@ public class ModelManager implements Model {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void cancelCheckout() throws RuntimeException {
         try {
@@ -325,6 +440,9 @@ public class ModelManager implements Model {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void undoCheckout(Integer checkoutId) throws RuntimeException {
         try {

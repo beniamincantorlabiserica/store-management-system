@@ -18,13 +18,22 @@ import java.util.Optional;
 public class SettingsViewController extends ViewController {
 
     private SettingsViewModelInterface viewModel; // contains a reference to the viewModel
+
+    /**
+     * ! always call this method after creating !
+     * receives a reference to the corresponding viewModel
+     */
     @Override
     protected void init() {
         viewModel = getViewModelFactory().getSettingsViewModel(); // fetches the viewModel variable from the viewModel factory class
     }
 
+    /**
+     * resets the viewController to its default state
+     */
     @Override
-    public void reset() {}
+    public void reset() {
+    }
 
     /**
      * opens the dashboard view and closes the settings view.
@@ -165,8 +174,11 @@ public class SettingsViewController extends ViewController {
         }
     }
 
-    public void onForceLockButtonPressed(ActionEvent actionEvent) {
-        if(userKnowsMasterPassword()) {
+    /**
+     * handles the force lock button pressed event and starts the procedure to attempt force locking of the store
+     */
+    public void onForceLockButtonPressed() {
+        if (userKnowsMasterPassword()) {
             return;
         }
         viewModel.setLockedState(true);
@@ -175,8 +187,11 @@ public class SettingsViewController extends ViewController {
         Logger.getInstance().log(LoggerType.WARNING, "The master password has been used to force lock the store!");
     }
 
+    /**
+     * @return true if user enters the correct master password in a dialog, false otherwise
+     */
     private boolean userKnowsMasterPassword() {
-        if(!showMasterPasswordCheckDialog()) {
+        if (!showMasterPasswordCheckDialog()) {
             Logger.getInstance().log(LoggerType.ERROR, "Wrong master password");
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Wrong Master Password");

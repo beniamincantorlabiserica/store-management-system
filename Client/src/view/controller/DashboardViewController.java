@@ -1,6 +1,5 @@
 package view.controller;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
@@ -102,16 +101,13 @@ public class DashboardViewController extends ViewController {
      */
     @FXML
     public void onInventoryButtonPressed() {
-        // TODO inventory page with list of items & ability to edit amount of item x & price of item.
-//        Alert alert = new Alert(AlertType.ERROR);
-//        alert.setTitle("Unimplemented feature");
-//        alert.setHeaderText("This feature is not yet implemented.");
-//        alert.setContentText("Description: inventory page with list of items & ability to edit amount of item x & price of item.");
-//        alert.showAndWait();
         getViewHandler().openView(View.INVENTORY);
     }
 
-    public void onSettingsButtonPressed(ActionEvent actionEvent) {
+    /**
+     * handles the settings button pressing event by opening the settings view
+     */
+    public void onSettingsButtonPressed() {
         getViewHandler().openView(View.SETTINGS);
     }
 }

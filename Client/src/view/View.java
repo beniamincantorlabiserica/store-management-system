@@ -7,7 +7,6 @@ public enum View {
     SETTINGS("fxml/SettingsView.fxml"),
     CASH_REGISTER("fxml/CashRegisterView.fxml");
 
-
     private final String fxmlFile;
 
     View(String fxmlFile) {

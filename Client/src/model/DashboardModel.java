@@ -55,4 +55,31 @@ public interface DashboardModel {
      * @return the opening hour as int
      */
     int getOpeningHourInteger();
+
+    /**
+     * Formula
+     * x = now() - openingHour() // hours passed
+     * t = closingHour() - openingHour()
+     * 1 ------- t
+     * y  ------- x
+     * y = x / t
+     * y = ( now() - getOpeningHour() ) / ( closingHour() - openingHour() )
+     *
+     * @return the current working day progress (from opening hour to closing hour is from 0 to 100) as a number on a scale from 0 to 1, where 0 is
+     * the first working hour and 1 is the last OR 0 if the store is outside working hours
+     */
+    double getDayProgress();
+
+    /**
+     * Formula
+     * x = LocalDateTime.now().getDayOfMonth()
+     * t = LocalDateTime.now().getCurrentMonthTotalDays()
+     * 1 ------- t
+     * y ------- x
+     * y = LocalDateTime.now().getDayOfMonth() / LocalDateTime.now().getCurrentMonthTotalDays()
+     *
+     * @return the current month progress (from first to last day is from 0 to 100) as a number on a scale from 0 to 1, where 0 is the first day of the month
+     * and 1 is the last day
+     */
+    double getMonthProgress();
 }
