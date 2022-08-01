@@ -8,12 +8,15 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import logger.Logger;
 import logger.LoggerType;
 import model.Item;
+import model.PaymentType;
 import view.View;
 import view.ViewController;
 import viewmodel.CashRegisterViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class CashRegisterViewController extends ViewController {
 
@@ -27,6 +30,8 @@ public class CashRegisterViewController extends ViewController {
     public TableColumn<Item, Integer> quantity;
     @FXML
     public TableColumn<Item, Double> price;
+    @FXML
+    public TableColumn<Item, String> priceMark;
     @FXML
     public Button scanItemButton;
     @FXML
@@ -86,12 +91,58 @@ public class CashRegisterViewController extends ViewController {
         }
     }
 
+    /**
+     * The method displys the options of payment methods
+     * to the cashier to choose and then displays a
+     * confirmation pop up where the cashier can approve or
+     * disapprove the transaction
+     */
     public void onCheckoutPressed() {
         double total = viewModel.checkout();
         currentItems = new ArrayList<>();
         reset();
         totalPrice.setText("0");
         Logger.getInstance().log(LoggerType.DEBUG, "Total price from checkout: " + total);
+
+        String paymentMethod = null;
+        List<String> choices = new ArrayList<>();
+        choices.add("Card"); // ->
+        choices.add("Mobilepay"); // <- choices for the Choice Dialog
+        choices.add("Cash");
+
+        ChoiceDialog<String> dialog = new ChoiceDialog<>("Payment Method", choices); // ->
+        dialog.setTitle("Payment method");
+        dialog.setContentText("Choose a payment method"); // <- preferences for the Choice Dialog
+        Optional<String> outcome = dialog.showAndWait(); // show the dialog and wait for an answer
+        if (outcome.isPresent()) {
+            paymentMethod = outcome.get();
+        }
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirm Payment");
+        alert.setHeaderText("Payment method: " + paymentMethod);
+        alert.setContentText("Confirm transaction?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            try {
+                switch (paymentMethod){
+                    case "Card": viewModel.completePayment(PaymentType.CARD);
+                    case "Mobilepay": viewModel.completePayment(PaymentType.MOBILEPAY);
+                    case "Cash": viewModel.completePayment(PaymentType.CASH);
+                    default: break;
+                }
+                Logger.getInstance().log(LoggerType.DEBUG, "Payment complete");
+            } catch (Exception e) {
+                Logger.getInstance().log(LoggerType.ERROR, e.getMessage());
+            }
+        } else {
+            try {
+                viewModel.cancelCheckout();
+            } catch (Exception e){
+                Logger.getInstance().log(LoggerType.ERROR, e.getMessage());
+            }
+        }
     }
 
     public boolean addItemToCheckout(Item item) {
