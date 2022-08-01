@@ -2,9 +2,9 @@ package view.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import logger.Logger;
-import logger.LoggerType;
 import model.User;
+import util.logger.Logger;
+import util.logger.LoggerType;
 import view.View;
 import view.ViewController;
 import viewmodel.StartViewModel;
@@ -151,7 +151,7 @@ public class StartViewController extends ViewController {
                 Logger.getInstance().log(LoggerType.WARNING, "Wrong password");
             }
         } catch (RuntimeException e) {
-            Logger.getInstance().log(LoggerType.ERROR, "Already logged in");
+            Logger.getInstance().log(LoggerType.ERROR, "Already logged in " + e.getMessage());
         } finally {
             reset();
         }

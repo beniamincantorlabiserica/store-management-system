@@ -1,21 +1,24 @@
-package database;
+package database.manager;
 
-import logger.Logger;
-import logger.LoggerType;
+import database.CheckoutDAO;
+import database.connection.DBConnection;
 import model.PaymentType;
+import util.logger.Logger;
+import util.logger.LoggerType;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CheckoutDatabaseManager {
+public class CheckoutDatabaseManager implements CheckoutDAO {
     private final DBConnection connection;
 
     public CheckoutDatabaseManager(DBConnection connection) {
         this.connection = connection;
     }
 
+    @Override
     public Integer getNextAvailableCheckoutNumber() {
         Logger.getInstance().log(LoggerType.DEBUG, "getNextAvailableCheckoutNumber()");
         String query = "SELECT MAX(id) AS currentId FROM checkouts";
@@ -29,6 +32,7 @@ public class CheckoutDatabaseManager {
         }
     }
 
+    @Override
     public void addItemToCheckout(int checkoutId, int itemId, String paymentType) {
         Logger.getInstance().log(LoggerType.DEBUG, "addItemToCheckout(" + checkoutId + ", " + itemId + ")");
         if (isItemInCheckout(checkoutId, itemId)) {
@@ -61,6 +65,7 @@ public class CheckoutDatabaseManager {
         }
     }
 
+    @Override
     public Double getTotalForCheckout(int checkoutId) {
         Logger.getInstance().log(LoggerType.DEBUG, "getTotalForCheckout(" + checkoutId + ")");
         String query = "SELECT " +
@@ -81,6 +86,7 @@ public class CheckoutDatabaseManager {
         }
     }
 
+    @Override
     public void setPaymentType(Integer checkoutId, PaymentType paymentType) {
         Logger.getInstance().log(LoggerType.DEBUG, "setPaymentType(" + checkoutId + ", " + paymentType + ")");
         String query = "UPDATE checkouts " +
@@ -89,6 +95,7 @@ public class CheckoutDatabaseManager {
         connection.updateDB(query);
     }
 
+    @Override
     public void rollbackCheckout(Integer checkoutId) {
         Logger.getInstance().log(LoggerType.DEBUG, "rollbackCheckout(" + checkoutId + ")");
         String query = "SELECT itemid, quantity FROM checkouts WHERE id = " + checkoutId;

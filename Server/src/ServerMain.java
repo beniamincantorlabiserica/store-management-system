@@ -1,25 +1,26 @@
-import logger.Logger;
-import logger.LoggerType;
-import model.ServerModelManager;
-import networking.RemoteModel;
+import database.DAOManager;
+import database.connection.DBConnection;
+import database.factory.DAOFactory;
 import mediator.ServerNetworkManager;
 import model.ServerModel;
+import model.ServerModelManager;
+import util.logger.Logger;
+import util.logger.LoggerType;
 
 import java.net.MalformedURLException;
 import java.rmi.RemoteException;
 import java.util.Scanner;
 
 public class ServerMain {
+    private static final int SERVER_PORT = 1099;
+    private static ServerModel model;
+
     public static void main(String[] args) {
-        ServerModel model = new ServerModelManager();
-        Thread serverThread = new Thread(() -> {
-            try {
-                new ServerNetworkManager(model);
-            } catch (RemoteException | MalformedURLException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        serverThread.start();
+        startServerThread();
+        startConsoleThread();
+    }
+
+    private static void startConsoleThread() {
         Thread consoleThread = new Thread(() -> {
             String command;
             Scanner scanner = new Scanner(System.in);
@@ -38,9 +39,22 @@ public class ServerMain {
                     Logger.getInstance().log(LoggerType.WARNING, "Unknown command! Please try one of the following: /exit, /soft-restart, or type /help to see explanations for each command.");
                 }
             }
-            model.powerOff();
             System.exit(0);
         });
         consoleThread.start();
+    }
+
+    private static void startServerThread() {
+        DBConnection dbConnection = new DBConnection();
+        DAOManager daoManager = new DAOFactory(dbConnection);
+        model = new ServerModelManager(daoManager);
+        Thread serverThread = new Thread(() -> {
+            try {
+                new ServerNetworkManager(model, SERVER_PORT);
+            } catch (RemoteException | MalformedURLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        serverThread.start();
     }
 }

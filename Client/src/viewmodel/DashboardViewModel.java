@@ -4,7 +4,9 @@ import javafx.application.Platform;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import model.Model;
-import util.DateTimeManager;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class DashboardViewModel implements DashBoardViewModelInterface {
     private final Model model;
@@ -24,11 +26,8 @@ public class DashboardViewModel implements DashBoardViewModelInterface {
     private final SimpleDoubleProperty dayProgressBarProperty;
     private final SimpleDoubleProperty monthProgressBarProperty;
 
-    private final DateTimeManager dateTimeManager;
-
     /**
      * constructor
-     *
      * @param model          expects a reference to the model
      * @param viewModelState expects a reference to the viewModelState
      */
@@ -47,7 +46,6 @@ public class DashboardViewModel implements DashBoardViewModelInterface {
         this.salesThisMonthProperty = new SimpleStringProperty();
         this.dayProgressBarProperty = new SimpleDoubleProperty();
         this.monthProgressBarProperty = new SimpleDoubleProperty();
-        dateTimeManager = DateTimeManager.getInstance();
         updateThread = new Thread(() -> {
             while (true) {
                 try {
@@ -66,9 +64,9 @@ public class DashboardViewModel implements DashBoardViewModelInterface {
      * performs a soft reset in the dashboard, refreshing only the date, time and day of week properties with the real-time values
      */
     private void softReset() {
-        this.dateProperty.set("DATE\n" + dateTimeManager.getDate());
-        this.timeProperty.set("TIME\n" + dateTimeManager.getTime());
-        this.dayOfWeekProperty.set("DAY OF WEEK\n" + dateTimeManager.getDayOfWeekName());
+        this.dateProperty.set("DATE\n" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yy")));
+        this.timeProperty.set("TIME\n" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH/mm/ss")));
+        this.dayOfWeekProperty.set("DAY OF WEEK\n" + LocalDateTime.now().getDayOfWeek().name());
     }
 
     /**

@@ -1,5 +1,7 @@
 package model;
 
+import database.connection.DBConnection;
+import database.factory.DAOFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +16,9 @@ class ServerModelManagerTest {
 
     @BeforeEach
     void setUp() {
-        serverModelManager = new ServerModelManager();
+        serverModelManager = new ServerModelManager(
+                new DAOFactory(new DBConnection())
+        );
     }
 
     @Test

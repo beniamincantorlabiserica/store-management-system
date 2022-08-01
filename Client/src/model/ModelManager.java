@@ -1,9 +1,9 @@
 package model;
 
-import logger.Logger;
-import logger.LoggerType;
 import mediator.NetworkManager;
 import networking.RemoteModel;
+import util.logger.Logger;
+import util.logger.LoggerType;
 
 import java.rmi.RemoteException;
 import java.time.LocalDateTime;

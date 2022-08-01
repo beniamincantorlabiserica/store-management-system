@@ -1,223 +1,252 @@
 package model;
 
-import database.ManagerFactory;
-import logger.Logger;
-import logger.LoggerType;
+import database.DAOManager;
+import util.logger.Logger;
+import util.logger.LoggerType;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 public class ServerModelManager implements ServerModel {
-    private ManagerFactory managerFactory;
-
-    private WorkingHours workingHours;
-
-    private boolean isInventoryCacheValid;
-
-    private ArrayList<Item> inventoryCache;
+    private final DAOManager daoManager;
 
     private Integer checkoutId;
 
-    public ServerModelManager() {
-        this.isInventoryCacheValid = false;
+    public ServerModelManager(DAOManager daoManager) {
+        this.daoManager = daoManager;
         Logger.getInstance().log("Starting server model..");
-        boot();
     }
 
-    private void boot() {
-        this.managerFactory = new ManagerFactory();
-        this.managerFactory.getGeneralDatabaseManager().checkDB();
-        this.workingHours = getWorkingHours();
-        this.updateInventoryCache();
-        this.checkoutId = null;
-    }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public User login(String password) {
-        return managerFactory.getUsersDatabaseManager().login(password);
+        return daoManager.getUserDAO().login(password);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void updatePassword(String password, String role) {
-        managerFactory.getUsersDatabaseManager().updatePassword(password, role);
+        daoManager.getUserDAO().updatePassword(password, role);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getMasterPassword() {
-        return managerFactory.getUsersDatabaseManager().getMasterPassword();
+        return daoManager.getUserDAO().getMasterPassword();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public WorkingHours getWorkingHours() {
         Logger.getInstance().log(LoggerType.DEBUG, "getWorkingHours() ServerModelManager");
-        return managerFactory.getDashboardDatabaseManager().getWorkingHours();
+        return daoManager.getDashboardDAO().getWorkingHours();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setOpeningHours(String openingTime) {
-        workingHours.setOpeningTime(openingTime);
-        updateWorkingHours();
+        daoManager.getDashboardDAO().setOpeningTime(openingTime);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setClosingHours(String closingTime) {
-        workingHours.setClosingTime(closingTime);
-        updateWorkingHours();
+        daoManager.getDashboardDAO().setClosingTime(closingTime);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getCheckoutsToday() {
         try {
-            return managerFactory.getDashboardDatabaseManager().getCheckoutsToday();
+            return daoManager.getDashboardDAO().getCheckoutsToday();
         } catch (Exception e) {
             Logger.getInstance().log(LoggerType.WARNING, "Could not fetch checkouts for today from server.");
         }
         return "Err";
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getItemsToday() {
         try {
-            return managerFactory.getDashboardDatabaseManager().getItemsToday();
+            return daoManager.getDashboardDAO().getItemsToday();
         } catch (Exception e) {
             Logger.getInstance().log(LoggerType.WARNING, "Could not fetch items for today from server.");
         }
         return "Err";
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getSalesToday() {
         try {
-            return managerFactory.getDashboardDatabaseManager().getSalesToday();
+            return daoManager.getDashboardDAO().getSalesToday();
         } catch (Exception e) {
             Logger.getInstance().log(LoggerType.WARNING, "Could not fetch sales for today from server.");
         }
-        return "Err";    }
+        return "Err";
+    }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getCheckoutsThisMonth() {
         try {
-            return managerFactory.getDashboardDatabaseManager().getCheckoutsThisMonth();
+            return daoManager.getDashboardDAO().getCheckoutsThisMonth();
         } catch (Exception e) {
             Logger.getInstance().log(LoggerType.WARNING, "Could not fetch checkouts this month from server.");
         }
         return "Err";
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getItemsThisMonth() {
         try {
-            return managerFactory.getDashboardDatabaseManager().getItemsThisMonth();
+            return daoManager.getDashboardDAO().getItemsThisMonth();
         } catch (Exception e) {
             Logger.getInstance().log(LoggerType.WARNING, "Could not fetch items this month from server.");
         }
         return "Err";
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getSalesThisMonth() {
         try {
-            return managerFactory.getDashboardDatabaseManager().getSalesThisMonth();
+            return daoManager.getDashboardDAO().getSalesThisMonth();
         } catch (Exception e) {
             Logger.getInstance().log(LoggerType.WARNING, "Could not fetch sales this month from server.");
         }
         return "Err";
     }
 
-    private void updateWorkingHours() {
-        managerFactory.getDashboardDatabaseManager().setWorkingHours(workingHours.getSQLReadyWorkingHours());
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean getLockedState() {
+        return daoManager.getPreferenceDAO().getLockedState();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setLockedState(boolean b) throws RuntimeException {
-        managerFactory.getPreferenceDatabaseManager().setLockedState(b);
+        daoManager.getPreferenceDAO().setLockedState(b);
         Logger.getInstance().log(LoggerType.DEBUG, "setLockedState(" + b + ")");
     }
 
-    @Override
-    public boolean getLockedState() {
-        return managerFactory.getPreferenceDatabaseManager().getLockedState();
-    }
-
-    public void powerOff() {
-        managerFactory.closeConnection();
-    }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void softRestart() {
-        powerOff();
-        boot();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ArrayList<Item> getItems() {
-        if (!isInventoryCacheValid) {
-            updateInventoryCache();
-        }
-        return inventoryCache;
+        return daoManager.getInventoryDAO().getItems();
     }
 
-    private void updateInventoryCache() {
-        this.inventoryCache = managerFactory.getInventoryDatabaseManager().getItems();
-        this.isInventoryCacheValid = true;
-    }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void changePrice(Long id, Double price) {
-        managerFactory.getInventoryDatabaseManager().changePrice(id, price);
-        isInventoryCacheValid = false;
+        daoManager.getInventoryDAO().changePrice(id, price);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void updateQuantity(int id, int quantity) {
-        managerFactory.getInventoryDatabaseManager().updateQuantity(id,quantity);
-        isInventoryCacheValid = false;
+        daoManager.getInventoryDAO().updateQuantity(id, quantity);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Item scanItem(String barCode) throws RemoteException {
         int itemId = Integer.parseInt(barCode);
-        Item addedItem = managerFactory.getInventoryDatabaseManager().isItem(itemId);
+        Item addedItem = daoManager.getInventoryDAO().isItem(itemId);
         if (addedItem == null) {
             throw new RemoteException("WRONG_BARCODE");
         } else if (addedItem.getQuantity() == 0) {
             throw new RemoteException("NO_MORE_ITEMS_IN_STOCK");
         }
         if (this.checkoutId == null) {
-            this.checkoutId = managerFactory.getCheckoutDatabaseManager().getNextAvailableCheckoutNumber();
+            this.checkoutId = daoManager.getCheckoutDAO().getNextAvailableCheckoutNumber();
         }
-        managerFactory.getCheckoutDatabaseManager().addItemToCheckout(checkoutId, itemId, "UNPAID");
-        managerFactory.getInventoryDatabaseManager().updateQuantity(itemId, addedItem.getQuantity() - 1);
-        isInventoryCacheValid = false;
+        daoManager.getCheckoutDAO().addItemToCheckout(checkoutId, itemId, "UNPAID");
+        daoManager.getInventoryDAO().updateQuantity(itemId, addedItem.getQuantity() - 1);
         addedItem.setQuantity(addedItem.getQuantity() - 1);
         return addedItem;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Double checkout() throws RemoteException {
         if (this.checkoutId == null) {
             throw new RemoteException("NO_ITEMS_TO_CHECKOUT");
         }
-        return managerFactory.getCheckoutDatabaseManager().getTotalForCheckout(this.checkoutId);
+        return daoManager.getCheckoutDAO().getTotalForCheckout(this.checkoutId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void cancelCheckout() {
-        managerFactory.getCheckoutDatabaseManager().rollbackCheckout(this.checkoutId);
-        isInventoryCacheValid = false;
+        daoManager.getCheckoutDAO().rollbackCheckout(this.checkoutId);
         this.checkoutId = null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void cancelCheckout(Integer checkoutId) {
-        managerFactory.getCheckoutDatabaseManager().rollbackCheckout(checkoutId);
-        isInventoryCacheValid = false;
+        daoManager.getCheckoutDAO().rollbackCheckout(checkoutId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void completePayment(PaymentType paymentType) {
-        managerFactory.getCheckoutDatabaseManager().setPaymentType(this.checkoutId, paymentType);
-        isInventoryCacheValid = false;
+        daoManager.getCheckoutDAO().setPaymentType(this.checkoutId, paymentType);
         this.checkoutId = null;
     }
 }

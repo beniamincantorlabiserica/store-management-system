@@ -1,12 +1,14 @@
-package database;
+package database.manager;
 
-import logger.Logger;
-import logger.LoggerType;
+import database.PreferenceDAO;
+import database.connection.DBConnection;
+import util.logger.Logger;
+import util.logger.LoggerType;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class PreferencesDatabaseManager {
+public class PreferencesDatabaseManager implements PreferenceDAO {
     private final DBConnection connection;
     private String locked;
 
@@ -14,6 +16,7 @@ public class PreferencesDatabaseManager {
         this.connection = connection;
     }
 
+    @Override
     public boolean getLockedState() {
         if (locked != null) {
             Logger.getInstance().log(LoggerType.DEBUG, "Local locked status exists, returning from cache as " + locked);
@@ -33,6 +36,7 @@ public class PreferencesDatabaseManager {
         }
     }
 
+    @Override
     public void setLockedState(boolean b) throws RuntimeException {
         if (b == Boolean.parseBoolean(locked)) {
             Logger.getInstance().log(LoggerType.ERROR, "Trying to query the database with no change, cancelling..");
