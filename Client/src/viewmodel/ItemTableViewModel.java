@@ -26,4 +26,7 @@ public class ItemTableViewModel {
     public SimpleStringProperty getPriceProperty() {
         return priceProperty;
     }
+    public void setQuantityProperty(String s){
+        quantityProperty.setValue(s);
+    }
 }

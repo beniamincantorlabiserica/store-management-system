@@ -4,15 +4,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import model.Item;
 import model.PaymentType;
 import util.logger.Logger;
 import util.logger.LoggerType;
 import view.View;
 import view.ViewController;
-import viewmodel.CashRegisterViewModel;
 import viewmodel.CashRegisterViewModelInterface;
+import viewmodel.ItemTableViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,17 +21,17 @@ import java.util.Optional;
 public class CashRegisterViewController extends ViewController {
 
     @FXML
-    public TableView<Item> table;
+    public TableView<ItemTableViewModel> table;
     @FXML
-    public TableColumn<Item, Integer> id;
+    public TableColumn<ItemTableViewModel, String> id;
     @FXML
-    public TableColumn<Item, String> item;
+    public TableColumn<ItemTableViewModel, String> item;
     @FXML
-    public TableColumn<Item, Integer> quantity;
+    public TableColumn<ItemTableViewModel, String> quantity;
     @FXML
-    public TableColumn<Item, Double> price;
+    public TableColumn<ItemTableViewModel, String> price;
     @FXML
-    public TableColumn<Item, String> priceMark;
+    public TableColumn<ItemTableViewModel, String> priceMark;
     @FXML
     public Button scanItemButton;
     @FXML
@@ -40,19 +39,19 @@ public class CashRegisterViewController extends ViewController {
     @FXML
     public TextField scanInput;
     private CashRegisterViewModelInterface viewModel; // contains a reference to the viewModel
-    private ArrayList<Item> currentItems;
+    private ObservableList<ItemTableViewModel> currentItems;
 
     public CashRegisterViewController() { } // Empty constructor
     @Override
     protected void init() {
         viewModel = getViewModelFactory().getCashRegisterViewModel(); // fetches the viewModel variable from the viewModel factory class
         totalPrice.setText("0");
-        currentItems = new ArrayList<>();
+        currentItems = FXCollections.observableArrayList();
         reset();
-        id.setCellValueFactory(new PropertyValueFactory<>("id"));
-        item.setCellValueFactory(new PropertyValueFactory<>("name"));
-        quantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
-        price.setCellValueFactory(new PropertyValueFactory<>("price"));
+        id.setCellValueFactory(cellData -> cellData.getValue().getIdProperty());
+        item.setCellValueFactory(cellData -> cellData.getValue().getItemProperty());
+        quantity.setCellValueFactory(cellData -> cellData.getValue().getQuantityProperty());
+        price.setCellValueFactory(cellData -> cellData.getValue().getPriceProperty());
     }
 
     /**
@@ -68,7 +67,7 @@ public class CashRegisterViewController extends ViewController {
         scanInput.setText("");
         try {
             currentItems = viewModel.scanItem(id);
-            Item currentItem = currentItems.get(currentItems.size() - 1);
+            ItemTableViewModel currentItem = currentItems.get(currentItems.size() - 1);
             currentItems.remove(currentItem);
             if (!addItemToCheckout(currentItem)) {
                 currentItems.add(currentItem);
@@ -100,7 +99,7 @@ public class CashRegisterViewController extends ViewController {
      */
     public void onCheckoutPressed() {
         double total = viewModel.checkout();
-        currentItems = new ArrayList<>();
+        currentItems = FXCollections.observableArrayList();
         reset();
         totalPrice.setText("0");
         Logger.getInstance().log(LoggerType.DEBUG, "Total price from checkout: " + total);
@@ -146,10 +145,10 @@ public class CashRegisterViewController extends ViewController {
         }
     }
 
-    public boolean addItemToCheckout(Item item) {
-        for (Item i : currentItems) {
-            if (Objects.equals(item.getId(), i.getId())) {
-                i.setQuantity(i.getQuantity() + 1);
+    public boolean addItemToCheckout(ItemTableViewModel item) {
+        for (ItemTableViewModel i : currentItems) {
+            if (Objects.equals(item.getIdProperty(), i.getIdProperty())) {
+                i.setQuantityProperty(i.getQuantityProperty().getValue() + 1);
                 return true;
             }
         }
@@ -162,9 +161,10 @@ public class CashRegisterViewController extends ViewController {
      */
     public void calculateTotal() {
         double sum = 0;
-        for (Item item : currentItems) {
-            Logger.getInstance().log(LoggerType.DEBUG, "Item: " + item.name);
-            sum += item.getPrice() * item.getQuantity();
+        for (ItemTableViewModel item : currentItems) {
+            Logger.getInstance().log(LoggerType.DEBUG, "Item: " + item.getItemProperty());
+            sum += Integer.parseInt(item.getPriceProperty().getValue())
+                    * Integer.parseInt(item.getQuantityProperty().getValue());
         }
         totalPrice.setText(String.valueOf(sum));
         Logger.getInstance().log(LoggerType.DEBUG, "----------------------");
@@ -182,7 +182,7 @@ public class CashRegisterViewController extends ViewController {
 
     @Override
     public void reset() {
-        ObservableList<Item> items = FXCollections.observableArrayList();
+        ObservableList<ItemTableViewModel> items = FXCollections.observableArrayList();
         items.clear();
         items.addAll(currentItems);
         table.setItems(items);

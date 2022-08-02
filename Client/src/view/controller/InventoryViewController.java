@@ -60,8 +60,8 @@ public class InventoryViewController extends ViewController {
         price.setCellFactory(TextFieldTableCell.forTableColumn(new DefaultStringConverter()));
         price.setOnEditCommit(itemIntegerCellEditEvent -> {
 
-            viewModel.changePrice(Long.valueOf(
-                    String.valueOf(itemIntegerCellEditEvent.getRowValue().getIdProperty().getValue())),
+            viewModel.changePrice(
+                    Long.valueOf(String.valueOf(itemIntegerCellEditEvent.getRowValue().getIdProperty().getValue())),
                     Double.parseDouble(itemIntegerCellEditEvent.getNewValue()));
                     reset();
         });

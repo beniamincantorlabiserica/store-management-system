@@ -1,5 +1,7 @@
 package viewmodel;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import model.Item;
 import model.Model;
 import model.PaymentType;
@@ -9,15 +11,22 @@ import java.util.ArrayList;
 public class CashRegisterViewModel implements CashRegisterViewModelInterface{
 
     private final Model model;
+    ObservableList<ItemTableViewModel> listToReturn;
 
     public CashRegisterViewModel(Model model) {
         this.model = model;
+        this.listToReturn = FXCollections.observableArrayList();
     }
 
 
     @Override
-    public ArrayList<Item> scanItem(String barCode) throws RuntimeException {
-        return model.scanItem(barCode);
+    public ObservableList<ItemTableViewModel> scanItem(String barCode) throws RuntimeException {
+        listToReturn.clear();
+        for(Item item : model.scanItem(barCode)){
+            listToReturn.add(new ItemTableViewModel(item));
+        }
+
+        return listToReturn;
     }
 
     @Override
