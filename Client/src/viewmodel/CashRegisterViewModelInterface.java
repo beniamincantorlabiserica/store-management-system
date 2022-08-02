@@ -1,5 +1,6 @@
 package viewmodel;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import model.Item;
 import model.PaymentType;
@@ -12,4 +13,11 @@ public interface CashRegisterViewModelInterface {
     void logout() throws RuntimeException;
     void completePayment(PaymentType paymentType) throws RuntimeException;
     void cancelCheckout() throws RuntimeException;
+    void onScanPressed();
+    void onCheckoutPressed();
+    SimpleStringProperty getTotalPriceLabelProperty();
+    SimpleStringProperty getScanInputProperty();
+    void setTotalPriceLabelProperty(String s);
+    ObservableList<ItemTableViewModel> getCurrentItems();
+
 }
