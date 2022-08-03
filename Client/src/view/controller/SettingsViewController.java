@@ -1,6 +1,5 @@
 package view.controller;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceDialog;
@@ -38,7 +37,7 @@ public class SettingsViewController extends ViewController {
     /**
      * opens the dashboard view and closes the settings view.
      */
-    public void onBackButtonPressed(ActionEvent actionEvent) {
+    public void onBackButtonPressed() {
         getViewHandler().openView(View.DASHBOARD);
     }
 
@@ -102,26 +101,13 @@ public class SettingsViewController extends ViewController {
         dialog.setContentText("Please enter the desired new password for the " + role + ":");
         Optional<String> result = dialog.showAndWait();
         if(result.isPresent()) {
-            if (!validateNewPassword(result.get())) { // validate the entered password
-                throw new RuntimeException("PASSWORD_INVALID");
-            }
-            return result.get();
+            String newPassword = result.get();
+            viewModel.validateNewPassword(newPassword);
+            return newPassword;
         }
         throw new RuntimeException("DIALOG_CANCELLED");
     }
 
-    /**
-     * validates the password sent as a string parameter
-     * @param s expects the password to be validated
-     * @return true if the password passes the validation tests, false otherwise
-     */
-    private boolean validateNewPassword(String s) {
-        if(s.length() < 4) {
-            Logger.getInstance().log(LoggerType.ERROR, "The new password should contain more than 3 characters");
-            return false;
-        }
-        return true;
-    }
 
     /**
      * handles the working hours button pressing event by displaying a Choice Dialog with a dropdown input (with the ability to choose from editing the opening time or

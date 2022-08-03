@@ -40,6 +40,8 @@ public interface SettingsViewModelInterface {
      */
     void updatePassword(String role, String password);
 
+    void validateNewPassword(String s);
+
     /**
      * @param b expects a boolean to represent the new status of the store where
      *          true is locked, false is unlocked
