@@ -33,18 +33,18 @@ public class CheckoutDatabaseManager implements CheckoutDAO {
     }
 
     @Override
-    public void addItemToCheckout(int checkoutId, int itemId, String paymentType) {
-        Logger.getInstance().log(LoggerType.DEBUG, "addItemToCheckout(" + checkoutId + ", " + itemId + ")");
+    public void addItemToCheckout(int checkoutId, int itemId) {
+        Logger.getInstance().log(LoggerType.DEBUG, "addItemToCheckout(" + checkoutId + ")");
         if (isItemInCheckout(checkoutId, itemId)) {
             addExistingItemToCheckout(checkoutId, itemId);
         } else {
-            addNewItemToCheckout(checkoutId, itemId, paymentType);
+            addNewItemToCheckout(checkoutId, itemId);
         }
     }
 
-    private void addNewItemToCheckout(int checkoutId, int itemId, String paymentType) {
+    private void addNewItemToCheckout(int checkoutId, int itemId) {
         Logger.getInstance().log(LoggerType.DEBUG, "addNewItemToCheckout(" + checkoutId + ", " + itemId + ")");
-        String query = "INSERT INTO checkouts VALUES (" + checkoutId + ", " + itemId + ", 1, '" + paymentType + "')";
+        String query = "INSERT INTO checkouts VALUES (" + checkoutId + ", " + itemId + ", 1, 'UNPAID')";
         connection.updateDB(query);
     }
 

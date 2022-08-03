@@ -207,7 +207,7 @@ public class ServerModelManager implements ServerModel {
         if (this.checkoutId == null) {
             this.checkoutId = daoManager.getCheckoutDAO().getNextAvailableCheckoutNumber();
         }
-        daoManager.getCheckoutDAO().addItemToCheckout(checkoutId, itemId, "UNPAID");
+        daoManager.getCheckoutDAO().addItemToCheckout(checkoutId, itemId);
         daoManager.getInventoryDAO().updateQuantity(itemId, addedItem.getQuantity() - 1);
         addedItem.setQuantity(addedItem.getQuantity() - 1);
         return addedItem;

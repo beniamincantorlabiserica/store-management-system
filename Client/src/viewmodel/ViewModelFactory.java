@@ -1,11 +1,11 @@
 package viewmodel;
 import model.Model;
 public class ViewModelFactory {
-    private final StartViewModel startViewModel;
-    private final DashboardViewModel dashboardViewModel;
-    private final InventoryViewModel inventoryViewModel;
-    private final SettingsViewModel settingsViewModel;
-    private final CashRegisterViewModel cashRegisterViewModel;
+    private final StartViewModelInterface startViewModel;
+    private final DashBoardViewModelInterface dashboardViewModel;
+    private final InventoryViewModelInterface inventoryViewModel;
+    private final SettingsViewModelInterface settingsViewModel;
+    private final CashRegisterViewModelInterface cashRegisterViewModel;
 
     public ViewModelFactory(Model model) {
 
@@ -17,21 +17,21 @@ public class ViewModelFactory {
         cashRegisterViewModel = new CashRegisterViewModel(model);
     }
 
-    public InventoryViewModel getInventoryViewModel() {
+    public InventoryViewModelInterface getInventoryViewModel() {
         return inventoryViewModel;
     }
 
-    public StartViewModel getStartViewModel() {
+    public StartViewModelInterface getStartViewModel() {
         return startViewModel;
     }
 
-    public DashboardViewModel getDashboardViewModel() {
+    public DashBoardViewModelInterface getDashboardViewModel() {
         return dashboardViewModel;
     }
 
-    public SettingsViewModel getSettingsViewModel() {
+    public SettingsViewModelInterface getSettingsViewModel() {
         return settingsViewModel;
     }
 
-    public CashRegisterViewModel getCashRegisterViewModel() {return cashRegisterViewModel;}
+    public CashRegisterViewModelInterface getCashRegisterViewModel() {return cashRegisterViewModel;}
 }
