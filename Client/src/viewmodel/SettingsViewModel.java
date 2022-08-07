@@ -4,7 +4,7 @@ import model.Model;
 import util.logger.Logger;
 import util.logger.LoggerType;
 
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class SettingsViewModel implements SettingsViewModelInterface {
@@ -17,7 +17,7 @@ public class SettingsViewModel implements SettingsViewModelInterface {
     @Override
     public void setOpeningHours(String s) throws RuntimeException {
         try {
-            LocalDateTime.parse(s);
+            LocalTime.parse(s);
         } catch (RuntimeException e) {
             throw new IllegalArgumentException(e);
         }
@@ -27,7 +27,7 @@ public class SettingsViewModel implements SettingsViewModelInterface {
     @Override
     public void setClosingHours(String s) throws RuntimeException {
         try {
-            LocalDateTime.parse(s);
+            LocalTime.parse(s);
         } catch (RuntimeException e) {
             throw new IllegalArgumentException(e);
         }

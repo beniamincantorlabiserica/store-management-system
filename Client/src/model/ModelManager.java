@@ -332,7 +332,7 @@ public class ModelManager implements Model {
     @Override
     public void setLockedState(boolean b) {
         if (locked.equals(String.valueOf(b))) {
-            Logger.getInstance().log(LoggerType.ERROR, "Trying to overwrite server data with the same data, cancelling..");
+            Logger.getInstance().log(LoggerType.WARNING, "Trying to overwrite server data with the same data, cancelling..");
             return;
         }
         try {
