@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class ModelManager implements Model {
     private RemoteModel clientModel;
     /**
-     * @value true if the client successfully connected to the server through RMI
+     * true if the client successfully connected to the server through RMI
      * false otherwise
      */
     private boolean network;

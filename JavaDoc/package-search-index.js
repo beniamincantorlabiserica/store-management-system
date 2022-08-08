@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"database"},{"l":"database.cache"},{"l":"database.connection"},{"l":"database.factory"},{"l":"database.manager"},{"l":"mediator"},{"l":"model"},{"l":"networking"},{"l":"util.logger"},{"l":"view"},{"l":"view.controller"},{"l":"viewmodel"}];updateSearchResults();
