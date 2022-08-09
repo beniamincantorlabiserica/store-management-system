@@ -1,22 +1,15 @@
 package view.controller;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.converter.DefaultStringConverter;
-import javafx.util.converter.DoubleStringConverter;
-import javafx.util.converter.IntegerStringConverter;
-import model.Item;
 import util.logger.Logger;
 import util.logger.LoggerType;
 import view.View;
 import view.ViewController;
-import viewmodel.InventoryViewModel;
 import viewmodel.InventoryViewModelInterface;
 import viewmodel.ItemTableViewModel;
 
@@ -31,6 +24,8 @@ public class InventoryViewController extends ViewController {
     public TableColumn<ItemTableViewModel, String> quantity;
     @FXML
     public TableColumn<ItemTableViewModel, String> price;
+    @FXML
+    public TableColumn<ItemTableViewModel, String> recentlyChanged;
     @FXML
     public Button back;
     private InventoryViewModelInterface viewModel;
@@ -63,8 +58,9 @@ public class InventoryViewController extends ViewController {
             viewModel.changePrice(
                     Long.valueOf(String.valueOf(itemIntegerCellEditEvent.getRowValue().getIdProperty().getValue())),
                     Double.parseDouble(itemIntegerCellEditEvent.getNewValue()));
-                    reset();
+            reset();
         });
+        recentlyChanged.setCellValueFactory(cellData -> cellData.getValue().getRecentlyChangedProperty());
     }
 
     /**

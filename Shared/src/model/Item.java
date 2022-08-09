@@ -4,11 +4,11 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public class Item implements Serializable {
-    public Long id;
-    public String name;
-    public Double price;
-    public Integer quantity;
-    public LocalDateTime editDateTime;
+    private Long id;
+    private String name;
+    private Double price;
+    private Integer quantity;
+    private LocalDateTime editDateTime;
 
     public Item(Long id, String name, Double price, Integer quantity, LocalDateTime lastEdit) {
         this.id = id;

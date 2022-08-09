@@ -8,7 +8,9 @@ public class Logger {
     private static Logger logger;
     private final ArrayList<String> logLines;
 
-    // 0 - logging off / 1 - info only / 2 - warnings and info / 3 - errors, warnings and info / 4 - errors, warnings, info and debug
+    // 0 - logging off / 1 - info only /
+    // 2 - warnings and info / 3 - errors, warnings and info /
+    // 4 - errors, warnings, info and debug
     // use 1 for distribution and 4 for general debugging / development
     private int logLevel;
 
