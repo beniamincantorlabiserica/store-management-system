@@ -10,21 +10,21 @@
 ### Deadline and exam
 The deadline for material uploading is on 12th of August 2022 at 13:00.
 Parts ready for uploading:
-- [ ] Project Description
-- [ ] Project Report
-- [ ] Process Report
-- [ ] Diagrams
+- [x] Project Description
+- [x] Project Report
+- [x] Process Report
+- [x] Diagrams
   - [X] Use Case Diagrams
-  - [ ] Use Case Descriptions
-  - [ ] Domain Model
+  - [x] Use Case Descriptions
+  - [x] Domain Model
   - [X] ER Diagram
-  - [ ] Server Class Diagram
-  - [ ] Client Class Diagram
-  - [ ] State Machine Diagrams
-- [ ] Client Package
-- [ ] Server Package
-- [ ] JavaDoc
-- [ ] UserGuide
+  - [x] Server Class Diagram
+  - [x] Client Class Diagram
+  - [x] State Machine Diagrams
+- [x] Client Package
+- [x] Server Package
+- [x] JavaDoc
+- [x] UserGuide
 
 ## Project
 ### Main idea
